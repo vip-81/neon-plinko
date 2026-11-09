@@ -6,7 +6,7 @@
 - 深链示例：`https://neon-plinko-flutter.web.app/?q=最高倍率是多少`
 - Firebase 项目：`boto3-firebase-1101012838`
 - Hosting 站点：`neon-plinko-flutter`
-- 依赖：`firebase_core ^5.1.0`、`firebase_ai ^5.1.0`、`firebase_analytics ^13.0.1`、`firebase_auth ^7.0.1`、Flutter 3.47.9 / Dart 3.13.7
+- 依赖：`firebase_core ^5.1.0`、`firebase_ai ^5.1.0`、`firebase_analytics ^13.0.1`、`firebase_auth ^7.0.1`、`cloud_firestore ^7.1.0`、Flutter 3.47.9 / Dart 3.13.7
 
 > 主游戏仍是 `../index.html` 的零依赖单文件静态站；本目录只是额外的 Flutter 客户端示例，不参与主站 SEO/GEO/Lighthouse 评分。
 
@@ -70,19 +70,52 @@ Firebase Web 端 Analytics 需要 `measurementId`（形如 `G-XXXXXXXXXX`），�
 - 提供「匿名登录」按钮，默认不自动请求，登录后把 uid 写入 Analytics `setUserId` 并埋 `login` 事件
 - 提供「退出登录」按钮
 
-### 登录提供方前提（重要）
+### 登录提供方（复验结论）
 
-Firebase 项目 `boto3-firebase-1101012838` **尚未启用 Firebase Authentication**：`identitytoolkit.googleapis.com/admin/v2/projects/.../config` 返回 `404 CONFIGURATION_NOT_FOUND`，也没有任何 sign-in provider。
+只读探测 `identitytoolkit.googleapis.com/admin/v2/.../config` 返回 `404 CONFIGURATION_NOT_FOUND`，这只表示项目**未使用 Identity Platform (GCIP)**，不代表经典 Firebase Auth 未启用。线上复验 `accounts:signUp` 返回 **200**、`authStateChanges()` 可拿到匿名 uid，说明 **Anonymous provider 实际可用**，「匿名登录」按钮能成功。
 
-因此采用优雅降级：
-
-- 默认不发起登录请求，页面加载仍是 0 第三方请求、0 控制台错误，AI 助手照常工作；
-- 点击「匿名登录」若返回 `operation-not-allowed`（provider 未启用），捕获 `FirebaseAuthException` 并显示「项目尚未启用 Anonymous 登录提供方；AI 助手仍可正常使用。」
-- 在 Firebase 控制台 → Authentication → Sign-in method 启用 **Anonymous** 后，重新打开页面点击即可成功，无需改代码。
+因此降级逻辑仍保留（用于其它项目/配置被关闭时），但本项目的匿名登录已可直接工作。
 
 `firebase.json` 的 CSP 已预先放行 `identitytoolkit.googleapis.com`、`securetoken.googleapis.com`、`apis.google.com`，并增加 `frame-src` 允许 Firebase Auth 的隐藏 iframe（`*.firebaseapp.com` / `*.web.app` / `accounts.google.com`）。
 
 > 主游戏 `../index.html` **不接入 Auth**（保持零第三方请求与 Lighthouse 100）。
+
+## Cloud Firestore
+
+对齐官方 [`firebase/quickstart-flutter` → `firestore/`](https://github.com/firebase/quickstart-flutter/tree/main/firestore) 的 `FirebaseFirestore.instance` + `collection().add()` + `snapshots()` + `StreamBuilder` 用法（官方示例为 Friendly Eats 餐厅 CRUD，此处改为 AI 问答日志）。
+
+`lib/main.dart` 中的 `FirestoreService`：
+
+- 每次 AI 问答写入集合 `neon_plinko_ai_logs`：`question` / `answer` / `model` / `source` / `client=flutter_web` / `createdAt=FieldValue.serverTimestamp()`
+- `recentLogs()` 用 `orderBy('createdAt', descending: true).limit(5).snapshots()` 提供最近 5 条，UI 用 `StreamBuilder` 展示
+- `firestore.rules`：默认拒绝所有读写，仅该集合允许已登录用户 `read` 与 `create`（对齐官方规则 `request.auth != null`），禁止 update/delete
+- `firestore.indexes.json`：空索引（单字段 `orderBy` 由 Firestore 自动索引，无需复合索引）
+
+### 前置条件（重要）
+
+项目 `boto3-firebase-1101012838` 当前：**`firestore.googleapis.com` 为 DISABLED**、未创建 Firestore 数据库。官方 quickstart 明确要求先在控制台创建数据库并部署安全规则；Anonymous Auth provider 经复验**已可用**（`accounts:signUp` 返回 200），因此规则中的 `request.auth != null` 可以被满足。
+
+因此使用**构建期开关**优雅降级：
+
+```dart
+const bool kFirestoreEnabled =
+    bool.fromEnvironment('FIRESTORE_ENABLED', defaultValue: false);
+```
+
+- 默认构建（`FIRESTORE_ENABLED=false`）：不实例化 Firestore、**不发起任何 Firestore 请求**、AI 助手与控制台完全不受影响，UI 显示「未启用」说明
+- 完成前置配置后重新构建即可开启真实读写，无需改业务逻辑：
+  ```bash
+  flutter build web --release --base-href '/' --no-wasm-dry-run \
+    --dart-define=FIRESTORE_ENABLED=true
+  firebase deploy --only firestore:rules --project boto3-firebase-1101012838
+  ```
+  两种构建均已通过 `flutter analyze` 与生产编译校验。前置配置只剩：在 Firebase 控制台启用 Firestore API 并创建 `(default)` 数据库。
+
+默认构建下 **Firestore 数据请求为 0**（仅 Firestore Web SDK 从 gstatic 加载 1 个脚本，已在 CSP 白名单内）。
+
+`firebase.json` 的 CSP 已显式放行 `firestore.googleapis.com`（也被 `*.googleapis.com` 覆盖）。
+
+> 主游戏 `../index.html` **不接入 Firestore**（保持零第三方请求与 Lighthouse 100，最高纪录仍在 localStorage）。
 
 ## 部署
 
