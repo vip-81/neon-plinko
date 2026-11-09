@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:firebase_ai/firebase_ai.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -64,6 +67,47 @@ class AnalyticsService {
       debugPrint('[analytics] logEvent($name) 失败：$e');
     }
   }
+
+  Future<void> setUserId(String? id) async {
+    final FirebaseAnalytics? analytics = _analytics;
+    if (analytics == null) return;
+    try {
+      await analytics.setUserId(id: id);
+    } catch (e) {
+      debugPrint('[analytics] setUserId 失败：$e');
+    }
+  }
+}
+
+/// 对齐官方 quickstart-flutter / authentication 的
+/// authStateChanges() + signInAnonymously() + User.uid 用法。
+///
+/// 匿名登录不需要注册、不需要输入信息，最适合纯娱乐规则助手。
+/// 项目当前尚未启用 Anonymous sign-in provider，因此按钮触发时会捕获
+/// `operation-not-allowed` 并给出友好提示，AI 助手完全不受影响。
+class AuthService {
+  AuthService._();
+  static final AuthService instance = AuthService._();
+
+  FirebaseAuth get _auth => FirebaseAuth.instance;
+
+  Stream<User?> authStateChanges() => _auth.authStateChanges();
+
+  Future<String> signInAnonymously() async {
+    final UserCredential credential = await _auth.signInAnonymously();
+    final String uid = credential.user?.uid ?? '';
+    if (uid.isEmpty) throw StateError('匿名登录未返回 uid');
+    await AnalyticsService.instance.setUserId(uid);
+    await AnalyticsService.instance.log('login', parameters: <String, Object>{
+      'method': 'anonymous',
+    });
+    return uid;
+  }
+
+  Future<void> signOut() async {
+    await AnalyticsService.instance.setUserId(null);
+    await _auth.signOut();
+  }
 }
 
 class NeonAiApp extends StatelessWidget {
@@ -101,11 +145,33 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
   bool _busy = false;
   String _status = '正在初始化…';
   String _answer = '';
+  StreamSubscription<User?>? _authSub;
+  User? _authUser;
+  String _authStatus = '未登录（可选）';
+  bool _authBusy = false;
 
   @override
   void initState() {
     super.initState();
     AnalyticsService.instance.init();
+    _authSub = AuthService.instance.authStateChanges().listen(
+      (User? user) {
+        if (!mounted) return;
+        setState(() {
+          _authUser = user;
+          if (user != null) {
+            final String short = user.uid.length >= 8 ? user.uid.substring(0, 8) : user.uid;
+            _authStatus = '匿名已登录 · uid $short…';
+          } else if (_authStatus.startsWith('匿名已登录')) {
+            _authStatus = '已退出登录';
+          }
+        });
+      },
+      onError: (Object e) {
+        if (!mounted) return;
+        setState(() => _authStatus = 'Auth 状态监听异常：$e');
+      },
+    );
     try {
       _ai = FirebaseAI.googleAI();
       _status = '已连接，请输入问题。';
@@ -122,8 +188,45 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
 
   @override
   void dispose() {
+    _authSub?.cancel();
     _controller.dispose();
     super.dispose();
+  }
+
+  Future<void> _signInAnonymously() async {
+    if (_authBusy || _authUser != null) return;
+    setState(() {
+      _authBusy = true;
+      _authStatus = '正在匿名登录…';
+    });
+    try {
+      await AuthService.instance.signInAnonymously();
+      if (!mounted) return;
+      setState(() {
+        _authBusy = false;
+        _authStatus = '匿名登录成功';
+      });
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _authBusy = false;
+        _authStatus = e.code == 'operation-not-allowed'
+            ? '项目尚未启用 Anonymous 登录提供方；AI 助手仍可正常使用。'
+            : '匿名登录未成功（${e.code}）；AI 助手仍可正常使用。';
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _authBusy = false;
+        _authStatus = '匿名登录未成功；AI 助手仍可正常使用。';
+      });
+    }
+  }
+
+  Future<void> _signOut() async {
+    await AuthService.instance.signOut();
+    if (!mounted) return;
+    setState(() => _authStatus = '已退出登录');
   }
 
   Future<void> _ask(String question, {String source = 'input'}) async {
@@ -208,7 +311,7 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
                 ),
                 const SizedBox(height: 6),
                 const Text(
-                  'FIREBASE AI LOGIC // FLUTTER WEB',
+                  'FIREBASE AI LOGIC + AUTH // FLUTTER WEB',
                   style: TextStyle(color: Color(0xFF00E5FF), fontSize: 12, letterSpacing: 2),
                 ),
                 const SizedBox(height: 12),
@@ -281,6 +384,51 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
                         '问题会发送给 Google Gemini，请勿输入个人信息。AI 回答可能有误，规则以游戏主页为准。',
                         style: TextStyle(color: Color(0xFFA8A2C8), fontSize: 12),
                       ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                _buildCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      const Text(
+                        'Firebase Authentication',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        '对齐官方 quickstart 的 authStateChanges() + signInAnonymously()。匿名登录仅生成临时 uid，不需要注册或输入任何信息；未启用登录提供方时 AI 助手仍可正常使用。',
+                        style: TextStyle(color: Color(0xFFA8A2C8), fontSize: 13, height: 1.6),
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: (_authBusy || _authUser != null) ? null : _signInAnonymously,
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: const Color(0xFF00E5FF),
+                                side: const BorderSide(color: Color(0x5500E5FF)),
+                              ),
+                              child: Text(_authBusy ? '登录中…' : '匿名登录'),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: OutlinedButton(
+                              onPressed: _authUser == null ? null : _signOut,
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: const Color(0xFFFF3CAC),
+                                side: const BorderSide(color: Color(0x55FF3CAC)),
+                              ),
+                              child: const Text('退出登录'),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Text(_authStatus, style: const TextStyle(color: Color(0xFF00E5FF), fontSize: 13)),
                     ],
                   ),
                 ),
