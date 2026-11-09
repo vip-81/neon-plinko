@@ -159,9 +159,20 @@ firebase deploy --only hosting:neon-plinko --project boto3-firebase-1101012838
 按 [`firebase/quickstart-flutter` → `authentication/`](https://github.com/firebase/quickstart-flutter/tree/main/authentication) 的 `authStateChanges()` / `signInAnonymously()` / `User.uid`，在 Flutter Web 应用加入 `firebase_auth ^7.0.1` 与匿名登录（官方示例为 Email/Password + `firebase_ui_auth`，此处选用无需注册的匿名方式）。
 
 - 新增 `AuthService`：订阅 `authStateChanges()`、提供「匿名登录」/「退出登录」按钮、登录后把 uid 写入 Analytics `setUserId` 并埋 `login` 事件。
-- **项目尚未启用 Firebase Authentication**：Identity Toolkit config 返回 `404 CONFIGURATION_NOT_FOUND`，无 sign-in provider。因此默认不自动请求；点击按钮若返回 `operation-not-allowed` 会友好提示，AI 助手完全不受影响。
+- 复验修正：`identitytoolkit admin/v2` 返回 `404 CONFIGURATION_NOT_FOUND` 只表示未启用 Identity Platform (GCIP)，**不代表经典 Firebase Auth 未启用**；线上 `accounts:signUp` 返回 200，Anonymous provider 实际可用，「匿名登录」按钮可成功拿到 uid。代码仍保留 `operation-not-allowed` 的降级分支以适配其它项目。
 - `firebase.json` CSP 已预放行 `identitytoolkit.googleapis.com` / `securetoken.googleapis.com`，并增加 `frame-src` 允许 Auth 隐藏 iframe。
 - 主游戏 `index.html` 不接入 Auth，保持零第三方请求与 Lighthouse 100。
+
+#### Cloud Firestore
+
+按 [`firebase/quickstart-flutter` → `firestore/`](https://github.com/firebase/quickstart-flutter/tree/main/firestore)（Friendly Eats）的 `collection().add()` + `snapshots()` + `StreamBuilder` 用法，在 Flutter Web 应用加入 `cloud_firestore ^7.1.0`：
+
+- `FirestoreService` 把每次 AI 问答写入 `neon_plinko_ai_logs`（问题/回答/模型/source/时间/客户端），并展示最近 5 条提问
+- 新增 `flutter_app/firestore.rules`（默认拒绝，仅该集合允许已登录用户 read/create）与 `flutter_app/firestore.indexes.json`（空索引）
+- **项目尚未启用 Firestore**：`firestore.googleapis.com` 为 `DISABLED`，无数据库；Anonymous Auth provider 经复验已可用。因此用构建期开关 `FIRESTORE_ENABLED` 默认关闭：不实例化 Firestore、Firestore 数据请求 0（仅 1 个 gstatic SDK 脚本）、AI 助手与控制台不受影响；在 Firebase 控制台启用 Firestore API 并创建 `(default)` 数据库后，用 `--dart-define=FIRESTORE_ENABLED=true` 重新构建并 `firebase deploy --only firestore:rules` 即可开启
+- 默认/开启两种构建均已通过 `flutter analyze` 与生产编译校验
+- `firebase.json` CSP 已显式放行 `firestore.googleapis.com`
+- 主游戏 `index.html` 不接入 Firestore，最高纪录仍在 localStorage
 
 ### Unity（Firebase AI Logic 快速入门）
 
