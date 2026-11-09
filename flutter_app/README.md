@@ -24,6 +24,15 @@
    ```
 3. 本目录的 `firebase.json` 已配置 Flutter Web 所需的 CSP（`wasm-unsafe-eval`、`fonts.gstatic.com`、Gemini 端点）与缓存策略。
 
+## 游戏本体（/game/）
+
+Flutter Web 站点同时承载完整的 NEON PLINKO 单文件 H5 游戏：`https://neon-plinko-flutter.web.app/game/`。
+
+- 构建后把仓库根目录的 `index.html`、`og-cover.png` 复制到发布目录的 `game/` 子目录即可（游戏全为 inline CSS/JS + `data:` favicon，无外部请求）。
+- `web/index.html` 底部的 `<a id="neon-game-launcher" href="/game/">` 是 Flutter 首页的「开始游戏」入口。
+- `firebase.json` 已为 `/game/` 与 `/game/**` 配置缓存，并在 CSP 的 `img-src` 放行 `https://neon-plinko.pages.dev`。
+- 游戏保持「免费、免下载、零依赖、单文件 H5」定位，未用 Dart 重写物理引擎。
+
 ## 部署
 
 ```bash
