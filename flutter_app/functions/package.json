@@ -1,0 +1,17 @@
+{
+  "name": "neon-plinko-functions",
+  "description": "Cloud Functions for Firebase callable used by the NEON PLINKO Flutter Web quickstart integration.",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "20"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^6.6.0"
+  }
+}
