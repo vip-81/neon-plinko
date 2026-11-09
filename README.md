@@ -170,9 +170,20 @@ firebase deploy --only hosting:neon-plinko --project boto3-firebase-1101012838
 - `FirestoreService` 把每次 AI 问答写入 `neon_plinko_ai_logs`（问题/回答/模型/source/时间/客户端），并展示最近 5 条提问
 - 新增 `flutter_app/firestore.rules`（默认拒绝，仅该集合允许已登录用户 read/create）与 `flutter_app/firestore.indexes.json`（空索引）
 - **项目尚未启用 Firestore**：`firestore.googleapis.com` 为 `DISABLED`，无数据库；Anonymous Auth provider 经复验已可用。因此用构建期开关 `FIRESTORE_ENABLED` 默认关闭：不实例化 Firestore、Firestore 数据请求 0（仅 1 个 gstatic SDK 脚本）、AI 助手与控制台不受影响；在 Firebase 控制台启用 Firestore API 并创建 `(default)` 数据库后，用 `--dart-define=FIRESTORE_ENABLED=true` 重新构建并 `firebase deploy --only firestore:rules` 即可开启
+- **实时聊天面板（FriendlyChat）**：原 `flutter/friendlychat-flutter` 已 404，迁移至 `flutter/codelabs` → `firebase-get-to-know-flutter`（BSD-3-Clause）。在 Flutter Web 应用新增匿名用户实时聊天：`FirestoreService.chatStream()` 用 `orderBy('createdAt').snapshots()` + `StreamBuilder` 实时展示 `neon_plinko_chat`，开启 `FIRESTORE_ENABLED` 时启用 `Settings(persistenceEnabled: true)` 离线缓存（对齐 FriendlyChat 的 Offline 特性）；`firestore.rules` 同步新增该集合的 read/create 规则。默认构建 0 聊天请求
 - 默认/开启两种构建均已通过 `flutter analyze` 与生产编译校验
 - `firebase.json` CSP 已显式放行 `firestore.googleapis.com`
 - 主游戏 `index.html` 不接入 Firestore，最高纪录仍在 localStorage
+
+#### Cloud Functions
+
+按 [`firebase/quickstart-flutter` → `cloud_functions/`](https://github.com/firebase/quickstart-flutter/tree/main/cloud_functions)（官方 V1 `addMessage` callable）的 `httpsCallable(...).call()` 用法，在 Flutter Web 应用加入 `cloud_functions ^7.0.1`：
+
+- `FunctionsService` 调用 callable `neonPlinkoRules` 返回游戏规格（倍率表/下注/目标/操作），UI 卡片展示；后端 `flutter_app/functions/index.js` 用当前 SDK 的 v2 `onCall` 等价实现（纯静态、无密钥、通过 `node --check`）
+- `flutter_app/functions/package.json` + `firebase.json` 的 `functions` codebase 配置；CSP 放行 `*.cloudfunctions.net`
+- **函数未部署到生产**：官方要求 Blaze 计费计划，而项目仍为 Spark、`cloudfunctions.googleapis.com` 为 DISABLED。用构建期开关 `FUNCTIONS_ENABLED` 默认关闭：0 次 Functions 请求、AI 助手与控制台不受影响；升级 Blaze 后 `firebase deploy --only functions` 并用 `--dart-define=FUNCTIONS_ENABLED=true` 重新构建即可开启
+- 关/开两种构建均通过 `flutter analyze` 与生产编译；本地可先用 `firebase emulators:start --only functions` 验证（不需要 Blaze）
+- 主游戏 `index.html` 不接入 Cloud Functions
 
 ### Unity（Firebase AI Logic 快速入门）
 
