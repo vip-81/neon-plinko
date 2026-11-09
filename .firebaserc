@@ -1,0 +1,15 @@
+﻿{
+  "projects": {
+    "default": "boto3-firebase-1101012838"
+  },
+  "targets": {
+    "boto3-firebase-1101012838": {
+      "hosting": {
+        "neon-plinko": [
+          "neon-plinko-20261110"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
