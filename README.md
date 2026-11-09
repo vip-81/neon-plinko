@@ -30,6 +30,7 @@
 ├── ai.html         # 独立 Web AI 规则助手页（Firebase AI Logic / Gemini）
 ├── firebase-config.example.js  # Web 配置模板；真实 firebase-config.js 仅部署时生成
 ├── flutter_app/    # 独立 Flutter Web AI 助手源码 + 部署配置
+├── unity_app/      # Firebase AI Logic Unity C# 源码示例（仅源码，未构建）
 ├── 404.html        # 品牌化 404 页面（含 noindex）
 ├── .nojekyll       # GitHub Pages：跳过 Jekyll，原样发布静态文件
 └── README.md       # 部署与维护说明
@@ -141,6 +142,16 @@ firebase deploy --only hosting:neon-plinko --project boto3-firebase-1101012838
 
 构建与部署命令见 `flutter_app/README.md`。
 
+### Unity（Firebase AI Logic 快速入门）
+
+依据 [`firebase/quickstart-unity`](https://github.com/firebase/quickstart-unity)（`master` 分支的 `firebaseai/testapp/`）新增 `unity_app/` C# 源码示例：
+
+- 核心脚本 `unity_app/Assets/Scripts/NeonPlinkoAIHandler.cs`：`FirebaseAI.GetInstance(FirebaseAI.Backend.GoogleAI(), useLimitedUseAppCheckTokens: true)` → `GetGenerativeModel(...)` → `GenerateContentAsync(...)`，与 Web / Flutter 助手使用同一套系统提示词与模型回退
+- 与 Flutter 仓库不同，这个 quickstart **确实包含** `firebaseai/` 官方示例（`UIHandler.cs` 默认模型 `gemini-3.1-flash-lite`，可切换 Google AI / Agent Platform 后端）
+- **未构建、未部署**：当前环境无 Unity Editor / Firebase Unity SDK；且官方 Firebase Unity SDK 只支持 Android / iOS / tvOS / 桌面（桌面仅开发用），**WebGL 不受官方支持**（[issue #566](https://github.com/firebase/firebase-unity-sdk/issues/566)），因此没有 Unity WebGL 静态托管产物
+- 浏览器端仍使用已上线的 Web 助手与 Flutter Web 助手；`unity_app/` 仅作为 Unity 客户端接入参考同步到代码仓库
+- 接入步骤、平台矩阵与 App Check 配置见 `unity_app/README.md`
+
 ### 代码托管镜像
 
 同一份源码已同步到三个公开仓库，均为零构建静态站点：
@@ -221,6 +232,7 @@ window.__NEON_PLINKO_DEBUG__.finish(true)
 
 - 项目文件不包含任何 Cloudflare、GitHub、Gitee、AtomGit、Google 或 itch.io 密钥；Firebase Web 配置只提供 `firebase-config.example.js` 模板，真实 `firebase-config.js` 只在部署目录生成。
 - Firebase Web API Key 是公开的项目标识而非私密凭据，已通过 Google API Keys API 限制为仅允许指定域名；请勿把 Gemini API Key 写进前端。
+- `unity_app/.gitignore` 已排除 `google-services.json`、`GoogleService-Info.plist` 与 App Check debug token；源码中均为占位符。
 - 本次部署使用的凭据仅通过命令环境传递，没有写入 `index.html`、README、Git 或静态资源；Google ADC 凭据保存在用户目录 `%APPDATA%\gcloud\application_default_credentials.json`，属于本机登录态，不在项目目录内。
 - 你在对话中提供的 **Cloudflare API Token、R2 Access Key / Secret Key、itch.io API Key、两个 GitHub Token、Gitee Token、AtomGit Token 均已出现在聊天记录中，请立即撤销并重新生成**。尤其是 R2 Secret Access Key、Cloudflare API Token 与 classic GitHub Token，应视为已泄露。
 - 后续更新时，使用环境变量或平台 Secrets 管理，不要把密钥粘贴到对话或提交到仓库。
