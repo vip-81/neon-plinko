@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ai/firebase_ai.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +8,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'firebase_options.dart';
+
+// 构建期开关：项目尚未创建 Firestore 数据库，默认关闭以保证 0 额外请求。
+// 完成前置配置后用 `flutter build web --dart-define=FIRESTORE_ENABLED=true` 开启。
+const bool kFirestoreEnabled =
+    bool.fromEnvironment('FIRESTORE_ENABLED', defaultValue: false);
 
 const String _systemInstruction = '你是「NEON PLINKO 霓虹弹珠」的官方规则助手。只回答与这个游戏相关的问题，包括：玩法步骤、9 个倍率槽（x12 / x4 / x1.5 / x0.5 / x0.25 / x0.5 / x1.5 / x4 / x12）、下注档位（10 / 25 / 50 / 100 / 250 CR）、初始 1,000 CR、目标 10,000 CR、键盘与触屏操作、最高纪录保存在浏览器 localStorage、纯娱乐且无真实货币投注。请用简体中文、简短、纯文本回答，不要使用 Markdown，不要编造未提供的信息。如果问题与游戏无关，请礼貌拒答并引导用户回到游戏。';
 
@@ -107,6 +113,55 @@ class AuthService {
   Future<void> signOut() async {
     await AnalyticsService.instance.setUserId(null);
     await _auth.signOut();
+  }
+}
+
+/// 对齐官方 quickstart-flutter / firestore 的
+/// FirebaseFirestore.instance + collection().add() + snapshots() 用法。
+///
+/// 每次 AI 问答写入 `neon_plinko_ai_logs`，并用最近 5 条展示「最近提问」。
+/// 项目当前 firestore.googleapis.com 为 DISABLED、数据库也未创建，因此
+/// 由 kFirestoreEnabled 构建期开关默认关闭：不实例化 Firestore、不发起请求。
+class FirestoreService {
+  FirestoreService._();
+  static final FirestoreService instance = FirestoreService._();
+
+  static const String collectionName = 'neon_plinko_ai_logs';
+
+  bool get enabled => kFirestoreEnabled;
+
+  Future<void> saveLog({
+    required String question,
+    required String answer,
+    required String model,
+    required String source,
+  }) async {
+    if (!enabled) return;
+    try {
+      await FirebaseFirestore.instance.collection(collectionName).add(<String, dynamic>{
+        'question': question,
+        'answer': answer,
+        'model': model,
+        'source': source,
+        'client': 'flutter_web',
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      debugPrint('[firestore] 写入失败：$e');
+    }
+  }
+
+  Stream<List<Map<String, dynamic>>> recentLogs() {
+    return FirebaseFirestore.instance
+        .collection(collectionName)
+        .orderBy('createdAt', descending: true)
+        .limit(5)
+        .snapshots()
+        .map(
+          (QuerySnapshot<Map<String, dynamic>> snap) => snap.docs
+              .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) => doc.data())
+              .toList(),
+        );
   }
 }
 
@@ -265,6 +320,12 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
           'status': 'ok',
           'model': name,
         });
+        await FirestoreService.instance.saveLog(
+          question: question.trim(),
+          answer: text,
+          model: name,
+          source: source,
+        );
         return;
       } catch (e) {
         lastError = e.toString();
@@ -429,6 +490,64 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
                       ),
                       const SizedBox(height: 10),
                       Text(_authStatus, style: const TextStyle(color: Color(0xFF00E5FF), fontSize: 13)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                _buildCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      const Text(
+                        'Cloud Firestore',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        '对齐官方 quickstart 的 collection().add() + snapshots() + StreamBuilder。启用后把每次 AI 问答写入 neon_plinko_ai_logs，并展示最近 5 条提问。',
+                        style: TextStyle(color: Color(0xFFA8A2C8), fontSize: 13, height: 1.6),
+                      ),
+                      const SizedBox(height: 12),
+                      if (!kFirestoreEnabled)
+                        const Text(
+                          '未启用：项目尚未创建 Firestore 数据库（firestore.googleapis.com 为 DISABLED）。AI 助手仍可正常使用，且不会产生任何 Firestore 请求。',
+                          style: TextStyle(color: Color(0xFF00E5FF), fontSize: 13, height: 1.6),
+                        )
+                      else
+                        StreamBuilder<List<Map<String, dynamic>>>(
+                          stream: FirestoreService.instance.recentLogs(),
+                          builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+                            if (snapshot.hasError) {
+                              return const Text(
+                                'Firestore 读取失败：请确认已创建数据库并部署 firestore.rules。',
+                                style: TextStyle(color: Color(0xFFFF3CAC), fontSize: 13),
+                              );
+                            }
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return const Text('正在读取最近提问…', style: TextStyle(color: Color(0xFF00E5FF), fontSize: 13));
+                            }
+                            final List<Map<String, dynamic>> logs = snapshot.data ?? <Map<String, dynamic>>[];
+                            if (logs.isEmpty) {
+                              return const Text('暂无记录', style: TextStyle(color: Color(0xFFA8A2C8), fontSize: 13));
+                            }
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: logs.map((Map<String, dynamic> log) {
+                                final String q = (log['question'] ?? '').toString();
+                                final String a = (log['answer'] ?? '').toString();
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: Text(
+                                    '• $q → $a',
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(color: Colors.white, fontSize: 13, height: 1.5),
+                                  ),
+                                );
+                              }).toList(),
+                            );
+                          },
+                        ),
                     ],
                   ),
                 ),
