@@ -1,0 +1,24 @@
+rules_version = '2';
+
+// 对齐官方 quickstart-flutter / firestore 的安全规则：默认拒绝所有读写，
+// 只对 NEON PLINKO 的 AI 问答日志集合开放「已登录用户」的读与创建。
+// 写入前需先启用 Anonymous Auth provider 并完成匿名登录。
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    match /neon_plinko_ai_logs/{logId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasAll([
+          'question', 'answer', 'model', 'source', 'client', 'createdAt'
+        ])
+        && request.resource.data.client == 'flutter_web'
+        && request.resource.data.question is string
+        && request.resource.data.answer is string;
+      allow update, delete: if false;
+    }
+  }
+}
