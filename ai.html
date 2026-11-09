@@ -155,7 +155,7 @@
           <button type="button" data-suggest="下注档位有哪些？初始筹码和胜利目标是多少？">下注与目标</button>
           <button type="button" data-suggest="这个游戏涉及真实货币或充值吗？最高纪录保存在哪里？">安全说明</button>
         </div>
-        <p class="status" id="status" role="status" aria-live="polite"></p>
+        <p class="status" id="status" role="status" aria-live="polite">正在初始化…</p>
         <div class="answer" id="answer" aria-live="polite"></div>
         <p class="note">本页面会把你的问题发送给 Google Gemini 以生成回答，请勿输入个人信息。AI 回答可能有误，游戏内规则以主页说明为准。</p>
       </section>
@@ -171,7 +171,6 @@
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js';
     import { getAI, getGenerativeModel, GoogleAIBackend } from 'https://www.gstatic.com/firebasejs/13.1.0/firebase-ai.js';
-    import { firebaseConfig } from './firebase-config.js';
 
     const form = document.getElementById('ask-form');
     const input = document.getElementById('question');
@@ -185,13 +184,23 @@
     const SYSTEM = '你是「NEON PLINKO 霓虹弹珠」的官方规则助手。只回答与这个游戏相关的问题，包括：玩法步骤、9 个倍率槽（x12 / x4 / x1.5 / x0.5 / x0.25 / x0.5 / x1.5 / x4 / x12）、下注档位（10 / 25 / 50 / 100 / 250 CR）、初始 1,000 CR、目标 10,000 CR、键盘与触屏操作、最高纪录保存在浏览器 localStorage、纯娱乐且无真实货币投注。请用简体中文、简短、纯文本回答，不要使用 Markdown，不要编造未提供的信息。如果问题与游戏无关，请礼貌拒答并引导用户回到游戏。';
 
     let ai;
+    let firebaseConfig;
     try {
-      const app = initializeApp(firebaseConfig);
-      ai = getAI(app, { backend: new GoogleAIBackend() });
-      statusEl.textContent = '已连接，请输入问题。';
-    } catch (err) {
-      statusEl.textContent = 'Firebase 初始化失败：' + (err && err.message ? err.message : String(err));
+      const configModule = await import('./firebase-config.js');
+      firebaseConfig = configModule.firebaseConfig;
+    } catch (_) {
+      statusEl.textContent = '此 AI 助手页仅在 Firebase Hosting 环境可用（缺少 firebase-config.js）。请访问 https://neon-plinko-20261110.web.app/ai';
       submit.disabled = true;
+    }
+    if (firebaseConfig) {
+      try {
+        const app = initializeApp(firebaseConfig);
+        ai = getAI(app, { backend: new GoogleAIBackend() });
+        statusEl.textContent = '已连接，请输入问题。';
+      } catch (err) {
+        statusEl.textContent = 'Firebase 初始化失败：' + (err && err.message ? err.message : String(err));
+        submit.disabled = true;
+      }
     }
 
     function setBusy(busy) {
