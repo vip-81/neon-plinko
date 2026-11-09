@@ -154,6 +154,15 @@ firebase deploy --only hosting:neon-plinko --project boto3-firebase-1101012838
 - **主游戏 `index.html` 不接入 Analytics**（保持无统计脚本、`connect-src 'self'`、Lighthouse 100）。
 - 同时移除了 Flutter 端已弃用的 `temperature` 参数，与官方及 JS 版实现对齐。
 
+#### Authentication（Firebase Auth）
+
+按 [`firebase/quickstart-flutter` → `authentication/`](https://github.com/firebase/quickstart-flutter/tree/main/authentication) 的 `authStateChanges()` / `signInAnonymously()` / `User.uid`，在 Flutter Web 应用加入 `firebase_auth ^7.0.1` 与匿名登录（官方示例为 Email/Password + `firebase_ui_auth`，此处选用无需注册的匿名方式）。
+
+- 新增 `AuthService`：订阅 `authStateChanges()`、提供「匿名登录」/「退出登录」按钮、登录后把 uid 写入 Analytics `setUserId` 并埋 `login` 事件。
+- **项目尚未启用 Firebase Authentication**：Identity Toolkit config 返回 `404 CONFIGURATION_NOT_FOUND`，无 sign-in provider。因此默认不自动请求；点击按钮若返回 `operation-not-allowed` 会友好提示，AI 助手完全不受影响。
+- `firebase.json` CSP 已预放行 `identitytoolkit.googleapis.com` / `securetoken.googleapis.com`，并增加 `frame-src` 允许 Auth 隐藏 iframe。
+- 主游戏 `index.html` 不接入 Auth，保持零第三方请求与 Lighthouse 100。
+
 ### Unity（Firebase AI Logic 快速入门）
 
 依据 [`firebase/quickstart-unity`](https://github.com/firebase/quickstart-unity)（`master` 分支的 `firebaseai/testapp/`）新增 `unity_app/` C# 源码示例：
