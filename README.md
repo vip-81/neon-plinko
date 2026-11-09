@@ -103,6 +103,7 @@ firebase deploy --only hosting:neon-plinko --project boto3-firebase-1101012838
 - 仅该页放宽 CSP，允许 `www.gstatic.com`、`apis.google.com` 与 `firebasevertexai.googleapis.com`；首页仍是严格 CSP，Lighthouse 保持 100/100/100。
 - 模型按 `gemini-3.5-flash-lite` → `gemini-3.6-flash` → `gemini-3.5-flash` 回退，单次请求 35 秒超时；`gemini-3.8-flash` 当前高负载，故不作为首选。
 - 系统提示词限定只回答 NEON PLINKO 的玩法、倍率、下注、操作与安全说明，并拒答无关问题。
+- 其他镜像（如 GitHub Pages）没有 `firebase-config.js` 时会显示「仅 Firebase 环境可用」并禁用提问，不会调用 Gemini；AI 助手的实际入口是 Firebase Hosting。
 
 前置配置（已完成）：
 
