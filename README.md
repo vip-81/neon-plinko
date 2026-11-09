@@ -8,6 +8,7 @@
 - **Firebase AI Logic 助手页（Web）**：https://neon-plinko-20261110.web.app/ai
 - **Flutter Web AI 助手**：https://neon-plinko-flutter.web.app/
 - **Flutter Web 站点内的 H5 游戏**：https://neon-plinko-flutter.web.app/game/
+- **React / Vite AI 助手**：https://neon-plinko-js.web.app/
 - **GitHub 仓库**：https://github.com/vip-81/neon-plinko
 - **Gitee 仓库**：https://gitee.com/vip882/neon-plinko
 - **AtomGit 仓库**：https://atomgit.com/zzw1208/neon-plinko
@@ -31,6 +32,7 @@
 ├── firebase-config.example.js  # Web 配置模板；真实 firebase-config.js 仅部署时生成
 ├── flutter_app/    # 独立 Flutter Web AI 助手源码 + 部署配置
 ├── unity_app/      # Firebase AI Logic Unity C# 源码示例（仅源码，未构建）
+├── js_app/         # Firebase AI Logic React / Vite 应用源码 + 部署配置
 ├── 404.html        # 品牌化 404 页面（含 noindex）
 ├── .nojekyll       # GitHub Pages：跳过 Jekyll，原样发布静态文件
 └── README.md       # 部署与维护说明
@@ -152,6 +154,20 @@ firebase deploy --only hosting:neon-plinko --project boto3-firebase-1101012838
 - 浏览器端仍使用已上线的 Web 助手与 Flutter Web 助手；`unity_app/` 仅作为 Unity 客户端接入参考同步到代码仓库
 - 接入步骤、平台矩阵与 App Check 配置见 `unity_app/README.md`
 
+### React / Vite（Firebase AI Logic JS 快速入门）
+
+依据 [`firebase/quickstart-js`](https://github.com/firebase/quickstart-js)（`master` 分支的 `ai/ai-samples/` 与 `ai-react-app/`）新建独立 Web 应用：
+
+- 站点：https://neon-plinko-js.web.app/ ，深链 `?q=最高倍率是多少`
+- Firebase 项目 `boto3-firebase-1101012838` · Hosting 站点 `neon-plinko-js` · deploy target `js`
+- 源码 `js_app/`：React 19 + TypeScript + Vite 6 + npm `firebase ^13`；`src/firebaseAIService.ts` 对齐官方 `service.ts`（`initializeApp` → `getAI(app)` → `getGenerativeModel`）
+- 配置通过 `VITE_FIREBASE_CONFIG` 在构建期注入，源码与仓库均不含真实项目标识；`.env.example` 只有占位符
+- 不传 `temperature` / `topP` / `topK`（官方注明 Gemini 3.x 已弃用）；模型回退与 Web / Flutter 助手一致，35 秒超时
+- App Check 按官方 `ReCaptchaEnterpriseProvider` 以注释骨架保留，未强制启用（无有效 site key 会拒绝全部客户端请求）
+- 实测：`?q=最高倍率是多少` 调用 `gemini-3.5-flash-lite` 返回 200，页面显示「最高倍率是 x12。」，控制台 0 错误
+- 站点 `noindex`，CSP 单独配置（Gemini 端点、字体、同站哈希资源），主站与其它镜像不受影响
+- 构建与部署命令见 `js_app/README.md`
+
 ### 代码托管镜像
 
 同一份源码已同步到三个公开仓库，均为零构建静态站点：
@@ -233,6 +249,7 @@ window.__NEON_PLINKO_DEBUG__.finish(true)
 - 项目文件不包含任何 Cloudflare、GitHub、Gitee、AtomGit、Google 或 itch.io 密钥；Firebase Web 配置只提供 `firebase-config.example.js` 模板，真实 `firebase-config.js` 只在部署目录生成。
 - Firebase Web API Key 是公开的项目标识而非私密凭据，已通过 Google API Keys API 限制为仅允许指定域名；请勿把 Gemini API Key 写进前端。
 - `unity_app/.gitignore` 已排除 `google-services.json`、`GoogleService-Info.plist` 与 App Check debug token；源码中均为占位符。
+- `js_app/` 使用 `VITE_FIREBASE_CONFIG` 构建期注入，`.gitignore` 排除 `.env*`；仓库内无任何真实 Firebase 配置。
 - 本次部署使用的凭据仅通过命令环境传递，没有写入 `index.html`、README、Git 或静态资源；Google ADC 凭据保存在用户目录 `%APPDATA%\gcloud\application_default_credentials.json`，属于本机登录态，不在项目目录内。
 - 你在对话中提供的 **Cloudflare API Token、R2 Access Key / Secret Key、itch.io API Key、两个 GitHub Token、Gitee Token、AtomGit Token 均已出现在聊天记录中，请立即撤销并重新生成**。尤其是 R2 Secret Access Key、Cloudflare API Token 与 classic GitHub Token，应视为已泄露。
 - 后续更新时，使用环境变量或平台 Secrets 管理，不要把密钥粘贴到对话或提交到仓库。
