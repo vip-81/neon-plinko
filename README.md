@@ -5,7 +5,8 @@
 - **生产地址（Canonical）**：https://neon-plinko.pages.dev/
 - **GitHub Pages 镜像**：https://vip-81.github.io/neon-plinko/
 - **Firebase Hosting 镜像**：https://neon-plinko-20261110.web.app/
-- **Firebase AI Logic 助手页**：https://neon-plinko-20261110.web.app/ai
+- **Firebase AI Logic 助手页（Web）**：https://neon-plinko-20261110.web.app/ai
+- **Flutter Web AI 助手**：https://neon-plinko-flutter.web.app/
 - **GitHub 仓库**：https://github.com/vip-81/neon-plinko
 - **Gitee 仓库**：https://gitee.com/vip882/neon-plinko
 - **AtomGit 仓库**：https://atomgit.com/zzw1208/neon-plinko
@@ -25,8 +26,9 @@
 ├── _headers        # Cloudflare Pages 缓存与安全响应头
 ├── firebase.json   # Firebase Hosting 配置（headers / cache / cleanUrls）
 ├── .firebaserc     # Firebase 项目与多站点 target 映射
-├── ai.html         # 独立 AI 规则助手页（Firebase AI Logic / Gemini）
+├── ai.html         # 独立 Web AI 规则助手页（Firebase AI Logic / Gemini）
 ├── firebase-config.example.js  # Web 配置模板；真实 firebase-config.js 仅部署时生成
+├── flutter_app/    # 独立 Flutter Web AI 助手源码 + 部署配置
 ├── 404.html        # 品牌化 404 页面（含 noindex）
 ├── .nojekyll       # GitHub Pages：跳过 Jekyll，原样发布静态文件
 └── README.md       # 部署与维护说明
@@ -121,6 +123,21 @@ firebase deploy --only hosting:neon-plinko --project boto3-firebase-1101012838
 ```
 
 生产环境建议在 Firebase 控制台额外配置 App Check / reCAPTCHA Enterprise 强制校验；当前通过 provisioning API 初始化，未启用 App Check 强制校验，但 API Key 已做域名限制。
+
+### Flutter Web AI 助手
+
+按你提供的 `firebase/quickstart-flutter` 方向，另建了独立 Flutter Web 客户端（该仓库 `main` 分支当前已无 AI Logic 示例，故按官方 `firebase_ai` Dart API 实现）：
+
+- 站点：https://neon-plinko-flutter.web.app/
+- Firebase 项目：`boto3-firebase-1101012838`；Hosting 站点：`neon-plinko-flutter`
+- 源码：`flutter_app/`，使用 `firebase_core ^5.1.0` + `firebase_ai ^5.1.0`，Flutter 3.47.9 / Dart 3.13.7
+- 功能与 Web 助手一致：系统提示词限定游戏规则、3 个稳定模型回退、35 秒超时、`?q=` 深链自动提问
+- 实测：`?q=最高倍率是多少` 调用 `gemini-3.5-flash-lite` 返回 200，答案为「游戏中的最高倍率是 x12，位于最左侧和最右侧的倍率槽。」，控制台 0 错误
+- 该站点单独放宽 CSP 以允许 Wasm（`'wasm-unsafe-eval'`）、`fonts.gstatic.com` 与 Gemini 端点；主游戏与 Web 助手的 CSP 不受影响
+- 页面同样 `noindex`，不进入 sitemap，不参与主站评分
+- 真实 `firebase_options.dart` 仅在构建目录；仓库中 `flutter_app/lib/firebase_options.dart` 为占位模板
+
+构建与部署命令见 `flutter_app/README.md`。
 
 ### 代码托管镜像
 
