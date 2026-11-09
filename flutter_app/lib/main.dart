@@ -1,4 +1,5 @@
 import 'package:firebase_ai/firebase_ai.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,50 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const NeonAiApp());
+}
+
+/// 对齐官方 quickstart-flutter / analytics 的 logEvent + setUserProperty 用法。
+///
+/// Firebase Web 端 Analytics 需要 measurementId（启用 Google Analytics 后才会生成）。
+/// 本项目尚未启用 GA、measurementId 为空，因此这里优雅跳过初始化：
+/// 不创建 FirebaseAnalytics 实例、不发起任何第三方统计请求，站点 CSP 与行为保持不变。
+/// 之后在 Firebase 控制台启用 GA 并把 measurementId 填入 firebase_options.dart 即可自动生效。
+class AnalyticsService {
+  AnalyticsService._();
+  static final AnalyticsService instance = AnalyticsService._();
+
+  FirebaseAnalytics? _analytics;
+
+  bool get enabled =>
+      (DefaultFirebaseOptions.web.measurementId ?? '').isNotEmpty;
+
+  Future<void> init() async {
+    if (!enabled) {
+      debugPrint('[analytics] measurementId 为空，跳过 Analytics 初始化。');
+      return;
+    }
+    try {
+      final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+      _analytics = analytics;
+      await analytics.setAnalyticsCollectionEnabled(true);
+      await analytics.setUserProperty(name: 'plinko_client', value: 'flutter_web');
+      await analytics.logScreenView(screenName: 'ai_assistant');
+      await log('app_open', parameters: <String, Object>{'platform': 'flutter_web'});
+    } catch (e) {
+      debugPrint('[analytics] 初始化失败：$e');
+      _analytics = null;
+    }
+  }
+
+  Future<void> log(String name, {Map<String, Object>? parameters}) async {
+    final FirebaseAnalytics? analytics = _analytics;
+    if (analytics == null) return;
+    try {
+      await analytics.logEvent(name: name, parameters: parameters);
+    } catch (e) {
+      debugPrint('[analytics] logEvent($name) 失败：$e');
+    }
+  }
 }
 
 class NeonAiApp extends StatelessWidget {
@@ -60,6 +105,7 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
   @override
   void initState() {
     super.initState();
+    AnalyticsService.instance.init();
     try {
       _ai = FirebaseAI.googleAI();
       _status = '已连接，请输入问题。';
@@ -68,7 +114,9 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
     }
     final String? initialQuestion = Uri.base.queryParameters['q'];
     if (initialQuestion != null && initialQuestion.trim().isNotEmpty) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _ask(initialQuestion));
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => _ask(initialQuestion, source: 'deeplink'),
+      );
     }
   }
 
@@ -78,7 +126,7 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
     super.dispose();
   }
 
-  Future<void> _ask(String question) async {
+  Future<void> _ask(String question, {String source = 'input'}) async {
     final FirebaseAI? ai = _ai;
     if (ai == null || _busy || question.trim().isEmpty) return;
     setState(() {
@@ -87,13 +135,18 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
       _status = '正在连接 Gemini，请稍候…';
     });
 
+    await AnalyticsService.instance.log('ask_ai', parameters: <String, Object>{
+      'source': source,
+      'question_length': question.trim().length,
+    });
+
     String lastError = '';
     for (final String name in _models) {
       try {
         final GenerativeModel model = ai.generativeModel(
           model: name,
           systemInstruction: Content.text(_systemInstruction),
-          generationConfig: GenerationConfig(maxOutputTokens: 300, temperature: 0.4),
+          generationConfig: GenerationConfig(maxOutputTokens: 300),
         );
         final GenerateContentResponse response = await model
             .generateContent(<Content>[Content.text(question.trim())])
@@ -105,12 +158,19 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
           _status = '回答完成。';
           _busy = false;
         });
+        await AnalyticsService.instance.log('ai_response', parameters: <String, Object>{
+          'status': 'ok',
+          'model': name,
+        });
         return;
       } catch (e) {
         lastError = e.toString();
       }
     }
 
+    await AnalyticsService.instance.log('ai_response', parameters: <String, Object>{
+      'status': 'error',
+    });
     if (!mounted) return;
     setState(() {
       _answer = '暂时无法连接 AI 助手。可能是模型临时高负载、API Key 域名限制或免费额度不足；已自动尝试多个稳定模型，请稍后重试。\n\n错误详情：$lastError';
@@ -244,7 +304,7 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
       side: const BorderSide(color: Color(0x5500E5FF)),
       onPressed: _busy ? null : () {
         _controller.text = question;
-        _ask(question);
+        _ask(question, source: 'suggestion');
       },
     );
   }
