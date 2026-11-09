@@ -134,7 +134,7 @@ firebase deploy --only hosting:neon-plinko --project boto3-firebase-1101012838
 
 - 站点：https://neon-plinko-flutter.web.app/
 - Firebase 项目：`boto3-firebase-1101012838`；Hosting 站点：`neon-plinko-flutter`
-- 源码：`flutter_app/`，使用 `firebase_core ^5.1.0` + `firebase_ai ^5.1.0`，Flutter 3.47.9 / Dart 3.13.7
+- 源码：`flutter_app/`，使用 `firebase_core ^5.1.0` + `firebase_ai ^5.1.0` + `firebase_analytics ^13.0.1`，Flutter 3.47.9 / Dart 3.13.7
 - 功能与 Web 助手一致：系统提示词限定游戏规则、3 个稳定模型回退、35 秒超时、`?q=` 深链自动提问
 - **游戏本体**：同一 Flutter Web 站点以 `/game/` 子路径托管完整单文件 H5 游戏（保持「免费、免下载、零依赖」），Flutter 首页底部有「▶ 开始游戏」入口；不重写 Canvas 物理引擎
 - 实测：`/game/` 空格开局 → 投放 → x1.5 结算 38 CR；`?q=最高倍率是多少` 调用 `gemini-3.5-flash-lite` 返回 200，答案为「游戏中的最高倍率是 x12，位于最左侧和最右侧的倍率槽。」，控制台 0 错误
@@ -143,6 +143,16 @@ firebase deploy --only hosting:neon-plinko --project boto3-firebase-1101012838
 - 真实 `firebase_options.dart` 仅在构建目录；仓库中 `flutter_app/lib/firebase_options.dart` 为占位模板
 
 构建与部署命令见 `flutter_app/README.md`。
+
+#### Analytics（Google Analytics for Firebase）
+
+按 [`firebase/quickstart-flutter` → `analytics/`](https://github.com/firebase/quickstart-flutter/tree/main/analytics) 的 `logEvent` / `setUserProperty` / `setAnalyticsCollectionEnabled` 用法，在 Flutter Web 应用埋入 `app_open`、`screen_view`、`ask_ai`、`ai_response` 与用户属性 `plinko_client=flutter_web`。
+
+- **项目尚未启用 Google Analytics**：`firebase apps:sdkconfig WEB <appId>` 返回 `measurementId` 为空，Firebase 项目 `resources` 中无 `analyticsAccount` / `analyticsProperty`。
+- 因此 `AnalyticsService` 优雅降级：`measurementId` 为空时跳过 `FirebaseAnalytics.instance` 初始化，**不发起任何第三方统计请求**；实测 `google-analytics` / `googletagmanager` 请求数均为 0，AI 助手仍返回 200、控制台 0 错误。
+- `firebase.json` 已预先在 CSP 放行 `www.google-analytics.com`、`*.google-analytics.com`、`*.analytics.google.com`、`www.googletagmanager.com`；启用 GA 后只需把生成的 `measurementId` 填入 `flutter_app/lib/firebase_options.dart` 并重新构建，无需改业务逻辑。
+- **主游戏 `index.html` 不接入 Analytics**（保持无统计脚本、`connect-src 'self'`、Lighthouse 100）。
+- 同时移除了 Flutter 端已弃用的 `temperature` 参数，与官方及 JS 版实现对齐。
 
 ### Unity（Firebase AI Logic 快速入门）
 
