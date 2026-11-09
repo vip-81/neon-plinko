@@ -7,6 +7,7 @@
 - **Firebase Hosting 镜像**：https://neon-plinko-20261110.web.app/
 - **Firebase AI Logic 助手页（Web）**：https://neon-plinko-20261110.web.app/ai
 - **Flutter Web AI 助手**：https://neon-plinko-flutter.web.app/
+- **Flutter Web 站点内的 H5 游戏**：https://neon-plinko-flutter.web.app/game/
 - **GitHub 仓库**：https://github.com/vip-81/neon-plinko
 - **Gitee 仓库**：https://gitee.com/vip882/neon-plinko
 - **AtomGit 仓库**：https://atomgit.com/zzw1208/neon-plinko
@@ -132,7 +133,8 @@ firebase deploy --only hosting:neon-plinko --project boto3-firebase-1101012838
 - Firebase 项目：`boto3-firebase-1101012838`；Hosting 站点：`neon-plinko-flutter`
 - 源码：`flutter_app/`，使用 `firebase_core ^5.1.0` + `firebase_ai ^5.1.0`，Flutter 3.47.9 / Dart 3.13.7
 - 功能与 Web 助手一致：系统提示词限定游戏规则、3 个稳定模型回退、35 秒超时、`?q=` 深链自动提问
-- 实测：`?q=最高倍率是多少` 调用 `gemini-3.5-flash-lite` 返回 200，答案为「游戏中的最高倍率是 x12，位于最左侧和最右侧的倍率槽。」，控制台 0 错误
+- **游戏本体**：同一 Flutter Web 站点以 `/game/` 子路径托管完整单文件 H5 游戏（保持「免费、免下载、零依赖」），Flutter 首页底部有「▶ 开始游戏」入口；不重写 Canvas 物理引擎
+- 实测：`/game/` 空格开局 → 投放 → x1.5 结算 38 CR；`?q=最高倍率是多少` 调用 `gemini-3.5-flash-lite` 返回 200，答案为「游戏中的最高倍率是 x12，位于最左侧和最右侧的倍率槽。」，控制台 0 错误
 - 该站点单独放宽 CSP 以允许 Wasm（`'wasm-unsafe-eval'`）、`fonts.gstatic.com` 与 Gemini 端点；主游戏与 Web 助手的 CSP 不受影响
 - 页面同样 `noindex`，不进入 sitemap，不参与主站评分
 - 真实 `firebase_options.dart` 仅在构建目录；仓库中 `flutter_app/lib/firebase_options.dart` 为占位模板
