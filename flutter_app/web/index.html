@@ -9,22 +9,47 @@
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#05030f">
   <meta name="robots" content="noindex, follow">
-  <title>AI 规则助手 | NEON PLINKO · Flutter Web</title>
-  <meta name="description" content="NEON PLINKO 霓虹弹珠的独立 Flutter Web AI 规则助手，由 Firebase AI Logic 与 Gemini 提供，回答玩法、倍率、下注与操作问题。">
-  <meta name="keywords" content="NEON PLINKO,霓虹弹珠,Flutter Web,Firebase AI Logic,Gemini,H5游戏">
+  <title>NEON PLINKO 霓虹弹珠 | Flutter Web · 赛博朋克 H5 游戏</title>
+  <meta name="description" content="NEON PLINKO 是一款免费、免下载的赛博朋克风 H5 霓虹弹珠游戏。移动发射器投放筹码，穿越能量钉阵赢取最高 x12 倍率，冲击 10,000 CR 金库目标；支持手机触屏与电脑键盘，打开即玩。本站同时提供 Firebase AI Logic 规则助手。">
+  <meta name="keywords" content="NEON PLINKO,霓虹弹珠,免费游戏,免下载,赛博朋克,H5游戏,Plinko,Flutter Web,Firebase AI Logic,Gemini,Canvas游戏">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="NEON PLINKO AI">
+  <meta name="apple-mobile-web-app-title" content="NEON PLINKO">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
   <link rel="manifest" href="manifest.json">
+
+  <style>
+    #neon-game-launcher {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      z-index: 2147483647;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #00e5ff, #ff3cac);
+      color: #06030f;
+      font: 700 14px/1.2 "Segoe UI", system-ui, -apple-system, "Microsoft YaHei", sans-serif;
+      text-decoration: none;
+      box-shadow: 0 6px 26px rgba(255, 60, 172, .55);
+      letter-spacing: .02em;
+    }
+    #neon-game-launcher:hover { filter: brightness(1.1); }
+    #neon-game-launcher:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+    @media (max-width: 480px) { #neon-game-launcher { bottom: 12px; padding: 10px 16px; font-size: 13px; } }
+  </style>
 </head>
 <body>
+  <a id="neon-game-launcher" href="/game/" aria-label="开始游玩 NEON PLINKO 霓虹弹珠 H5 游戏">▶ 开始游戏 · NEON PLINKO</a>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
