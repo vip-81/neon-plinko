@@ -5,6 +5,8 @@
 - **生产地址（Canonical）**：https://neon-plinko.pages.dev/
 - **GitHub Pages 镜像**：https://vip-81.github.io/neon-plinko/
 - **GitHub 仓库**：https://github.com/vip-81/neon-plinko
+- **Gitee 仓库**：https://gitee.com/vip882/neon-plinko
+- **AtomGit 仓库**：https://atomgit.com/zzw1208/neon-plinko
 - **Cloudflare Pages 项目**：`neon-plinko`
 - **部署环境**：production / `main`
 - **现有项目**：`neon21-casino`、`static-casino-game`、`golden-reels` 均保持原样，未被覆盖
@@ -19,6 +21,7 @@
 ├── sitemap.xml     # 单页 sitemap
 ├── llms.txt        # 面向 AI 摘要与引用的结构化站点摘要
 ├── _headers        # Cloudflare Pages 缓存与安全响应头
+├── 404.html        # 品牌化 404 页面（含 noindex）
 ├── .nojekyll       # GitHub Pages：跳过 Jekyll，原样发布静态文件
 └── README.md       # 部署与维护说明
 ```
@@ -62,6 +65,20 @@ git push -u origin main
 - GitHub Pages 不支持自定义响应头，`_headers` 中的 CSP 与缓存策略仅在 Cloudflare Pages 生效。
 - 两个地址返回相同页面；canonical、`og:url`、JSON-LD、`sitemap.xml` 与 `robots.txt` 统一指向 Cloudflare 生产域名，避免重复索引。
 - 需要把 GitHub Pages 设为主站时，将上述文件中的 `https://neon-plinko.pages.dev/` 替换为 `https://vip-81.github.io/neon-plinko/`，同步更新 `llms.txt`，然后重新部署两个平台。
+
+### 代码托管镜像
+
+同一份源码已同步到三个公开仓库，均为零构建静态站点：
+
+| 平台 | 仓库 | 默认分支 |
+|---|---|---|
+| GitHub | https://github.com/vip-81/neon-plinko | `main` |
+| Gitee | https://gitee.com/vip882/neon-plinko | `master` |
+| AtomGit | https://atomgit.com/zzw1208/neon-plinko | `main` |
+
+- 三个仓库仅用于源码分发与备份；线上生产仍以 Cloudflare Pages 为 canonical。
+- `.nojekyll` 为平台标记文件，内容为一个换行符，便于 Gitee / AtomGit 正确写入空标记文件。
+- 更新任一仓库后，其他两个仓库需手动同步同一批文件；操作凭据使用环境变量或平台 Secrets，勿写入项目文件。
 
 ## 本地预览
 
