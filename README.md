@@ -5,6 +5,7 @@
 - **生产地址（Canonical）**：https://neon-plinko.pages.dev/
 - **GitHub Pages 镜像**：https://vip-81.github.io/neon-plinko/
 - **Firebase Hosting 镜像**：https://neon-plinko-20261110.web.app/
+- **Firebase AI Logic 助手页**：https://neon-plinko-20261110.web.app/ai
 - **GitHub 仓库**：https://github.com/vip-81/neon-plinko
 - **Gitee 仓库**：https://gitee.com/vip882/neon-plinko
 - **AtomGit 仓库**：https://atomgit.com/zzw1208/neon-plinko
@@ -24,6 +25,8 @@
 ├── _headers        # Cloudflare Pages 缓存与安全响应头
 ├── firebase.json   # Firebase Hosting 配置（headers / cache / cleanUrls）
 ├── .firebaserc     # Firebase 项目与多站点 target 映射
+├── ai.html         # 独立 AI 规则助手页（Firebase AI Logic / Gemini）
+├── firebase-config.example.js  # Web 配置模板；真实 firebase-config.js 仅部署时生成
 ├── 404.html        # 品牌化 404 页面（含 noindex）
 ├── .nojekyll       # GitHub Pages：跳过 Jekyll，原样发布静态文件
 └── README.md       # 部署与维护说明
@@ -91,6 +94,33 @@ firebase deploy --only hosting:neon-plinko --project boto3-firebase-1101012838
 - Firebase 镜像与 Cloudflare / GitHub Pages 一样，canonical 保持 `https://neon-plinko.pages.dev/`。
 - 登录使用 `gcloud auth application-default login` 生成的 ADC；Firebase CLI 会直接复用该凭据，无需单独 `firebase login`。
 
+### Firebase AI Logic 助手页
+
+独立页面 `ai.html` 使用 Firebase AI Logic Web SDK（13.1.0，gstatic CDN）调用 Gemini，提供游戏规则问答；主游戏 `index.html` 完全不变。
+
+- 访问地址：https://neon-plinko-20261110.web.app/ai （`/ai.html` 会 301 到 `/ai`）
+- 该页设置 `noindex, follow`，不参与主站 SEO/GEO 评分，也不纳入主站 Lighthouse。
+- 仅该页放宽 CSP，允许 `www.gstatic.com`、`apis.google.com` 与 `firebasevertexai.googleapis.com`；首页仍是严格 CSP，Lighthouse 保持 100/100/100。
+- 模型按 `gemini-3.5-flash-lite` → `gemini-3.6-flash` → `gemini-3.5-flash` 回退，单次请求 35 秒超时；`gemini-3.8-flash` 当前高负载，故不作为首选。
+- 系统提示词限定只回答 NEON PLINKO 的玩法、倍率、下注、操作与安全说明，并拒答无关问题。
+
+前置配置（已完成）：
+
+- 注册 Firebase Web App：`1:909891373707:web:93ea70d7a2a1fe5ac6a28e`
+- 启用 `generativelanguage.googleapis.com`、`firebasevertexai.googleapis.com`、`apikeys.googleapis.com`
+- 通过 Firebase provisioning API 创建 AI Logic genai config（否则会报 `genai config not found`）
+- 将公开 Firebase Web API Key 限制为仅允许 `https://neon-plinko-20261110.web.app/*`、`https://neon-plinko-20261110.firebaseapp.com/*` 与 localhost
+
+部署时使用 `firebase-config.example.js` 作为模板生成 `firebase-config.js` 并上传到 Hosting；**真实配置不提交到公开仓库**，避免把项目标识写入源码库：
+
+```bash
+cp firebase-config.example.js firebase-config.js
+# 填入 firebase apps:sdkconfig WEB <appId> 输出的值
+firebase deploy --only hosting:neon-plinko --project boto3-firebase-1101012838
+```
+
+生产环境建议在 Firebase 控制台额外配置 App Check / reCAPTCHA Enterprise 强制校验；当前通过 provisioning API 初始化，未启用 App Check 强制校验，但 API Key 已做域名限制。
+
 ### 代码托管镜像
 
 同一份源码已同步到三个公开仓库，均为零构建静态站点：
@@ -143,6 +173,7 @@ window.__NEON_PLINKO_DEBUG__.finish(true)
 - `llms.txt` 提供可直接引用的游戏事实、规则、倍率与 FAQ，并注明引用来源。
 - `sitemap.xml` 与 `robots.txt` 已指向正式域名。
 - Google Search Console：已通过 API 创建 URL-prefix 资源 `https://neon-plinko.pages.dev/`；因所有权尚未验证，sitemap 提交返回 403。需在 GSC 完成验证（HTML 文件 / DNS / meta 标签）后重新提交 `sitemap.xml`。
+- AI 助手页为 `noindex` 辅助页，不进入 sitemap，也不作为生成式引擎的引用来源；GEO 仍以主页语义化内容、JSON-LD、FAQ 与 `llms.txt` 为准。
 
 ### 绑定自定义域名后
 
@@ -168,7 +199,8 @@ window.__NEON_PLINKO_DEBUG__.finish(true)
 
 ## 安全提示（重要）
 
-- 项目文件不包含任何 Cloudflare、GitHub、Gitee、AtomGit、Google 或 itch.io 密钥。
+- 项目文件不包含任何 Cloudflare、GitHub、Gitee、AtomGit、Google 或 itch.io 密钥；Firebase Web 配置只提供 `firebase-config.example.js` 模板，真实 `firebase-config.js` 只在部署目录生成。
+- Firebase Web API Key 是公开的项目标识而非私密凭据，已通过 Google API Keys API 限制为仅允许指定域名；请勿把 Gemini API Key 写进前端。
 - 本次部署使用的凭据仅通过命令环境传递，没有写入 `index.html`、README、Git 或静态资源；Google ADC 凭据保存在用户目录 `%APPDATA%\gcloud\application_default_credentials.json`，属于本机登录态，不在项目目录内。
 - 你在对话中提供的 **Cloudflare API Token、R2 Access Key / Secret Key、itch.io API Key、两个 GitHub Token、Gitee Token、AtomGit Token 均已出现在聊天记录中，请立即撤销并重新生成**。尤其是 R2 Secret Access Key、Cloudflare API Token 与 classic GitHub Token，应视为已泄露。
 - 后续更新时，使用环境变量或平台 Secrets 管理，不要把密钥粘贴到对话或提交到仓库。
