@@ -6,7 +6,7 @@
 - 深链示例：`https://neon-plinko-flutter.web.app/?q=最高倍率是多少`
 - Firebase 项目：`boto3-firebase-1101012838`
 - Hosting 站点：`neon-plinko-flutter`
-- 依赖：`firebase_core ^5.1.0`、`firebase_ai ^5.1.0`、`firebase_analytics ^13.0.1`、`firebase_auth ^7.0.1`、`cloud_firestore ^7.1.0`、Flutter 3.47.9 / Dart 3.13.7
+- 依赖：`firebase_core ^5.1.0`、`firebase_ai ^5.1.0`、`firebase_analytics ^13.0.1`、`firebase_auth ^7.0.1`、`cloud_firestore ^7.1.0`、`cloud_functions ^7.0.1`、Flutter 3.47.9 / Dart 3.13.7
 
 > 主游戏仍是 `../index.html` 的零依赖单文件静态站；本目录只是额外的 Flutter 客户端示例，不参与主站 SEO/GEO/Lighthouse 评分。
 
@@ -91,6 +91,16 @@ Firebase Web 端 Analytics 需要 `measurementId`（形如 `G-XXXXXXXXXX`），�
 - `firestore.rules`：默认拒绝所有读写，仅该集合允许已登录用户 `read` 与 `create`（对齐官方规则 `request.auth != null`），禁止 update/delete
 - `firestore.indexes.json`：空索引（单字段 `orderBy` 由 Firestore 自动索引，无需复合索引）
 
+#### 实时聊天面板（FriendlyChat 快速入门）
+
+对齐 [`flutter/codelabs` → `firebase-get-to-know-flutter`](https://github.com/flutter/codelabs/tree/main/firebase-get-to-know-flutter)（即 FriendlyChat Flutter codelab；原 `flutter/friendlychat-flutter` 已 404，迁移至此，BSD-3-Clause）的 **Auth + Firestore + 离线持久化** 用法：
+
+- `FirestoreService.chatStream()`：`neon_plinko_chat` 集合 `orderBy('createdAt', descending: true).limit(50).snapshots()` + `StreamBuilder` 实时列表（与 codelab `orderBy('timestamp', descending: true)` 同构）
+- `postMessage()`：匿名用户发消息（uid / displayName / text / createdAt），复用现有 `AuthService` 匿名登录
+- **Offline 特性**：`FIRESTORE_ENABLED` 开启时调用 `FirebaseFirestore.instance.settings = const Settings(persistenceEnabled: true)`，启用 Flutter Web 的 IndexedDB 持久化缓存，断网仍能展示历史消息
+- `firestore.rules` 新增 `neon_plinko_chat`：`read`/`create` 限已登录用户，且 `uid == request.auth.uid`、`text` 为字符串且 ≤ 500 字，禁止 update/delete
+- 默认（关闭）构建：不初始化 Firestore、0 聊天请求、UI 显示「未启用」说明
+
 ### 前置条件（重要）
 
 项目 `boto3-firebase-1101012838` 当前：**`firestore.googleapis.com` 为 DISABLED**、未创建 Firestore 数据库。官方 quickstart 明确要求先在控制台创建数据库并部署安全规则；Anonymous Auth provider 经复验**已可用**（`accounts:signUp` 返回 200），因此规则中的 `request.auth != null` 可以被满足。
@@ -116,6 +126,38 @@ const bool kFirestoreEnabled =
 `firebase.json` 的 CSP 已显式放行 `firestore.googleapis.com`（也被 `*.googleapis.com` 覆盖）。
 
 > 主游戏 `../index.html` **不接入 Firestore**（保持零第三方请求与 Lighthouse 100，最高纪录仍在 localStorage）。
+
+## Cloud Functions
+
+对齐官方 [`firebase/quickstart-flutter` → `cloud_functions/`](https://github.com/firebase/quickstart-flutter/tree/main/cloud_functions) 的 `FirebaseFunctions.instance.httpsCallable(...).call()` 用法（官方示例为 V1 `addMessage` 回显）。
+
+- 客户端 `lib/main.dart` 的 `FunctionsService`：调用 callable `neonPlinkoRules`，返回游戏规格（9 个倍率槽、下注档位、初始 1,000 CR、目标 10,000 CR、操作方式等结构化数据），UI 卡片展示结果
+- 后端 `functions/index.js`：当前 SDK 的 v2 `onCall`（与官方 V1 等价），纯静态返回、无外部请求、无密钥
+- `functions/package.json`：`firebase-functions ^6.6.0` + Node 20
+- `firebase.json` 增加 `functions` codebase 配置，CSP 放行 `*.cloudfunctions.net`
+
+### 前置条件（重要）
+
+官方明确：**Cloud Functions 生产部署必须 Blaze（pay-as-you-go）计费计划**。当前项目 `boto3-firebase-1101012838` 仍为 Spark、`cloudfunctions.googleapis.com` 为 DISABLED、`cloudbilling.googleapis.com` 未启用（无法查 billing info），因此**函数未部署到生产**。
+
+使用构建期开关优雅降级：
+
+```dart
+const bool kFunctionsEnabled =
+    bool.fromEnvironment('FUNCTIONS_ENABLED', defaultValue: false);
+```
+
+- 默认构建（`FUNCTIONS_ENABLED=false`）：不实例化 Functions、**0 次 Functions 请求**，AI 助手与控制台不受影响，UI 显示「未启用」
+- 想在本地验证，可先用 Firebase Emulator（不需要 Blaze）：`firebase emulators:start --only functions`，并在客户端用 `FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001)`
+- 升级 Blaze、启用 `cloudfunctions.googleapis.com` 后：
+  ```bash
+  firebase deploy --only functions --project boto3-firebase-1101012838
+  flutter build web --release --base-href '/' --no-wasm-dry-run \
+    --dart-define=FUNCTIONS_ENABLED=true
+  ```
+  两种构建（关/开）均已通过 `flutter analyze` 与生产编译校验；后端 `index.js` 通过 `node --check`。
+
+> 主游戏 `../index.html` **不接入 Cloud Functions**（保持零第三方请求与 Lighthouse 100）。
 
 ## 部署
 
