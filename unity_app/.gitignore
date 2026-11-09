@@ -1,0 +1,44 @@
+# Unity generated
+Library/
+Temp/
+Obj/
+Build/
+Builds/
+Logs/
+UserSettings/
+MemoryCaptures/
+Recordings/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Build artifacts
+*.apk
+*.aab
+*.app
+*.ipa
+*.unitypackage
+
+# Firebase config files (contain project identifiers; do not commit)
+google-services.json
+google-services-desktop.json
+GoogleService-Info.plist
+
+# Firebase AI Logic / App Check local secrets
+*appcheck*.local*
+appcheck-debug-token.txt
+
+# OS
+.DS_Store
+Thumbs.db
