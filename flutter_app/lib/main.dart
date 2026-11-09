@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_ai/firebase_ai.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +14,12 @@ import 'firebase_options.dart';
 // 完成前置配置后用 `flutter build web --dart-define=FIRESTORE_ENABLED=true` 开启。
 const bool kFirestoreEnabled =
     bool.fromEnvironment('FIRESTORE_ENABLED', defaultValue: false);
+
+// 构建期开关：Cloud Functions 生产部署需要 Blaze 计费计划，当前项目为 Spark，
+// 函数未部署。默认关闭以保证 0 额外请求；升级 Blaze 并部署函数后用
+// `flutter build web --dart-define=FUNCTIONS_ENABLED=true` 开启。
+const bool kFunctionsEnabled =
+    bool.fromEnvironment('FUNCTIONS_ENABLED', defaultValue: false);
 
 const String _systemInstruction = '你是「NEON PLINKO 霓虹弹珠」的官方规则助手。只回答与这个游戏相关的问题，包括：玩法步骤、9 个倍率槽（x12 / x4 / x1.5 / x0.5 / x0.25 / x0.5 / x1.5 / x4 / x12）、下注档位（10 / 25 / 50 / 100 / 250 CR）、初始 1,000 CR、目标 10,000 CR、键盘与触屏操作、最高纪录保存在浏览器 localStorage、纯娱乐且无真实货币投注。请用简体中文、简短、纯文本回答，不要使用 Markdown，不要编造未提供的信息。如果问题与游戏无关，请礼貌拒答并引导用户回到游戏。';
 
@@ -163,6 +170,89 @@ class FirestoreService {
               .toList(),
         );
   }
+
+  // ---- FriendlyChat 实时聊天面板（离线可用） ----
+
+  static const String chatCollection = 'neon_plinko_chat';
+  static bool _initialized = false;
+
+  /// 对齐 FriendlyChat 的「Offline」特性：开启时启用 Firestore 本地缓存，
+  /// 断网也能展示历史消息（Flutter Web 走 IndexedDB 持久化）。
+  /// 必须在首次读写前调用，且由 kFirestoreEnabled 开关保护。
+  Future<void> init() async {
+    if (!enabled || _initialized) return;
+    try {
+      FirebaseFirestore.instance.settings = const Settings(persistenceEnabled: true);
+      _initialized = true;
+    } catch (e) {
+      debugPrint('[firestore] 初始化离线缓存失败：$e');
+    }
+  }
+
+  Future<void> postMessage({
+    required String uid,
+    required String displayName,
+    required String text,
+  }) async {
+    if (!enabled) return;
+    try {
+      await FirebaseFirestore.instance.collection(chatCollection).add(<String, dynamic>{
+        'uid': uid,
+        'displayName': displayName,
+        'text': text,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      debugPrint('[firestore] 发送消息失败：$e');
+    }
+  }
+
+  /// 对齐 FriendlyChat 的 orderBy('timestamp').snapshots() 实时列表。
+  Stream<List<Map<String, dynamic>>> chatStream() {
+    return FirebaseFirestore.instance
+        .collection(chatCollection)
+        .orderBy('createdAt', descending: true)
+        .limit(50)
+        .snapshots()
+        .map(
+          (QuerySnapshot<Map<String, dynamic>> snap) => snap.docs
+              .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) => doc.data())
+              .toList(),
+        );
+  }
+}
+
+/// 对齐官方 quickstart-flutter / cloud_functions 的
+/// FirebaseFunctions.instance.httpsCallable('...').call() 用法。
+///
+/// 调用后端 callable `neonPlinkoRules`，返回游戏规格（倍率表/下注/目标）。
+/// 官方示例为 `addMessage` 字符串回显，此处改为与 NEON PLINKO 规则相关的结构化数据。
+/// 项目当前为 Spark、`cloudfunctions.googleapis.com` 为 DISABLED、函数未部署，
+/// 因此由 kFunctionsEnabled 构建期开关默认关闭：不实例化 Functions、不发起请求。
+class FunctionsService {
+  FunctionsService._();
+  static final FunctionsService instance = FunctionsService._();
+
+  static const String callableName = 'neonPlinkoRules';
+
+  bool get enabled => kFunctionsEnabled;
+
+  Future<Map<String, dynamic>?> fetchRules() async {
+    if (!enabled) return null;
+    try {
+      final HttpsCallableResult<dynamic> result =
+          await FirebaseFunctions.instance.httpsCallable(callableName).call();
+      final Object? data = result.data;
+      if (data is Map<Object?, Object?>) {
+        return data.map((Object? k, Object? v) =>
+            MapEntry<String, dynamic>(k.toString(), v));
+      }
+      return <String, dynamic>{'raw': data.toString()};
+    } catch (e) {
+      debugPrint('[functions] 调用失败：$e');
+      return <String, dynamic>{'error': e.toString()};
+    }
+  }
 }
 
 class NeonAiApp extends StatelessWidget {
@@ -204,11 +294,20 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
   User? _authUser;
   String _authStatus = '未登录（可选）';
   bool _authBusy = false;
+  Map<String, dynamic>? _functionRules;
+  String _functionStatus = '未启用';
+  bool _functionBusy = false;
+  final TextEditingController _chatController = TextEditingController();
+  String _chatError = '';
 
   @override
   void initState() {
     super.initState();
     AnalyticsService.instance.init();
+    if (kFirestoreEnabled) {
+      // 启用时初始化 Firestore 离线缓存（必须在首次读写前）。
+      FirestoreService.instance.init();
+    }
     _authSub = AuthService.instance.authStateChanges().listen(
       (User? user) {
         if (!mounted) return;
@@ -245,6 +344,7 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
   void dispose() {
     _authSub?.cancel();
     _controller.dispose();
+    _chatController.dispose();
     super.dispose();
   }
 
@@ -282,6 +382,43 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
     await AuthService.instance.signOut();
     if (!mounted) return;
     setState(() => _authStatus = '已退出登录');
+  }
+
+  Future<void> _callRulesFunction() async {
+    if (_functionBusy) return;
+    setState(() {
+      _functionBusy = true;
+      _functionStatus = '正在调用 Cloud Function…';
+      _functionRules = null;
+    });
+    final Map<String, dynamic>? rules = await FunctionsService.instance.fetchRules();
+    if (!mounted) return;
+    setState(() {
+      _functionBusy = false;
+      _functionRules = rules;
+      if (rules == null) {
+        _functionStatus = '未启用';
+      } else if (rules.containsKey('error')) {
+        _functionStatus = '调用失败：${rules['error']}';
+      } else {
+        _functionStatus = '调用成功';
+      }
+    });
+  }
+
+  Future<void> _postChat() async {
+    final String text = _chatController.text.trim();
+    if (text.isEmpty || !kFirestoreEnabled) return;
+    setState(() => _chatError = '');
+    await FirestoreService.instance.postMessage(
+      uid: _authUser?.uid ?? 'anon',
+      displayName: _authUser != null
+          ? '访客${(_authUser!.uid.length >= 4 ? _authUser!.uid.substring(0, 4) : _authUser!.uid)}'
+          : '匿名访客',
+      text: text,
+    );
+    if (!mounted) return;
+    _chatController.clear();
   }
 
   Future<void> _ask(String question, {String source = 'input'}) async {
@@ -548,6 +685,164 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
                             );
                           },
                         ),
+                    ],
+                  ),
+                ),
+                _buildCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      const Text(
+                        'Cloud Functions',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        '对齐官方 quickstart 的 FirebaseFunctions.instance.httpsCallable(...).call()。后端 callable neonPlinkoRules 返回游戏规格（倍率表/下注/目标）；与官方 addMessage 回显示例同构。',
+                        style: TextStyle(color: Color(0xFFA8A2C8), fontSize: 13, height: 1.6),
+                      ),
+                      const SizedBox(height: 12),
+                      if (!kFunctionsEnabled)
+                        const Text(
+                          '未启用：Cloud Functions 生产部署需要 Blaze 计费计划，当前项目为 Spark、函数未部署。AI 助手仍可正常使用，且不会产生任何 Functions 请求。',
+                          style: TextStyle(color: Color(0xFF00E5FF), fontSize: 13, height: 1.6),
+                        )
+                      else ...<Widget>[
+                        OutlinedButton(
+                          onPressed: _functionBusy ? null : _callRulesFunction,
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: const Color(0xFF00E5FF),
+                            side: const BorderSide(color: Color(0x5500E5FF)),
+                          ),
+                          child: Text(_functionBusy ? '调用中…' : '调用 neonPlinkoRules'),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(_functionStatus, style: const TextStyle(color: Color(0xFF00E5FF), fontSize: 13)),
+                        if (_functionRules != null) ...<Widget>[
+                          const SizedBox(height: 8),
+                          Container(
+                            padding: const EdgeInsets.all(14),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF060312),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: const Color(0x33A8A2C8)),
+                            ),
+                            child: SelectableText(
+                              _functionRules!.entries
+                                  .map((MapEntry<String, dynamic> e) => '${e.key}: ${e.value}')
+                                  .join('\n'),
+                              style: const TextStyle(color: Colors.white, fontSize: 13, height: 1.6),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                _buildCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      const Text(
+                        '实时聊天面板（FriendlyChat）',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        '对齐官方 flutter/codelabs · firebase-get-to-know-flutter（FriendlyChat）的 Auth + Firestore + 离线持久化：匿名用户发消息写入 neon_plinko_chat，用 orderBy(\'createdAt\').snapshots() + StreamBuilder 实时展示；启用时开启本地缓存，断网仍可看历史。',
+                        style: TextStyle(color: Color(0xFFA8A2C8), fontSize: 13, height: 1.6),
+                      ),
+                      const SizedBox(height: 12),
+                      if (!kFirestoreEnabled)
+                        const Text(
+                          '未启用：当前为构建期关闭状态（Firestore 数据库尚未创建）。AI 助手与控制台不受影响，且不会产生任何 Firestore 请求。',
+                          style: TextStyle(color: Color(0xFF00E5FF), fontSize: 13, height: 1.6),
+                        )
+                      else ...<Widget>[
+                        Container(
+                          height: 200,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF060312),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: const Color(0x33A8A2C8)),
+                          ),
+                          child: StreamBuilder<List<Map<String, dynamic>>>(
+                            stream: FirestoreService.instance.chatStream(),
+                            builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+                              if (snapshot.hasError) {
+                                return const Text(
+                                  '聊天读取失败：请确认已创建数据库并部署 firestore.rules。',
+                                  style: TextStyle(color: Color(0xFFFF3CAC), fontSize: 13),
+                                );
+                              }
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return const Text('正在加载聊天…', style: TextStyle(color: Color(0xFF00E5FF), fontSize: 13));
+                              }
+                              final List<Map<String, dynamic>> msgs = snapshot.data ?? <Map<String, dynamic>>[];
+                              if (msgs.isEmpty) {
+                                return const Text('还没有消息，来发第一条吧～', style: TextStyle(color: Color(0xFFA8A2C8), fontSize: 13));
+                              }
+                              return ListView.separated(
+                                reverse: true,
+                                itemCount: msgs.length,
+                                separatorBuilder: (BuildContext c, int i) => const SizedBox(height: 8),
+                                itemBuilder: (BuildContext c, int i) {
+                                  final Map<String, dynamic> m = msgs[i];
+                                  final String name = (m['displayName'] ?? '匿名').toString();
+                                  final String body = (m['text'] ?? '').toString();
+                                  return RichText(
+                                    text: TextSpan(
+                                      style: const TextStyle(color: Colors.white, fontSize: 13, height: 1.5),
+                                      children: <TextSpan>[
+                                        TextSpan(text: '$name：', style: const TextStyle(color: Color(0xFF00E5FF))),
+                                        TextSpan(text: body),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: TextField(
+                                controller: _chatController,
+                                style: const TextStyle(color: Colors.white, fontSize: 13),
+                                decoration: InputDecoration(
+                                  hintText: _authUser != null ? '说点什么…' : '请先匿名登录再发言',
+                                  hintStyle: const TextStyle(color: Color(0x88A8A2C8)),
+                                  isDense: true,
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(color: Color(0x55A8A2C8)),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                onSubmitted: (_) => _postChat(),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            OutlinedButton(
+                              onPressed: _authUser == null ? null : _postChat,
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: const Color(0xFFFF3CAC),
+                                side: const BorderSide(color: Color(0x55FF3CAC)),
+                              ),
+                              child: const Text('发送'),
+                            ),
+                          ],
+                        ),
+                        if (_chatError.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Text(_chatError, style: const TextStyle(color: Color(0xFFFF3CAC), fontSize: 12)),
+                          ),
+                      ],
                     ],
                   ),
                 ),
