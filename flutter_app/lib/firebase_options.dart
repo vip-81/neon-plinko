@@ -16,5 +16,7 @@ class DefaultFirebaseOptions {
     projectId: 'YOUR_PROJECT_ID',
     authDomain: 'YOUR_PROJECT.firebaseapp.com',
     storageBucket: 'YOUR_PROJECT.firebasestorage.app',
+    // 启用 Google Analytics 后填入 G-XXXXXXXXXX；为空时 AnalyticsService 会跳过初始化。
+    measurementId: '',
   );
 }
