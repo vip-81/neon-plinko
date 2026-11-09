@@ -6,7 +6,7 @@
 - 深链示例：`https://neon-plinko-flutter.web.app/?q=最高倍率是多少`
 - Firebase 项目：`boto3-firebase-1101012838`
 - Hosting 站点：`neon-plinko-flutter`
-- 依赖：`firebase_core ^5.1.0`、`firebase_ai ^5.1.0`、`firebase_analytics ^13.0.1`、Flutter 3.47.9 / Dart 3.13.7
+- 依赖：`firebase_core ^5.1.0`、`firebase_ai ^5.1.0`、`firebase_analytics ^13.0.1`、`firebase_auth ^7.0.1`、Flutter 3.47.9 / Dart 3.13.7
 
 > 主游戏仍是 `../index.html` 的零依赖单文件静态站；本目录只是额外的 Flutter 客户端示例，不参与主站 SEO/GEO/Lighthouse 评分。
 
@@ -60,6 +60,30 @@ Firebase Web 端 Analytics 需要 `measurementId`（形如 `G-XXXXXXXXXX`），�
 
 > 主游戏 `../index.html` 明确无统计脚本、CSP `connect-src 'self'`，**不接入 Analytics**，以保持零第三方请求与 Lighthouse 100。
 
+## Authentication（Firebase Auth）
+
+对齐官方 [`firebase/quickstart-flutter` → `authentication/`](https://github.com/firebase/quickstart-flutter/tree/main/authentication) 的 `authStateChanges()` / `signInAnonymously()` / `User.uid` 用法；官方示例用 Email/Password + `firebase_ui_auth`，本助手改用**匿名登录**（无需注册、无需输入信息，更适合纯娱乐规则问答）。
+
+`lib/main.dart` 中的 `AuthService`：
+
+- 启动时订阅 `authStateChanges()`，UI 显示匿名 uid 前 8 位
+- 提供「匿名登录」按钮，默认不自动请求，登录后把 uid 写入 Analytics `setUserId` 并埋 `login` 事件
+- 提供「退出登录」按钮
+
+### 登录提供方前提（重要）
+
+Firebase 项目 `boto3-firebase-1101012838` **尚未启用 Firebase Authentication**：`identitytoolkit.googleapis.com/admin/v2/projects/.../config` 返回 `404 CONFIGURATION_NOT_FOUND`，也没有任何 sign-in provider。
+
+因此采用优雅降级：
+
+- 默认不发起登录请求，页面加载仍是 0 第三方请求、0 控制台错误，AI 助手照常工作；
+- 点击「匿名登录」若返回 `operation-not-allowed`（provider 未启用），捕获 `FirebaseAuthException` 并显示「项目尚未启用 Anonymous 登录提供方；AI 助手仍可正常使用。」
+- 在 Firebase 控制台 → Authentication → Sign-in method 启用 **Anonymous** 后，重新打开页面点击即可成功，无需改代码。
+
+`firebase.json` 的 CSP 已预先放行 `identitytoolkit.googleapis.com`、`securetoken.googleapis.com`、`apis.google.com`，并增加 `frame-src` 允许 Firebase Auth 的隐藏 iframe（`*.firebaseapp.com` / `*.web.app` / `accounts.google.com`）。
+
+> 主游戏 `../index.html` **不接入 Auth**（保持零第三方请求与 Lighthouse 100）。
+
 ## 部署
 
 ```bash
@@ -68,6 +92,14 @@ firebase deploy --only hosting:flutter --project boto3-firebase-1101012838
 ```
 
 部署前把 `build/web` 内容复制到含 `firebase.json` 的发布目录；真实 `firebase_options.dart` 只保留在构建机，不提交到公开仓库。
+
+**避免旧版 JS 缓存**：Flutter Web 的 `main.dart.js` 文件名不带内容哈希，`firebase.json` 已对 `main.dart.js` / `flutter_bootstrap.js` / `flutter.js` / `version.json` 设置 `no-cache, must-revalidate`。此外每次部署需把生成的 `flutter_bootstrap.js` 中
+
+```js
+"mainJsPath":"main.dart.js"
+```
+
+改为 `"mainJsPath":"main.dart.js?v=<serviceWorkerVersion>"`（`serviceWorkerVersion` 就在同一文件末尾）。这样浏览器会按构建版本请求新 JS，不会命中上一版缓存。
 
 ## 模型回退
 
