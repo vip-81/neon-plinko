@@ -20,5 +20,17 @@ service cloud.firestore {
         && request.resource.data.answer is string;
       allow update, delete: if false;
     }
+
+    // FriendlyChat 实时聊天：已登录用户可读、可发自己的消息（text 限长 500）。
+    match /neon_plinko_chat/{msgId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null
+        && request.resource.data.keys().hasAll(['uid', 'displayName', 'text', 'createdAt'])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.text is string
+        && request.resource.data.text.size() <= 500
+        && request.resource.data.displayName is string;
+      allow update, delete: if false;
+    }
   }
 }
