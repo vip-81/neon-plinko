@@ -1,0 +1,3738 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>NEON PLINKO 霓虹弹珠 | 赛博朋克风免费 H5 赌场小游戏</title>
+  <meta name="description" content="NEON PLINKO 是一款免费、免下载的赛博朋克风 H5 霓虹弹珠游戏。移动发射器投放筹码，穿越能量钉阵赢取最高 12 倍倍率，在余额归零前冲击 10,000 筹码破局目标。支持手机触屏与电脑键盘，打开即玩。">
+  <meta name="keywords" content="赛博朋克游戏,H5小游戏,Plinko,霓虹弹珠,在线小游戏,免费游戏,Canvas游戏,单文件HTML,弹珠游戏,Cyberpunk,网页游戏">
+  <meta name="author" content="NEON PLINKO Studio">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="theme-color" content="#05020d">
+  <meta name="color-scheme" content="dark">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <link rel="canonical" href="https://neon-plinko.pages.dev/">
+  <link rel="alternate" type="text/plain" href="https://neon-plinko.pages.dev/llms.txt" title="LLM-readable site summary">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2305020d'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='%2348e8ff' stroke-width='3'/%3E%3Cpath d='M32 17v30M17 32h30' stroke='%23ff3bd4' stroke-width='2' opacity='.85'/%3E%3C/svg%3E">
+
+  <!-- Open Graph：部署上线后建议把相对地址替换为正式域名的绝对地址 -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="NEON PLINKO">
+  <meta property="og:locale" content="zh_CN">
+  <meta property="og:title" content="NEON PLINKO 霓虹弹珠｜赛博朋克风免费 H5 小游戏">
+  <meta property="og:description" content="移动发射器，投放霓虹筹码，穿越钉阵赢取最高 x12 倍率。免费、免下载，支持手机与电脑，立即接入霓虹赌场。">
+  <meta property="og:url" content="https://neon-plinko.pages.dev/">
+  <meta property="og:image" content="https://neon-plinko.pages.dev/og-cover.png">
+  <meta property="og:image:secure_url" content="https://neon-plinko.pages.dev/og-cover.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="NEON PLINKO 赛博朋克霓虹弹珠游戏封面">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="NEON PLINKO 霓虹弹珠｜赛博朋克风免费 H5 小游戏">
+  <meta name="twitter:description" content="操控发射器投放霓虹筹码，穿越能量钉阵赢取最高 x12 倍率。免费、免下载，手机与电脑均可游玩。">
+  <meta name="twitter:image" content="https://neon-plinko.pages.dev/og-cover.png">
+  <meta name="twitter:image:alt" content="NEON PLINKO 赛博朋克霓虹弹珠游戏封面">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://neon-plinko.pages.dev/#website",
+        "name": "NEON PLINKO",
+        "alternateName": "霓虹弹珠",
+        "url": "https://neon-plinko.pages.dev/",
+        "inLanguage": "zh-CN",
+        "description": "免费的赛博朋克风 H5 霓虹弹珠小游戏，支持手机触屏与电脑键盘。"
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://neon-plinko.pages.dev/#webpage",
+        "url": "https://neon-plinko.pages.dev/",
+        "name": "NEON PLINKO 霓虹弹珠 | 赛博朋克风免费 H5 赌场小游戏",
+        "description": "免费、免下载的赛博朋克风 H5 霓虹弹珠游戏。移动发射器投放筹码，穿越能量钉阵赢取最高 x12 倍率，冲击 10,000 CR 目标。",
+        "isPartOf": { "@id": "https://neon-plinko.pages.dev/#website" },
+        "about": { "@id": "https://neon-plinko.pages.dev/#game" },
+        "primaryImageOfPage": {
+          "@type": "ImageObject",
+          "url": "https://neon-plinko.pages.dev/og-cover.png",
+          "width": 1200,
+          "height": 630
+        },
+        "inLanguage": "zh-CN",
+        "datePublished": "2026-11-09",
+        "dateModified": "2026-11-09"
+      },
+      {
+        "@type": "VideoGame",
+        "@id": "https://neon-plinko.pages.dev/#game",
+        "name": "NEON PLINKO 霓虹弹珠",
+        "url": "https://neon-plinko.pages.dev/",
+        "description": "一款单文件 Canvas 弹珠游戏。玩家移动发射器、投放筹码，让弹珠穿过能量钉阵落入倍率槽，在余额归零前冲击 10,000 筹码目标。",
+        "image": "https://neon-plinko.pages.dev/og-cover.png",
+        "keywords": "赛博朋克游戏,H5小游戏,Plinko,霓虹弹珠,免费网页游戏",
+        "genre": ["Casino", "Arcade", "Physics", "Hyper-casual"],
+        "gamePlatform": ["Web browser", "Desktop", "Mobile"],
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Any (modern web browser)",
+        "browserRequirements": "Requires JavaScript and HTML5 Canvas",
+        "playMode": "SinglePlayer",
+        "numberOfPlayers": 1,
+        "isAccessibleForFree": true,
+        "inLanguage": "zh-CN",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "CNY",
+          "availability": "https://schema.org/InStock"
+        },
+        "datePublished": "2026-11-09",
+        "dateModified": "2026-11-09"
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://neon-plinko.pages.dev/#faq-schema",
+        "url": "https://neon-plinko.pages.dev/",
+        "isPartOf": { "@id": "https://neon-plinko.pages.dev/#webpage" },
+        "inLanguage": "zh-CN",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "NEON PLINKO 是什么游戏？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "NEON PLINKO 是一款赛博朋克主题的免费 H5 弹珠游戏。玩家移动顶部发射器并投放筹码，筹码穿过钉阵后落入不同倍率槽，最高可获得 12 倍回报。游戏从 1,000 筹码起步，目标是在余额跌破 10 筹码前达到 10,000 筹码。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "需要下载、注册或付费吗？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "不需要。NEON PLINKO 为单文件静态网页，无需下载客户端、无需注册、无内购，也不包含真实货币投注。通过现代浏览器打开页面即可开始。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "手机可以玩吗？如何操作？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "可以。电脑端使用左右方向键移动发射器、上下方向键调整下注、空格键投放筹码；手机端可以在棋盘上拖动瞄准，并通过下注按钮和投放按钮操作。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "游戏最高倍率是多少？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "最外侧的两个霓虹槽为最高倍率 x12，其相邻槽为 x4，中间区域依次为 x1.5、x0.5 和 x0.25。边缘槽的命中概率更低。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "最高纪录保存在哪里？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "历史最高余额保存在浏览器本地 localStorage 中，不会上传服务器。清除浏览器站点数据后会重置纪录。"
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "筹码能兑换真实货币吗？",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "不能。游戏内筹码仅为娱乐用虚拟积分，不支持充值、提现或兑换任何真实奖品。本作不提供真实货币赌博服务。"
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    /* ============ 设计变量与基础重置 ============ */
+    :root {
+      --bg: #05020d;
+      --bg-deep: #030109;
+      --panel: #0a0718;
+      --panel-2: #100a26;
+      --line: rgba(126, 107, 255, .24);
+      --line-strong: rgba(72, 232, 255, .36);
+      --cyan: #48e8ff;
+      --cyan-soft: #a9f6ff;
+      --pink: #ff3bd4;
+      --pink-soft: #ff9de9;
+      --violet: #8061ff;
+      --gold: #ffd36b;
+      --mint: #65ffcf;
+      --danger: #ff5470;
+      --text: #f2f4ff;
+      --muted: #a7acce;
+      --muted-2: #858aae;
+      --display: "Bahnschrift", "DIN Alternate", "Arial Narrow", Impact, sans-serif;
+      --sans: "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      --mono: "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --radius: 20px;
+      --header-h: 72px;
+      --shadow: 0 28px 80px rgba(0, 0, 0, .55);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-width: 300px;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--text);
+      background:
+        radial-gradient(900px 600px at 12% -10%, rgba(255, 59, 212, .13), transparent 62%),
+        radial-gradient(1000px 700px at 92% 8%, rgba(72, 232, 255, .10), transparent 58%),
+        linear-gradient(180deg, #060213 0%, #05020d 45%, #04010a 100%);
+      font-family: var(--sans);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      opacity: .55;
+      background-image:
+        linear-gradient(rgba(98, 86, 190, .12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(98, 86, 190, .12) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 20%, #000 20%, transparent 80%);
+      mask-image: radial-gradient(ellipse 90% 70% at 50% 20%, #000 20%, transparent 80%);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      pointer-events: none;
+      opacity: .19;
+      background: repeating-linear-gradient(180deg, transparent 0 3px, rgba(0, 0, 0, .28) 3px 4px);
+      mix-blend-mode: multiply;
+    }
+
+    ::selection { background: rgba(255, 59, 212, .36); color: #fff; }
+
+    img, svg, canvas { display: block; max-width: 100%; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; }
+    a { color: inherit; }
+    h1, h2, h3, p, dl, dd, ol, ul { margin: 0; }
+    ol, ul { padding: 0; list-style: none; }
+
+    :focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+
+    .sr-only {
+      position: absolute !important;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0);
+      white-space: nowrap; border: 0;
+    }
+
+    .skip-link {
+      position: fixed;
+      top: -80px; left: 16px;
+      z-index: 999;
+      padding: 10px 18px;
+      color: #031015;
+      background: var(--cyan);
+      font: 700 13px/1 var(--mono);
+      text-decoration: none;
+      transition: top .2s ease;
+    }
+    .skip-link:focus { top: 14px; }
+
+    .noscript-bar {
+      padding: 10px 18px;
+      color: #1d1200;
+      background: var(--gold);
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* ============ 顶部导航 ============ */
+    .site-header {
+      width: min(1180px, 100%);
+      min-height: var(--header-h);
+      margin: 0 auto;
+      padding: 18px clamp(18px, 4vw, 48px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      position: relative;
+      z-index: 20;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--text);
+      text-decoration: none;
+      font-family: var(--display);
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(72, 232, 255, .55);
+      background: linear-gradient(135deg, rgba(72, 232, 255, .13), rgba(255, 59, 212, .13));
+      box-shadow: inset 0 0 14px rgba(72, 232, 255, .12), 0 0 18px rgba(72, 232, 255, .1);
+      transform: rotate(45deg);
+    }
+    .brand-mark svg { width: 16px; height: 16px; transform: rotate(-45deg); }
+    .brand span { color: var(--pink); }
+
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: clamp(16px, 2.5vw, 32px);
+      margin-left: auto;
+    }
+    .site-nav a {
+      color: var(--muted);
+      font: 600 12px/1 var(--mono);
+      letter-spacing: .12em;
+      text-decoration: none;
+      transition: color .2s ease;
+    }
+    .site-nav a:hover { color: var(--cyan); }
+
+    .sound-toggle {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      color: var(--muted);
+      background: rgba(12, 8, 30, .6);
+      font: 700 10px/1 var(--mono);
+      letter-spacing: .12em;
+      cursor: pointer;
+      transition: border-color .2s ease, color .2s ease, background .2s ease;
+    }
+    .sound-toggle:hover { color: var(--cyan); border-color: var(--line-strong); }
+    .sound-toggle svg { width: 15px; height: 15px; }
+    .sound-toggle .sound-off { display: none; }
+    .sound-toggle.is-muted .sound-on { display: none; }
+    .sound-toggle.is-muted .sound-off { display: block; }
+    .sound-toggle.is-muted { color: var(--muted-2); }
+
+    /* ============ Hero 布局 ============ */
+    .hero {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      padding: clamp(14px, 2vw, 30px) clamp(18px, 4vw, 48px) clamp(54px, 7vw, 90px);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 430px);
+      gap: clamp(34px, 5vw, 80px);
+      align-items: center;
+      min-height: min(720px, calc(100svh - var(--header-h) - 32px));
+    }
+
+    .hero-copy {
+      position: relative;
+      padding-left: 20px;
+      animation: hero-in .8s cubic-bezier(.16, 1, .3, 1) both;
+    }
+    .hero-copy::before {
+      content: "";
+      position: absolute;
+      top: 6px; bottom: 6px; left: 0;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, var(--cyan) 15%, var(--pink) 80%, transparent);
+      opacity: .6;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-bottom: clamp(20px, 3vw, 32px);
+      color: var(--cyan);
+      font: 700 10px/1.4 var(--mono);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 10px var(--mint);
+      animation: blink 1.8s ease-in-out infinite;
+    }
+
+    .hero h1 {
+      max-width: 700px;
+      font-family: var(--display);
+      font-size: clamp(68px, 10vw, 134px);
+      font-weight: 900;
+      line-height: .76;
+      letter-spacing: -.035em;
+      text-transform: uppercase;
+      text-wrap: balance;
+    }
+    .hero h1 span { display: block; }
+    .title-neon {
+      color: #e7fdff;
+      text-shadow: 0 0 18px rgba(72, 232, 255, .46), 0 0 80px rgba(72, 232, 255, .17);
+    }
+    .title-pink {
+      color: transparent;
+      background: linear-gradient(92deg, var(--pink) 4%, #ff8ce8 48%, var(--violet) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      filter: drop-shadow(0 0 22px rgba(255, 59, 212, .25));
+    }
+
+    .hero-kicker {
+      margin-top: 24px;
+      color: var(--text);
+      font: 800 clamp(16px, 1.65vw, 21px)/1.2 var(--sans);
+      letter-spacing: .22em;
+    }
+    .hero-kicker::before {
+      content: "//";
+      margin-right: 10px;
+      color: var(--pink);
+      font-family: var(--mono);
+    }
+
+    .hero-lead {
+      max-width: 540px;
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: clamp(14px, 1.25vw, 16px);
+      line-height: 1.9;
+    }
+    .hero-lead strong { color: var(--cyan-soft); font-weight: 700; }
+
+    .quick-facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 24px;
+    }
+    .quick-facts li {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 7px;
+      padding: 7px 10px;
+      border: 1px solid rgba(126, 107, 255, .2);
+      background: rgba(11, 7, 28, .55);
+      color: var(--muted);
+      font: 500 10px/1.2 var(--mono);
+      letter-spacing: .06em;
+    }
+    .quick-facts strong {
+      color: var(--gold);
+      font-size: 12px;
+    }
+
+    .hero-controls {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 22px;
+      color: var(--muted-2);
+      font: 500 11px/1.8 var(--mono);
+    }
+    .hero-controls .sep { margin: 0 5px; color: rgba(155, 160, 196, .35); }
+
+    kbd {
+      display: inline-grid;
+      place-items: center;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 5px;
+      border: 1px solid rgba(152, 139, 255, .3);
+      border-bottom-color: rgba(152, 139, 255, .5);
+      border-radius: 3px;
+      color: #c8cbee;
+      background: linear-gradient(180deg, rgba(38, 29, 75, .8), rgba(10, 7, 22, .8));
+      font: 700 10px/1 var(--mono);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, .35);
+    }
+
+    .hero-note {
+      margin-top: 18px;
+      color: var(--muted-2);
+      font: 500 10px/1.7 var(--mono);
+      letter-spacing: .04em;
+    }
+    .hero-note span { margin-right: 6px; color: var(--pink); }
+
+    @keyframes hero-in {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .3; }
+    }
+
+    /* ============ 游戏机柜 ============ */
+    .cabinet {
+      position: relative;
+      width: 100%;
+      max-width: 430px;
+      justify-self: end;
+      padding: 11px;
+      border: 1px solid rgba(108, 214, 255, .24);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(155deg, rgba(23, 15, 52, .96), rgba(7, 4, 19, .98) 52%, rgba(12, 6, 29, .98));
+      box-shadow:
+        0 0 0 1px rgba(255, 59, 212, .06),
+        0 30px 90px rgba(0, 0, 0, .62),
+        0 0 60px rgba(95, 51, 255, .10),
+        inset 0 1px 0 rgba(255, 255, 255, .05);
+      animation: cabinet-in .9s .08s cubic-bezier(.16, 1, .3, 1) both;
+      isolation: isolate;
+    }
+    .cabinet::before,
+    .cabinet::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .cabinet::before {
+      inset: -28px;
+      border-radius: 36px;
+      opacity: .55;
+      background:
+        radial-gradient(circle at 18% 4%, rgba(72, 232, 255, .22), transparent 30%),
+        radial-gradient(circle at 84% 92%, rgba(255, 59, 212, .19), transparent 34%);
+      filter: blur(28px);
+    }
+    .cabinet::after {
+      top: 20px; right: -7px; bottom: 20px;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(255, 59, 212, .55), transparent);
+    }
+    @keyframes cabinet-in {
+      from { opacity: 0; transform: translateY(24px) scale(.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .cabinet-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 2px 5px 10px;
+      color: var(--muted-2);
+      font: 700 9px/1.4 var(--mono);
+      letter-spacing: .13em;
+    }
+    .cabinet-id { display: inline-flex; align-items: center; gap: 7px; color: #aeb2d5; }
+    .cabinet-id em { color: var(--muted-2); font-style: normal; }
+    .cabinet-led {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 8px var(--cyan);
+      animation: blink 2.4s ease-in-out infinite;
+    }
+    .cabinet-mode {
+      padding: 3px 7px;
+      border: 1px solid rgba(72, 232, 255, .24);
+      color: var(--cyan);
+      background: rgba(72, 232, 255, .055);
+      font-size: 8px;
+      letter-spacing: .16em;
+    }
+    .cabinet[data-mode="over"] .cabinet-mode { color: var(--danger); border-color: rgba(255, 84, 112, .3); background: rgba(255, 84, 112, .06); }
+    .cabinet[data-mode="victory"] .cabinet-mode { color: var(--gold); border-color: rgba(255, 211, 107, .34); background: rgba(255, 211, 107, .07); }
+
+    .hud {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 7px;
+    }
+    .stat {
+      min-width: 0;
+      padding: 8px 9px 9px;
+      border: 1px solid rgba(126, 107, 255, .14);
+      border-radius: 5px;
+      background: linear-gradient(180deg, rgba(32, 23, 69, .58), rgba(10, 7, 24, .52));
+    }
+    .stat-label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--muted-2);
+      font: 600 9px/1.4 var(--mono);
+      letter-spacing: .04em;
+      white-space: nowrap;
+    }
+    .stat-label small { color: rgba(160, 165, 199, .72); font-size: 7px; }
+    .stat-value {
+      display: inline-block;
+      max-width: 100%;
+      margin-top: 4px;
+      overflow: hidden;
+      color: #f4f7ff;
+      font: 800 clamp(15px, 4.4vw, 21px)/1 var(--mono);
+      letter-spacing: -.05em;
+      font-variant-numeric: tabular-nums;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .stat-balance .stat-value { color: var(--cyan-soft); text-shadow: 0 0 14px rgba(72, 232, 255, .22); }
+    .stat-unit {
+      margin-left: 3px;
+      color: var(--muted-2);
+      font: 600 7px/1 var(--mono);
+    }
+    .stat-value.pulse-up { animation: pulse-up .5s ease; }
+    .stat-value.pulse-down { animation: pulse-down .5s ease; }
+    @keyframes pulse-up {
+      0% { transform: scale(1); color: var(--mint); }
+      45% { transform: scale(1.09); color: var(--mint); }
+      100% { transform: scale(1); }
+    }
+    @keyframes pulse-down {
+      0% { transform: scale(1); color: var(--danger); }
+      45% { transform: scale(.96); color: var(--danger); }
+      100% { transform: scale(1); }
+    }
+
+    .target { padding: 0 2px 9px; }
+    .target-copy {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 5px;
+      color: var(--muted-2);
+      font: 600 8px/1.4 var(--mono);
+      letter-spacing: .09em;
+    }
+    .target-copy span:last-child { color: #b9bde0; letter-spacing: .02em; }
+    .target-track {
+      position: relative;
+      height: 7px;
+      overflow: hidden;
+      border: 1px solid rgba(126, 107, 255, .16);
+      border-radius: 999px;
+      background: rgba(4, 2, 12, .8);
+    }
+    .target-fill {
+      display: block;
+      width: 10%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--cyan), var(--pink) 78%, var(--gold));
+      box-shadow: 0 0 12px rgba(255, 59, 212, .55);
+      transition: width .45s cubic-bezier(.2, .8, .2, 1);
+    }
+    .target-fill::after {
+      content: "";
+      display: block;
+      width: 45%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .55), transparent);
+      animation: target-shimmer 2.8s linear infinite;
+    }
+    @keyframes target-shimmer {
+      from { transform: translateX(-120%); }
+      to { transform: translateX(290%); }
+    }
+
+    /* ============ Canvas 舞台与覆盖层 ============ */
+    .stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 5 / 6;
+      overflow: hidden;
+      border: 1px solid rgba(72, 232, 255, .22);
+      border-radius: 11px;
+      background: #04020b;
+      box-shadow: inset 0 0 50px rgba(37, 15, 89, .4), 0 0 0 1px rgba(0, 0, 0, .5);
+      touch-action: pan-y;
+    }
+    .stage::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+      pointer-events: none;
+      border-radius: inherit;
+      box-shadow: inset 0 0 40px rgba(0, 0, 0, .5);
+      background: repeating-linear-gradient(180deg, transparent 0 3px, rgba(2, 0, 9, .12) 3px 4px);
+      mix-blend-mode: multiply;
+    }
+    #gameCanvas {
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+      cursor: crosshair;
+      outline: none;
+    }
+    #gameCanvas:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: -3px;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 7;
+      display: grid;
+      place-items: center;
+      padding: clamp(14px, 4vw, 24px);
+      background:
+        radial-gradient(circle at 50% 35%, rgba(255, 59, 212, .14), transparent 53%),
+        linear-gradient(180deg, rgba(4, 2, 12, .52), rgba(4, 2, 12, .88));
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+    }
+    .overlay[hidden] { display: none !important; }
+
+    .overlay-card {
+      position: relative;
+      width: min(100%, 310px);
+      padding: clamp(20px, 5vw, 27px) clamp(16px, 5vw, 24px);
+      border: 1px solid rgba(108, 214, 255, .25);
+      border-radius: 4px;
+      background:
+        linear-gradient(145deg, rgba(18, 11, 42, .92), rgba(6, 3, 16, .94));
+      box-shadow: 0 22px 60px rgba(0, 0, 0, .55), inset 0 1px 0 rgba(255, 255, 255, .05);
+      text-align: center;
+    }
+    .overlay-card::before,
+    .overlay-card::after {
+      content: "";
+      position: absolute;
+      width: 18px; height: 18px;
+      pointer-events: none;
+    }
+    .overlay-card::before {
+      top: -1px; left: -1px;
+      border-top: 1px solid var(--cyan);
+      border-left: 1px solid var(--cyan);
+    }
+    .overlay-card::after {
+      right: -1px; bottom: -1px;
+      border-right: 1px solid var(--pink);
+      border-bottom: 1px solid var(--pink);
+    }
+    .overlay-eyebrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      color: var(--cyan);
+      font: 700 8px/1.4 var(--mono);
+      letter-spacing: .16em;
+    }
+    .overlay-eyebrow span {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 8px var(--cyan);
+    }
+    .overlay-card h2 {
+      margin-top: 12px;
+      color: #f6f8ff;
+      font-family: var(--display);
+      font-size: clamp(30px, 8vw, 39px);
+      font-weight: 900;
+      line-height: .95;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+    .overlay-card h2 span {
+      color: transparent;
+      background: linear-gradient(90deg, var(--pink), #b991ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+    .overlay-card > p:not(.overlay-eyebrow):not(.overlay-hint) {
+      max-width: 250px;
+      margin: 13px auto 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.75;
+    }
+
+    .overlay-specs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin: 17px 0;
+      border: 1px solid rgba(126, 107, 255, .15);
+      background: rgba(126, 107, 255, .12);
+    }
+    .overlay-specs div {
+      padding: 7px 4px;
+      background: rgba(7, 4, 18, .9);
+    }
+    .overlay-specs span {
+      display: block;
+      color: var(--muted-2);
+      font: 500 7px/1.4 var(--mono);
+      letter-spacing: .02em;
+    }
+    .overlay-specs strong {
+      display: block;
+      margin-top: 2px;
+      color: var(--cyan-soft);
+      font: 800 11px/1.2 var(--mono);
+      font-variant-numeric: tabular-nums;
+    }
+    .overlay-hint {
+      margin-top: 11px;
+      color: var(--muted-2);
+      font: 500 8px/1.6 var(--mono);
+      letter-spacing: .03em;
+    }
+    .overlay-over .overlay-card { border-color: rgba(255, 84, 112, .25); }
+    .overlay-over .overlay-eyebrow { color: var(--danger); }
+    .overlay-over .overlay-eyebrow span { background: var(--danger); box-shadow: 0 0 8px var(--danger); }
+    .overlay-over.is-victory .overlay-card { border-color: rgba(255, 211, 107, .36); }
+    .overlay-over.is-victory .overlay-eyebrow { color: var(--gold); }
+    .overlay-over.is-victory .overlay-eyebrow span { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
+    .overlay-over.is-victory .overlay-card h2 span {
+      background: linear-gradient(90deg, var(--gold), var(--pink));
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    /* 结算卡压缩排版：确保「重新接入」在矮棋盘和手机竖屏中始终可见 */
+    .overlay-over { padding: 14px; overflow-y: auto; align-items: safe center; }
+    .overlay-over .overlay-card { padding: 16px 16px 14px; }
+    .overlay-over .overlay-eyebrow { font-size: 7px; letter-spacing: .12em; }
+    .overlay-over .overlay-card h2 {
+      margin-top: 8px;
+      font-size: 32px;
+      line-height: .9;
+    }
+    .overlay-over .overlay-card > p:not(.overlay-eyebrow):not(.overlay-hint) {
+      margin-top: 8px;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .overlay-over .result-score {
+      margin: 9px 0 8px;
+      padding: 7px 6px;
+    }
+    .overlay-over .result-score strong { font-size: 28px; }
+    .overlay-over .result-grid { gap: 4px; margin-bottom: 10px; }
+    .overlay-over .result-grid div { padding: 5px 7px; }
+    .overlay-over .result-grid span { font-size: 7px; }
+    .overlay-over .result-grid strong { font-size: 10px; line-height: 1.4; }
+    .overlay-over .btn { min-height: 42px; }
+    .overlay-over .text-link { margin-top: 6px; font-size: 8px; }
+
+    @media (max-height: 700px), (max-width: 470px) {
+      .overlay-over .overlay-card > p:not(.overlay-eyebrow):not(.overlay-hint) { display: none; }
+      .overlay-over .result-grid > div:nth-child(n + 3) { display: none; }
+      .overlay-over .text-link { display: none; }
+    }
+
+    .result-score {
+      margin: 13px 0 10px;
+      padding: 10px 8px;
+      border-top: 1px solid rgba(255, 255, 255, .07);
+      border-bottom: 1px solid rgba(255, 255, 255, .07);
+    }
+    .result-score span {
+      display: block;
+      color: var(--muted-2);
+      font: 600 8px/1.4 var(--mono);
+      letter-spacing: .14em;
+    }
+    .result-score strong {
+      color: var(--gold);
+      font: 900 clamp(27px, 8vw, 35px)/1.15 var(--mono);
+      letter-spacing: -.04em;
+      font-variant-numeric: tabular-nums;
+      text-shadow: 0 0 18px rgba(255, 211, 107, .22);
+    }
+    .result-score small { margin-left: 4px; color: var(--muted-2); font: 700 8px/1 var(--mono); }
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      margin-bottom: 14px;
+      text-align: left;
+    }
+    .result-grid div {
+      padding: 6px 8px;
+      border: 1px solid rgba(126, 107, 255, .13);
+      background: rgba(9, 5, 22, .45);
+    }
+    .result-grid span {
+      display: block;
+      color: var(--muted-2);
+      font: 500 8px/1.4 var(--mono);
+    }
+    .result-grid strong {
+      display: block;
+      overflow: hidden;
+      color: var(--text);
+      font: 700 11px/1.5 var(--mono);
+      font-variant-numeric: tabular-nums;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .text-link {
+      display: inline-block;
+      margin-top: 10px;
+      color: var(--muted);
+      font: 600 9px/1.8 var(--mono);
+      letter-spacing: .05em;
+      text-decoration: underline;
+      text-decoration-color: rgba(155, 160, 196, .3);
+      text-underline-offset: 3px;
+    }
+    .text-link:hover { color: var(--cyan); }
+
+    /* ============ 按钮、历史记录与控制栏 ============ */
+    .btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 0 18px;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      color: #f8faff;
+      font: 800 12px/1 var(--mono);
+      letter-spacing: .1em;
+      text-decoration: none;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform .15s ease, box-shadow .2s ease, filter .2s ease, background .2s ease;
+    }
+    .btn::before,
+    .btn::after {
+      content: "";
+      position: absolute;
+      width: 5px; height: 5px;
+      pointer-events: none;
+    }
+    .btn::before { top: 3px; left: 3px; border-top: 1px solid currentColor; border-left: 1px solid currentColor; opacity: .6; }
+    .btn::after { right: 3px; bottom: 3px; border-right: 1px solid currentColor; border-bottom: 1px solid currentColor; opacity: .6; }
+    .btn:hover:not(:disabled) { transform: translateY(-1px); }
+    .btn:active:not(:disabled) { transform: translateY(1px) scale(.995); }
+    .btn:disabled { cursor: not-allowed; filter: saturate(.35); opacity: .5; }
+
+    .btn-primary {
+      width: 100%;
+      color: #041018;
+      background: linear-gradient(100deg, var(--cyan) 0%, #c2f9ff 48%, var(--pink) 100%);
+      box-shadow: 0 0 24px rgba(72, 232, 255, .2), 0 12px 28px rgba(0, 0, 0, .32);
+    }
+    .btn-primary:hover:not(:disabled) { box-shadow: 0 0 32px rgba(255, 59, 212, .28), 0 14px 30px rgba(0, 0, 0, .38); }
+    .btn-primary span { font-size: 16px; line-height: 1; }
+
+    .btn-drop {
+      min-height: 52px;
+      padding: 0 12px;
+      color: #f7fbff;
+      border-color: rgba(72, 232, 255, .33);
+      background:
+        linear-gradient(180deg, rgba(53, 39, 110, .72), rgba(20, 11, 47, .9) 58%, rgba(8, 4, 20, .96));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 8px 20px rgba(0, 0, 0, .25);
+      overflow: hidden;
+    }
+    .btn-drop::marker { display: none; }
+    .btn-drop::before,
+    .btn-drop::after { border-color: var(--cyan); }
+    .btn-drop:hover:not(:disabled) {
+      border-color: rgba(72, 232, 255, .72);
+      background: linear-gradient(180deg, rgba(56, 147, 183, .38), rgba(24, 15, 58, .95) 62%, rgba(8, 4, 20, .98));
+      box-shadow: 0 0 28px rgba(72, 232, 255, .15), inset 0 1px 0 rgba(255, 255, 255, .1);
+    }
+    .btn-drop kbd {
+      position: absolute;
+      right: 9px;
+      bottom: 6px;
+      min-width: 0;
+      height: 16px;
+      padding: 0 4px;
+      border-color: rgba(255, 255, 255, .12);
+      color: rgba(255, 255, 255, .45);
+      background: rgba(0, 0, 0, .18);
+      font-size: 7px;
+      box-shadow: none;
+    }
+    .drop-icon {
+      display: grid;
+      place-items: center;
+      width: 23px; height: 23px;
+      border: 1px solid rgba(72, 232, 255, .5);
+      border-radius: 50%;
+      color: var(--cyan);
+      font: 800 15px/1 var(--mono);
+      box-shadow: 0 0 12px rgba(72, 232, 255, .14);
+    }
+    .btn-drop.is-running .drop-icon {
+      animation: drop-pulse .8s ease-in-out infinite;
+    }
+    @keyframes drop-pulse {
+      0%, 100% { transform: translateY(0); opacity: .5; }
+      50% { transform: translateY(3px); opacity: 1; }
+    }
+
+    .history {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 35px;
+      padding: 7px 2px 2px;
+    }
+    .history-label {
+      flex: 0 0 auto;
+      color: var(--muted-2);
+      font: 600 8px/1.4 var(--mono);
+      letter-spacing: .07em;
+      white-space: nowrap;
+    }
+    .history-label small { color: rgba(111, 115, 152, .55); font-size: 7px; }
+    .history-list {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .history-chip {
+      flex: 0 0 auto;
+      min-width: 38px;
+      padding: 4px 5px;
+      border: 1px solid rgba(126, 107, 255, .14);
+      border-radius: 2px;
+      color: var(--muted-2);
+      background: rgba(9, 5, 22, .6);
+      font: 700 8px/1.2 var(--mono);
+      text-align: center;
+      white-space: nowrap;
+      animation: chip-in .3s ease both;
+    }
+    .history-chip[data-tier="high"] { color: var(--gold); border-color: rgba(255, 211, 107, .25); background: rgba(255, 211, 107, .055); }
+    .history-chip[data-tier="mid"] { color: var(--cyan); border-color: rgba(72, 232, 255, .2); background: rgba(72, 232, 255, .045); }
+    .history-chip[data-tier="low"] { color: var(--pink-soft); border-color: rgba(255, 59, 212, .17); background: rgba(255, 59, 212, .045); }
+    .history-chip[data-tier="loss"] { color: #9c82be; }
+    @keyframes chip-in {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: minmax(0, .94fr) minmax(0, 1.3fr);
+      gap: 7px;
+      padding-top: 3px;
+    }
+    .bet-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      min-width: 0;
+      padding: 7px 8px;
+      border: 1px solid rgba(126, 107, 255, .16);
+      border-radius: 4px;
+      background: rgba(10, 6, 25, .62);
+    }
+    .bet-label {
+      color: var(--muted-2);
+      font: 600 8px/1 var(--mono);
+      letter-spacing: .08em;
+    }
+    .bet-label small { color: rgba(111, 115, 152, .55); font-size: 7px; }
+    .bet-stepper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 3px;
+    }
+    .bet-stepper output {
+      flex: 1;
+      min-width: 0;
+      color: var(--text);
+      font: 800 16px/1.4 var(--mono);
+      letter-spacing: -.03em;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+    .icon-btn {
+      width: 26px;
+      height: 26px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(126, 107, 255, .2);
+      border-radius: 2px;
+      color: var(--muted);
+      background: rgba(130, 94, 255, .06);
+      font: 700 15px/1 var(--mono);
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: color .15s ease, border-color .15s ease, background .15s ease;
+    }
+    .icon-btn:hover:not(:disabled) { color: var(--cyan); border-color: rgba(72, 232, 255, .48); background: rgba(72, 232, 255, .08); }
+    .icon-btn:disabled { opacity: .32; cursor: not-allowed; }
+
+    .cabinet-hint {
+      margin-top: 6px;
+      color: var(--muted-2);
+      font: 500 8px/1.7 var(--mono);
+      text-align: center;
+      letter-spacing: .02em;
+    }
+    .cabinet-hint kbd {
+      min-width: 16px;
+      height: 16px;
+      margin: 0 1px;
+      padding: 0 3px;
+      border-color: rgba(126, 107, 255, .2);
+      font-size: 7px;
+      box-shadow: none;
+    }
+    .cabinet-hint span { margin: 0 4px; color: rgba(155, 160, 196, .28); }
+
+    .stage-glass {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+      border-radius: inherit;
+      box-shadow: inset 0 0 60px rgba(0, 0, 0, .3);
+    }
+    .screen-flash {
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+      pointer-events: none;
+      opacity: 0;
+      border-radius: inherit;
+      background: rgba(255, 59, 212, .25);
+      mix-blend-mode: screen;
+    }
+    .screen-flash.is-hot { animation: screen-hot .4s ease-out; }
+    .screen-flash.is-gold { background: rgba(255, 211, 107, .3); animation: screen-hot .55s ease-out; }
+    @keyframes screen-hot {
+      0% { opacity: .9; }
+      100% { opacity: 0; }
+    }
+
+    .cabinet[data-mode="over"] { border-color: rgba(255, 84, 112, .18); }
+    .cabinet[data-mode="victory"] { border-color: rgba(255, 211, 107, .3); }
+
+    /* ============ 页面信息区（SEO / GEO 内容） ============ */
+    .page-content {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid rgba(126, 107, 255, .13);
+      background:
+        linear-gradient(180deg, rgba(8, 5, 20, .7), rgba(4, 1, 10, .94)),
+        radial-gradient(800px 400px at 80% 10%, rgba(255, 59, 212, .06), transparent 65%);
+    }
+    .info-section {
+      width: min(1060px, 100%);
+      margin: 0 auto;
+      padding: clamp(54px, 8vw, 84px) clamp(18px, 4vw, 36px);
+      border-bottom: 1px solid rgba(126, 107, 255, .09);
+    }
+    .info-section:last-of-type { border-bottom: 0; }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 128px minmax(0, 1fr);
+      gap: clamp(14px, 3vw, 36px);
+      align-items: start;
+      margin-bottom: clamp(24px, 4vw, 38px);
+    }
+    .section-index {
+      padding-top: 6px;
+      color: var(--pink);
+      font: 700 10px/1.5 var(--mono);
+      letter-spacing: .12em;
+    }
+    .section-index::before {
+      content: "";
+      display: inline-block;
+      width: 20px;
+      height: 1px;
+      margin-right: 8px;
+      vertical-align: middle;
+      background: var(--pink);
+      box-shadow: 0 0 8px var(--pink);
+    }
+    .section-head h2 {
+      color: #f3f6ff;
+      font-family: var(--display);
+      font-size: clamp(30px, 4.6vw, 48px);
+      font-weight: 900;
+      line-height: 1.04;
+      letter-spacing: -.015em;
+      text-wrap: balance;
+    }
+    .section-head h2 em {
+      color: var(--cyan);
+      font-style: normal;
+    }
+    .section-head p {
+      max-width: 700px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    .summary-card {
+      position: relative;
+      padding: clamp(20px, 4vw, 32px);
+      overflow: hidden;
+      border: 1px solid rgba(72, 232, 255, .2);
+      border-radius: 4px;
+      background:
+        linear-gradient(125deg, rgba(25, 16, 58, .83), rgba(7, 4, 19, .86) 52%, rgba(28, 8, 39, .75));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05), 0 20px 50px rgba(0, 0, 0, .2);
+    }
+    .summary-card::before {
+      content: "01";
+      position: absolute;
+      top: -23px; right: 14px;
+      color: rgba(255, 255, 255, .035);
+      font: 900 130px/1 var(--display);
+      letter-spacing: -.06em;
+      pointer-events: none;
+    }
+    .summary-label {
+      color: var(--cyan);
+      font: 700 10px/1.5 var(--mono);
+      letter-spacing: .12em;
+    }
+    .summary-text {
+      position: relative;
+      max-width: 900px;
+      margin-top: 11px;
+      color: #dfe2f7;
+      font-size: clamp(14px, 1.5vw, 16px);
+      line-height: 1.95;
+    }
+    .summary-text strong { color: var(--gold); font-weight: 700; }
+
+    .game-facts {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      margin-top: 22px;
+      border-top: 1px solid rgba(126, 107, 255, .15);
+      background: rgba(126, 107, 255, .12);
+    }
+    .game-facts div {
+      min-width: 0;
+      padding: 12px 12px 11px;
+      background: rgba(7, 4, 18, .75);
+    }
+    .game-facts dt {
+      color: var(--muted-2);
+      font: 500 9px/1.5 var(--mono);
+      letter-spacing: .05em;
+    }
+    .game-facts dd {
+      margin-top: 3px;
+      color: var(--text);
+      font: 700 12px/1.4 var(--mono);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .feature-card {
+      position: relative;
+      min-height: 150px;
+      padding: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(126, 107, 255, .16);
+      border-radius: 3px;
+      background: linear-gradient(160deg, rgba(20, 13, 45, .58), rgba(6, 3, 16, .44));
+    }
+    .feature-card::after {
+      content: "";
+      position: absolute;
+      right: -34px; bottom: -44px;
+      width: 110px; height: 110px;
+      border: 1px solid rgba(255, 59, 212, .14);
+      border-radius: 50%;
+      box-shadow: 0 0 0 14px rgba(72, 232, 255, .025), 0 0 0 28px rgba(255, 59, 212, .02);
+    }
+    .feature-no {
+      color: var(--pink);
+      font: 700 9px/1.4 var(--mono);
+      letter-spacing: .1em;
+    }
+    .feature-card h3 {
+      margin-top: 18px;
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: .01em;
+    }
+    .feature-card p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, .88fr);
+      gap: clamp(24px, 4vw, 44px);
+      align-items: start;
+    }
+    .rule-steps {
+      counter-reset: step;
+      display: grid;
+      gap: 9px;
+    }
+    .rule-step {
+      position: relative;
+      padding: 14px 16px 14px 56px;
+      border-left: 1px solid rgba(72, 232, 255, .23);
+      background: linear-gradient(90deg, rgba(72, 232, 255, .045), transparent 68%);
+    }
+    .rule-step::before {
+      counter-increment: step;
+      content: "0" counter(step);
+      position: absolute;
+      top: 15px; left: 14px;
+      color: var(--cyan);
+      font: 700 10px/1.4 var(--mono);
+      letter-spacing: .08em;
+    }
+    .rule-step h3 {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .rule-step p {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+    .rule-step strong { color: var(--cyan-soft); font-weight: 600; }
+
+    .payout-card {
+      padding: 20px;
+      border: 1px solid rgba(126, 107, 255, .18);
+      border-radius: 4px;
+      background: rgba(9, 5, 23, .62);
+    }
+    .payout-card h3 {
+      color: var(--text);
+      font: 700 11px/1.5 var(--mono);
+      letter-spacing: .08em;
+    }
+    .payout-card > p {
+      margin: 5px 0 13px;
+      color: var(--muted-2);
+      font-size: 11px;
+      line-height: 1.7;
+    }
+    .payout-table {
+      width: 100%;
+      border-collapse: collapse;
+      color: var(--muted);
+      font: 500 11px/1.5 var(--mono);
+      font-variant-numeric: tabular-nums;
+    }
+    .payout-table caption {
+      padding-bottom: 9px;
+      color: var(--muted-2);
+      font: 500 9px/1.6 var(--mono);
+      text-align: left;
+    }
+    .payout-table th,
+    .payout-table td {
+      padding: 7px 8px;
+      border-bottom: 1px solid rgba(126, 107, 255, .1);
+      text-align: left;
+    }
+    .payout-table th { color: var(--muted-2); font-size: 9px; font-weight: 600; letter-spacing: .04em; }
+    .payout-table td:last-child { color: var(--cyan-soft); font-weight: 700; }
+    .payout-table tr:last-child td { border-bottom: 0; }
+    .payout-table .is-hot { color: var(--gold); }
+    .risk-note {
+      display: flex;
+      gap: 9px;
+      margin-top: 13px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 59, 212, .13);
+      color: var(--muted-2);
+      font-size: 10px;
+      line-height: 1.7;
+    }
+    .risk-note::before { content: "!"; color: var(--pink); font: 800 12px/1.4 var(--mono); }
+
+    .tech-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .tech-item {
+      padding: 13px 14px;
+      border: 1px solid rgba(126, 107, 255, .13);
+      background: rgba(8, 4, 19, .42);
+    }
+    .tech-item span {
+      display: block;
+      color: var(--muted-2);
+      font: 600 8px/1.4 var(--mono);
+      letter-spacing: .08em;
+    }
+    .tech-item strong {
+      display: block;
+      margin-top: 4px;
+      color: var(--text);
+      font: 600 11px/1.5 var(--mono);
+    }
+
+    .faq-list {
+      display: grid;
+      gap: 7px;
+      max-width: 900px;
+    }
+    .faq-item {
+      border: 1px solid rgba(126, 107, 255, .14);
+      background: rgba(9, 5, 23, .5);
+      transition: border-color .2s ease, background .2s ease;
+    }
+    .faq-item[open] { border-color: rgba(72, 232, 255, .28); background: rgba(13, 8, 31, .68); }
+    .faq-item summary {
+      position: relative;
+      padding: 15px 46px 15px 17px;
+      color: #dfe2f6;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+      touch-action: manipulation;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::before {
+      content: "";
+      position: absolute;
+      top: 50%; left: 0;
+      width: 2px; height: 16px;
+      transform: translateY(-50%);
+      background: var(--pink);
+      opacity: 0;
+      box-shadow: 0 0 9px var(--pink);
+      transition: opacity .2s ease;
+    }
+    .faq-item[open] summary::before { opacity: 1; }
+    .faq-item summary::after {
+      content: "+";
+      position: absolute;
+      top: 50%; right: 17px;
+      color: var(--cyan);
+      font: 400 18px/1 var(--mono);
+      transform: translateY(-50%);
+      transition: transform .2s ease;
+    }
+    .faq-item[open] summary::after { content: "−"; transform: translateY(-50%) rotate(180deg); }
+    .faq-item p {
+      max-width: 760px;
+      padding: 0 17px 16px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.9;
+    }
+
+    /* ============ 页脚 ============ */
+    .site-footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid rgba(126, 107, 255, .13);
+      background: rgba(3, 1, 8, .86);
+    }
+    .footer-inner {
+      width: min(1060px, 100%);
+      margin: 0 auto;
+      padding: 36px clamp(18px, 4vw, 36px) calc(28px + env(safe-area-inset-bottom));
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr);
+      gap: 30px;
+    }
+    .footer-brand {
+      color: var(--text);
+      font: 800 16px/1 var(--display);
+      letter-spacing: .12em;
+    }
+    .footer-brand span { color: var(--pink); }
+    .footer-desc {
+      max-width: 470px;
+      margin-top: 9px;
+      color: var(--muted-2);
+      font-size: 11px;
+      line-height: 1.85;
+    }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      align-content: start;
+      justify-content: flex-end;
+    }
+    .footer-links a {
+      color: var(--muted);
+      font: 500 10px/1.6 var(--mono);
+      text-decoration: underline;
+      text-decoration-color: rgba(155, 160, 196, .2);
+      text-underline-offset: 3px;
+    }
+    .footer-links a:hover { color: var(--cyan); }
+    .footer-meta {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 8px 20px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(126, 107, 255, .09);
+      color: var(--muted-2);
+      font: 500 9px/1.7 var(--mono);
+      letter-spacing: .02em;
+    }
+    .footer-meta p { max-width: 700px; }
+
+    @media (max-width: 1000px) {
+      .hero-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(340px, 400px);
+        gap: 34px;
+      }
+      .hero h1 { font-size: clamp(64px, 9.5vw, 110px); }
+    }
+
+    @media (max-width: 860px) {
+      .section-head { grid-template-columns: 1fr; gap: 8px; }
+      .section-index { padding-top: 0; }
+      .rules-grid { grid-template-columns: 1fr; }
+      .game-facts { grid-template-columns: repeat(2, 1fr); }
+      .feature-grid { grid-template-columns: 1fr; }
+      .feature-card { min-height: 0; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-links { justify-content: flex-start; }
+    }
+
+    @media (max-width: 760px) {
+      :root { --header-h: 62px; }
+      .site-header { padding-top: 14px; padding-bottom: 10px; }
+      .site-nav { display: none; }
+      .hero { padding-top: 8px; padding-bottom: 48px; }
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        min-height: 0;
+      }
+      .hero-copy { padding-left: 15px; }
+      .hero h1 { font-size: clamp(62px, 18vw, 104px); line-height: .78; }
+      .hero-kicker { margin-top: 17px; font-size: 14px; letter-spacing: .14em; }
+      .hero-lead { margin-top: 13px; font-size: 13px; line-height: 1.8; }
+      .quick-facts { margin-top: 16px; }
+      .quick-facts li { padding: 6px 8px; }
+      .hero-controls { margin-top: 14px; font-size: 10px; }
+      .hero-note { margin-top: 12px; }
+      .cabinet { justify-self: stretch; max-width: 500px; margin: 0 auto; }
+      .hud { gap: 5px; }
+      .stat { padding: 7px 8px 8px; }
+      .stat-label { font-size: 7px; }
+      .stat-value { font-size: clamp(15px, 5vw, 20px); }
+      .cabinet-hint { font-size: 7px; }
+      .tech-strip { grid-template-columns: 1fr; }
+    }
+
+    /* 矮屏桌面：压缩间距并按视口高度缩放机柜，确保下注与投放按钮在首屏可见 */
+    @media (min-width: 761px) and (max-height: 860px) {
+      .site-header { min-height: 54px; padding-top: 8px; padding-bottom: 8px; }
+      .hero { padding-top: 6px; padding-bottom: 24px; }
+      .hero-grid { min-height: 0; align-items: start; }
+      .hero h1 { font-size: clamp(60px, 8vw, 96px); }
+      .eyebrow { margin-bottom: 18px; }
+      .hero-kicker { margin-top: 18px; }
+      .hero-lead { margin-top: 12px; font-size: 13px; line-height: 1.75; }
+      .quick-facts { margin-top: 14px; }
+      .hero-controls { margin-top: 15px; }
+      .hero-note { margin-top: 11px; }
+      .cabinet { max-width: min(430px, calc((100svh - 300px) / 1.2)); }
+      .hud { margin-bottom: 5px; }
+      .stat { padding: 6px 8px 7px; }
+      .stat-value { font-size: 18px; }
+      .target { padding-bottom: 7px; }
+      .controls { padding-top: 1px; }
+    }
+
+    /* 更矮的窗口：隐藏次要历史条与快捷键提示，把高度让给棋盘 */
+    @media (min-width: 761px) and (max-height: 700px) {
+      .cabinet { max-width: min(430px, calc((100svh - 250px) / 1.2)); }
+      .cabinet-hint { display: none; }
+      .history { display: none; }
+    }
+
+    @media (max-width: 470px) {
+      .hero-lead { max-width: 100%; }
+      .hero h1 { font-size: clamp(56px, 19vw, 88px); }
+      .hero-kicker { letter-spacing: .1em; }
+      .quick-facts { gap: 5px; }
+      .quick-facts li { font-size: 9px; }
+      .quick-facts strong { font-size: 11px; }
+      .hero-controls .sep { margin: 0 2px; }
+      .overlay { padding: 12px; }
+      .overlay-card { padding: 18px 13px; }
+      .overlay-card h2 { font-size: 28px; }
+      .overlay-card > p:not(.overlay-eyebrow):not(.overlay-hint) { margin-top: 10px; font-size: 11px; }
+      .overlay-specs { margin: 13px 0; }
+      .btn { min-height: 44px; font-size: 11px; }
+      .btn-drop { min-height: 48px; padding: 0 9px; }
+      .drop-icon { width: 21px; height: 21px; }
+      .controls { gap: 5px; }
+      .bet-panel { padding: 7px 5px; }
+      .bet-stepper output { font-size: 14px; }
+      .icon-btn { width: 24px; height: 24px; }
+      .cabinet-hint kbd { display: none; }
+      .cabinet-hint { letter-spacing: 0; }
+      .history-label { font-size: 7px; }
+      .history-chip { min-width: 34px; font-size: 7px; }
+      .info-section { padding-top: 46px; padding-bottom: 46px; }
+      .section-head h2 { font-size: clamp(28px, 9vw, 38px); }
+      .summary-card { padding: 18px 15px; }
+      .game-facts div { padding: 10px 9px; }
+      .payout-card { padding: 16px 13px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+      }
+      .target-fill::after { display: none; }
+    }
+
+    @media (forced-colors: active) {
+      .btn-primary, .btn-drop, .tab, .icon-btn { border: 1px solid ButtonText; }
+      .target-track { border: 1px solid ButtonText; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#game">跳到游戏</a>
+  <noscript><div class="noscript-bar">NEON PLINKO 需要启用 JavaScript 才能运行。你仍可阅读下方的玩法说明、倍率表与常见问题。</div></noscript>
+
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="NEON PLINKO 首页">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="6"></circle>
+          <path d="M12 2v20M2 12h20"></path>
+        </svg>
+      </span>
+      NEON <span>PLINKO</span>
+    </a>
+    <nav class="site-nav" aria-label="主导航">
+      <a href="#game">试玩</a>
+      <a href="#about">简介</a>
+      <a href="#rules">规则</a>
+      <a href="#faq">问答</a>
+    </nav>
+    <button class="sound-toggle" id="soundToggle" type="button" aria-pressed="true" aria-label="声音 ON，关闭游戏音效">
+      <svg class="sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+        <path d="M4 9v6h4l5 4V5L8 9H4Z"></path>
+        <path d="M17 9a4 4 0 0 1 0 6M19.5 6.5a8 8 0 0 1 0 11"></path>
+      </svg>
+      <svg class="sound-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+        <path d="M4 9v6h4l5 4V5L8 9H4Z"></path>
+        <path d="m17 9 5 6M22 9l-5 6"></path>
+      </svg>
+      <span>声音 ON</span>
+    </button>
+  </header>
+
+  <main>
+    <section class="hero" id="game" aria-labelledby="pageTitle">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> CYBER CASINO // SYSTEM READY</p>
+          <h1 id="pageTitle">
+            <span class="title-neon">NEON</span>
+            <span class="title-pink">PLINKO</span>
+          </h1>
+          <p class="hero-kicker">霓虹弹珠 · 概率赌场</p>
+          <p class="hero-lead">
+            把霓虹筹码投进能量钉阵，让物理替你穿过风险与概率。命中高倍率槽，扩张你的账户；在余额归零之前，<strong>击穿 10,000 CR 金库</strong>。
+          </p>
+          <ul class="quick-facts" aria-label="游戏关键信息">
+            <li><strong>1,000</strong> 初始筹码</li>
+            <li><strong>x12</strong> 最高倍率</li>
+            <li><strong>9</strong> 个结算槽</li>
+            <li><strong>100%</strong> 免费游玩</li>
+          </ul>
+          <div class="hero-controls" aria-label="操作提示">
+            <kbd>←</kbd><kbd>→</kbd> 移动发射器
+            <span class="sep">/</span>
+            <kbd>↑</kbd><kbd>↓</kbd> 调整下注
+            <span class="sep">/</span>
+            <kbd>SPACE</kbd> 投放
+          </div>
+          <p class="hero-note"><span aria-hidden="true">◈</span> 纯娱乐体验，无真实货币投注 · 最高纪录仅保存在本机</p>
+        </div>
+
+        <div class="cabinet" id="cabinet" data-mode="start">
+          <div class="cabinet-head">
+            <span class="cabinet-id"><span class="cabinet-led" aria-hidden="true"></span> PLINKO-07 <em>// NIGHT CITY</em></span>
+            <span class="cabinet-mode" id="modeLabel">STANDBY</span>
+          </div>
+
+          <div class="hud" aria-label="游戏数据">
+            <div class="stat stat-balance">
+              <span class="stat-label">账户余额 <small>BALANCE</small></span>
+              <strong class="stat-value" id="balanceValue">1,000</strong><span class="stat-unit">CR</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">本局峰值 <small>PEAK</small></span>
+              <strong class="stat-value" id="peakValue">1,000</strong><span class="stat-unit">CR</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">历史纪录 <small>RECORD</small></span>
+              <strong class="stat-value" id="recordValue">—</strong>
+            </div>
+          </div>
+
+          <div class="target">
+            <div class="target-copy">
+              <span>破局目标 // VAULT</span>
+              <span id="targetValue">1,000 / 10,000</span>
+            </div>
+            <div class="target-track" id="targetTrack" role="progressbar" aria-label="金库目标进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="10" aria-valuetext="当前进度 10%">
+              <span class="target-fill" id="targetFill"></span>
+            </div>
+          </div>
+
+          <div class="stage" id="stage">
+            <canvas id="gameCanvas" width="900" height="1080" tabindex="0" aria-label="霓虹弹珠游戏区域。左右方向键移动发射器，上下方向键调整下注，空格键投放筹码。手机端可拖动瞄准。">
+              你的浏览器不支持 Canvas。请使用较新的浏览器来游玩 NEON PLINKO。
+            </canvas>
+
+            <div class="overlay overlay-start" id="startOverlay">
+              <div class="overlay-card">
+                <p class="overlay-eyebrow"><span aria-hidden="true"></span> DROP PROTOCOL READY</p>
+                <h2>霓虹赌场<br><span>等你接入</span></h2>
+                <p>瞄准钉阵，投放筹码。每一次落点，都是概率与物理的共谋。</p>
+                <div class="overlay-specs" aria-label="开局参数">
+                  <div><span>初始资金</span><strong>1,000 CR</strong></div>
+                  <div><span>最高倍率</span><strong>x12</strong></div>
+                  <div><span>破局目标</span><strong>10,000</strong></div>
+                </div>
+                <button class="btn btn-primary" id="startBtn" type="button">开始投放 <span aria-hidden="true">→</span></button>
+                <p class="overlay-hint">无需注册 · 无需下载 · 30 秒上手</p>
+              </div>
+            </div>
+
+            <div class="overlay overlay-over" id="gameOverOverlay" hidden>
+              <div class="overlay-card">
+                <p class="overlay-eyebrow"><span aria-hidden="true"></span> <b id="overEyebrow" style="font-weight:700">CONNECTION CLOSED</b></p>
+                <h2 id="overTitle">金库<br><span>已清空</span></h2>
+                <p id="overDesc">余额不足，霓虹赌场暂时切断了你的接入权限。</p>
+                <div class="result-score">
+                  <span>本局得分 / PEAK</span>
+                  <strong id="finalScore">0</strong><small>CR</small>
+                </div>
+                <div class="result-grid">
+                  <div><span>最终余额</span><strong id="statFinal">0 CR</strong></div>
+                  <div><span>投放次数</span><strong id="statDrops">0</strong></div>
+                  <div><span>最大单次收益</span><strong id="statMaxWin">0 CR</strong></div>
+                  <div><span>历史纪录</span><strong id="statRecord">—</strong></div>
+                </div>
+                <button class="btn btn-primary" id="restartBtn" type="button">重新接入 <span aria-hidden="true">↻</span></button>
+                <a class="text-link" href="#rules">查看玩法与倍率</a>
+              </div>
+            </div>
+
+            <div class="stage-glass" aria-hidden="true"></div>
+            <div class="screen-flash" id="screenFlash" aria-hidden="true"></div>
+          </div>
+
+          <div class="history">
+            <span class="history-label">最近落点 <small>LOG</small></span>
+            <ol class="history-list" id="historyList" aria-label="最近五次开奖倍率">
+              <li class="history-chip">—</li>
+              <li class="history-chip">—</li>
+              <li class="history-chip">—</li>
+              <li class="history-chip">—</li>
+              <li class="history-chip">—</li>
+            </ol>
+          </div>
+
+          <div class="controls" aria-label="游戏控制">
+            <div class="bet-panel">
+              <span class="bet-label">单注 <small>BET</small></span>
+              <div class="bet-stepper">
+                <button class="icon-btn" id="betMinus" type="button" aria-label="降低下注" disabled>−</button>
+                <output id="betValue" aria-label="当前下注">25</output>
+                <button class="icon-btn" id="betPlus" type="button" aria-label="提高下注" disabled>+</button>
+              </div>
+            </div>
+            <button class="btn btn-drop" id="dropBtn" type="button" disabled>
+              <span class="drop-icon" aria-hidden="true">↓</span>
+              <span id="dropLabel">等待接入</span>
+              <kbd>SPACE</kbd>
+            </button>
+          </div>
+
+          <p class="cabinet-hint"><kbd>←</kbd><kbd>→</kbd> 移动 <span>/</span> <kbd>↑</kbd><kbd>↓</kbd> 下注 <span>/</span> <kbd>SPACE</kbd> 投放</p>
+          <p class="sr-only" id="srStatus" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <div class="page-content">
+      <section class="info-section" id="about" aria-labelledby="aboutTitle">
+        <div class="section-head">
+          <p class="section-index">01 // GAME BRIEF</p>
+          <div>
+            <h2 id="aboutTitle">在霓虹钉阵里，<em>和概率做一笔交易。</em></h2>
+            <p>NEON PLINKO 把经典弹珠台改造成一台赛博朋克赌场终端。没有复杂注册，也没有真实货币：只有一枚筹码、一组钉阵，以及你在风险与收益之间做出的每一次选择。</p>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <p class="summary-label">一句话了解 NEON PLINKO</p>
+          <p class="summary-text">
+            <strong>NEON PLINKO 是一款免费、免下载的赛博朋克风 H5 霓虹弹珠游戏。</strong>
+            玩家操控顶部发射器，将筹码投入由 8 行能量钉阵组成的棋盘；筹码经过真实 Canvas 物理碰撞后落入 9 个倍率槽，按单注金额与落点倍率结算。账户从 1,000 CR 起步，目标是在余额低于最低下注 10 CR 前冲击 10,000 CR 金库目标。
+          </p>
+          <dl class="game-facts" aria-label="游戏规格">
+            <div><dt>游戏类型</dt><dd>物理弹珠 / 街机赌场</dd></div>
+            <div><dt>支持平台</dt><dd>PC · iOS · Android</dd></div>
+            <div><dt>操作方式</dt><dd>键盘 / 触屏拖动</dd></div>
+            <div><dt>单局时长</dt><dd>约 1–5 分钟</dd></div>
+            <div><dt>初始筹码</dt><dd>1,000 CR</dd></div>
+            <div><dt>最低下注</dt><dd>10 CR</dd></div>
+            <div><dt>最高倍率</dt><dd>x12</dd></div>
+            <div><dt>价格</dt><dd>免费 · 无内购</dd></div>
+          </dl>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <p class="feature-no">FEATURE // 01</p>
+            <h3>实时物理碰撞</h3>
+            <p>筹码不是动画幻灯片。重力、反弹、随机扰动与钉阵碰撞都在 Canvas 中实时演算，每一局落点都不可完全预测。</p>
+          </article>
+          <article class="feature-card">
+            <p class="feature-no">FEATURE // 02</p>
+            <h3>双端无缝操控</h3>
+            <p>电脑端用方向键瞄准和调整下注，手机端直接在棋盘上拖动。响应式布局会自动适配竖屏、横屏与桌面浏览器。</p>
+          </article>
+          <article class="feature-card">
+            <p class="feature-no">FEATURE // 03</p>
+            <h3>轻量单文件运行</h3>
+            <p>整个游戏、视觉与音效都封装在一个 HTML 文件中，不依赖外部图片、CDN 或追踪脚本。打开页面即可开始，也可离线保存。</p>
+          </article>
+        </div>
+
+        <div class="tech-strip" aria-label="技术特性">
+          <div class="tech-item"><span>RENDER</span><strong>HTML5 Canvas 2D</strong></div>
+          <div class="tech-item"><span>INPUT</span><strong>Keyboard + Pointer + Touch</strong></div>
+          <div class="tech-item"><span>STORAGE</span><strong>LocalStorage 本地纪录</strong></div>
+        </div>
+      </section>
+
+      <section class="info-section" id="rules" aria-labelledby="rulesTitle">
+        <div class="section-head">
+          <p class="section-index">02 // HOW TO PLAY</p>
+          <div>
+            <h2 id="rulesTitle">三步上手，<em>一局见分晓。</em></h2>
+            <p>游戏规则刻意保持简单：选注、瞄准、投放。真正需要判断的，是你愿意用多大的风险去换取多高的倍率。</p>
+          </div>
+        </div>
+
+        <div class="rules-grid">
+          <ol class="rule-steps">
+            <li class="rule-step">
+              <h3>移动发射器</h3>
+              <p>电脑端按 <strong>← / →</strong> 移动顶部发射器，手机端可以直接在棋盘上半区拖动。发射位置会改变筹码的初始路径。</p>
+            </li>
+            <li class="rule-step">
+              <h3>调整单注</h3>
+              <p>使用 <strong>↑ / ↓</strong> 或下注栏的加减按钮在 <strong>10、25、50、100、250 CR</strong> 之间切换。单注不能超过当前余额。</p>
+            </li>
+            <li class="rule-step">
+              <h3>投放筹码</h3>
+              <p>按 <strong>空格键</strong> 或点击「投放筹码」。筹码先扣除单注金额，再穿过钉阵，落入底部倍率槽后按 <strong>单注 × 倍率</strong> 结算。</p>
+            </li>
+            <li class="rule-step">
+              <h3>扩张或出局</h3>
+              <p>余额达到 <strong>10,000 CR</strong> 即宣告击穿金库；余额低于最低下注 <strong>10 CR</strong> 则本局结束。本局得分取全程账户余额峰值。</p>
+            </li>
+          </ol>
+
+          <div class="payout-card">
+            <h3>PAYOUT MATRIX // 倍率表</h3>
+            <p>从棋盘左侧到右侧共 9 个结算槽，倍率左右对称。越靠近边缘，倍率越高，命中概率也越低。</p>
+            <table class="payout-table">
+              <caption>落点倍率与相对位置</caption>
+              <thead>
+                <tr><th scope="col">位置</th><th scope="col">倍率</th><th scope="col">风险特征</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>最外侧 1 / 9</td><td class="is-hot">x12</td><td>极高风险 · 最高回报</td></tr>
+                <tr><td>次外侧 2 / 8</td><td>x4</td><td>高风险</td></tr>
+                <tr><td>中段 3 / 7</td><td>x1.5</td><td>中等风险</td></tr>
+                <tr><td>内侧 4 / 6</td><td>x0.5</td><td>低回报区</td></tr>
+                <tr><td>中心 5</td><td>x0.25</td><td>最常见落点</td></tr>
+              </tbody>
+            </table>
+            <p class="risk-note">高倍率槽位于钉阵边缘，命中概率相对更低。小注可以延长游戏时间，大注则能更快冲击金库目标，但也会加速余额消耗。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="info-section" id="faq" aria-labelledby="faqTitle">
+        <div class="section-head">
+          <p class="section-index">03 // FAQ</p>
+          <div>
+            <h2 id="faqTitle">关于这台霓虹赌场，<em>你可能想知道。</em></h2>
+            <p>以下问题覆盖玩法、平台、纪录保存与虚拟筹码说明。若你第一次访问本页，建议先阅读规则区。</p>
+          </div>
+        </div>
+
+        <div class="faq-list">
+          <details class="faq-item" open>
+            <summary>NEON PLINKO 是什么游戏？</summary>
+            <p>NEON PLINKO 是一款赛博朋克主题的免费 H5 弹珠游戏。玩家移动顶部发射器并投放筹码，筹码穿过钉阵后落入不同倍率槽，最高可获得 12 倍回报。游戏从 1,000 筹码起步，目标是在余额跌破 10 筹码前达到 10,000 筹码。</p>
+          </details>
+          <details class="faq-item">
+            <summary>需要下载、注册或付费吗？</summary>
+            <p>不需要。NEON PLINKO 为单文件静态网页，无需下载客户端、无需注册、无内购，也不包含真实货币投注。通过现代浏览器打开页面即可开始。</p>
+          </details>
+          <details class="faq-item">
+            <summary>手机可以玩吗？如何操作？</summary>
+            <p>可以。电脑端使用左右方向键移动发射器、上下方向键调整下注、空格键投放筹码；手机端可以在棋盘上拖动瞄准，并通过下注按钮和投放按钮操作。页面针对窄屏做了响应式布局。</p>
+          </details>
+          <details class="faq-item">
+            <summary>游戏最高倍率是多少？</summary>
+            <p>最外侧的两个霓虹槽为最高倍率 x12，其相邻槽为 x4，中间区域依次为 x1.5、x0.5 和 x0.25。边缘槽的命中概率更低，属于高风险高回报区域。</p>
+          </details>
+          <details class="faq-item">
+            <summary>最高纪录保存在哪里？</summary>
+            <p>历史最高余额保存在浏览器本地 localStorage 中，不会上传服务器。清除浏览器站点数据、使用无痕模式或更换设备后，纪录不会同步。</p>
+          </details>
+          <details class="faq-item">
+            <summary>筹码能兑换真实货币吗？</summary>
+            <p>不能。游戏内筹码仅为娱乐用虚拟积分，不支持充值、提现或兑换任何真实奖品。本作不提供真实货币赌博服务，请理性对待游戏结果。</p>
+          </details>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <p class="footer-brand">NEON<span>PLINKO</span></p>
+        <p class="footer-desc">一台无需下载的赛博朋克霓虹弹珠终端。玩法灵感来自经典 Plinko 物理街机机制，代码、视觉与文案均为本页面原创实现；游戏不涉及真实货币、充值或提现。</p>
+      </div>
+      <nav class="footer-links" aria-label="页脚导航">
+        <a href="#game">开始游戏</a>
+        <a href="#about">游戏简介</a>
+        <a href="#rules">玩法与倍率</a>
+        <a href="#faq">常见问题</a>
+        <a href="#game">返回顶部</a>
+      </nav>
+      <div class="footer-meta">
+        <p>© <span id="copyrightYear">2026</span> NEON PLINKO · 娱乐用途 · 无真实货币投注 · 请适度游戏</p>
+        <p>最后更新：<time datetime="2026-11-09">2026-11-09</time> · 单文件 H5 · Canvas 2D</p>
+      </div>
+    </div>
+  </footer>
+
+
+  <script>
+    (() => {
+      'use strict';
+
+      /* ============================================================
+       * 0. 基础工具与常量
+       * ============================================================ */
+      const $ = (selector) => document.querySelector(selector);
+      const TAU = Math.PI * 2;
+      const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+      const lerp = (a, b, t) => a + (b - a) * t;
+      const rand = (min, max) => min + Math.random() * (max - min);
+      const nf = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
+      const formatCredits = (value) => nf.format(Math.max(0, Math.round(value)));
+      const formatMult = (value) => `x${Number.isInteger(value) ? value : value}`;
+
+      // 游戏核心参数
+      const VW = 900;
+      const VH = 1080;
+      const START_BALANCE = 1000;
+      const VAULT_TARGET = 10000;
+      const MIN_BET = 10;
+      const BETS = [10, 25, 50, 100, 250];
+      const MULTIPLIERS = [12, 4, 1.5, 0.5, 0.25, 0.5, 1.5, 4, 12];
+      const PEG_ROWS = 8;
+
+      // 每一种倍率对应的颜色与文案（左右对称）
+      const BIN_STYLES = MULTIPLIERS.map((mult) => {
+        if (mult >= 12) return { color: '#ffd36b', name: 'JACKPOT', tier: 'high' };
+        if (mult >= 4) return { color: '#ff3bd4', name: 'HIGH', tier: 'high' };
+        if (mult >= 1.5) return { color: '#48e8ff', name: 'MID', tier: 'mid' };
+        if (mult >= 0.5) return { color: '#8061ff', name: 'LOW', tier: 'low' };
+        return { color: '#7276a3', name: 'CORE', tier: 'loss' };
+      });
+
+      // 棋盘几何：所有坐标都基于 900 × 1080 的逻辑分辨率
+      const GEOM = (() => {
+        const left = 70;
+        const right = 830;
+        const top = 300;
+        const gap = 72;
+        const binTop = 856;
+        const binBottom = 978;
+        const binW = (right - left) / MULTIPLIERS.length;
+        const pegs = [];
+
+        for (let row = 0; row < PEG_ROWS; row += 1) {
+          const y = top + row * gap;
+          if (row % 2 === 0) {
+            // 偶数行：9 颗钉子，对准每个结算槽的中心
+            for (let i = 0; i < MULTIPLIERS.length; i += 1) {
+              pegs.push({
+                x: left + binW * (i + 0.5),
+                y,
+                color: (i + row) % 2 === 0 ? '#48e8ff' : '#ff3bd4'
+              });
+            }
+          } else {
+            // 奇数行：10 颗钉子，对准结算槽分隔线
+            for (let i = 0; i <= MULTIPLIERS.length; i += 1) {
+              pegs.push({
+                x: left + binW * i,
+                y,
+                color: (i + row) % 2 === 0 ? '#ff3bd4' : '#48e8ff'
+              });
+            }
+          }
+        }
+
+        return {
+          left,
+          right,
+          top,
+          gap,
+          binTop,
+          binBottom,
+          binHeight: binBottom - binTop,
+          binW,
+          pegs,
+          railY: 188,
+          ballStartY: 226,
+          wallLeft: left - 24,
+          wallRight: right + 24,
+          payoutY: 942,
+          aimMin: left + 18,
+          aimMax: right - 18
+        };
+      })();
+
+      const BALL_RADIUS = 12;
+      const PEG_RADIUS = 7.5;
+      const GRAVITY = 1450;
+      const FIXED_STEP = 1 / 240;
+      const MAX_STEPS = 10;
+      const STORAGE_RECORD = 'neonPlinko.record.v1';
+      const STORAGE_SOUND = 'neonPlinko.sound.v1';
+
+      // 安全读写 localStorage，避免隐私模式或禁用存储时抛错
+      function readStorage(key) {
+        try { return window.localStorage.getItem(key); } catch (error) { return null; }
+      }
+      function writeStorage(key, value) {
+        try { window.localStorage.setItem(key, value); } catch (error) { /* 忽略存储异常 */ }
+      }
+
+      const storedRecord = Number.parseInt(readStorage(STORAGE_RECORD) || '0', 10);
+      let bestRecord = Number.isFinite(storedRecord) && storedRecord > 0 ? storedRecord : 0;
+      let audioEnabled = readStorage(STORAGE_SOUND) !== 'off';
+
+      /* ============================================================
+       * 1. 游戏状态与 DOM 引用
+       * ============================================================ */
+      const game = {
+        phase: 'start',          // start | playing | over | victory
+        balance: START_BALANCE,
+        peak: START_BALANCE,
+        betIndex: 1,             // 默认 25 CR
+        drops: 0,
+        maxWin: 0,
+        bestMultiplier: 0,
+        history: [],
+        ball: null,
+        roundLock: false,
+        roundTimer: 0,
+        aimX: VW / 2,
+        recordBeforeRun: bestRecord,
+        lastResult: null
+      };
+
+      const el = {
+        canvas: $('#gameCanvas'),
+        stage: $('#stage'),
+        cabinet: $('#cabinet'),
+        modeLabel: $('#modeLabel'),
+        balance: $('#balanceValue'),
+        peak: $('#peakValue'),
+        record: $('#recordValue'),
+        targetValue: $('#targetValue'),
+        targetTrack: $('#targetTrack'),
+        targetFill: $('#targetFill'),
+        startOverlay: $('#startOverlay'),
+        startBtn: $('#startBtn'),
+        overOverlay: $('#gameOverOverlay'),
+        overEyebrow: $('#overEyebrow'),
+        overTitle: $('#overTitle'),
+        overDesc: $('#overDesc'),
+        finalScore: $('#finalScore'),
+        statFinal: $('#statFinal'),
+        statDrops: $('#statDrops'),
+        statMaxWin: $('#statMaxWin'),
+        statRecord: $('#statRecord'),
+        restartBtn: $('#restartBtn'),
+        historyList: $('#historyList'),
+        betMinus: $('#betMinus'),
+        betPlus: $('#betPlus'),
+        betValue: $('#betValue'),
+        dropBtn: $('#dropBtn'),
+        dropLabel: $('#dropLabel'),
+        soundToggle: $('#soundToggle'),
+        screenFlash: $('#screenFlash'),
+        srStatus: $('#srStatus'),
+        copyrightYear: $('#copyrightYear')
+      };
+
+      const ctx = el.canvas ? el.canvas.getContext('2d', { alpha: false }) : null;
+      if (!ctx) {
+        if (el.srStatus) el.srStatus.textContent = '当前浏览器无法创建 Canvas 画布，请更换浏览器后重试。';
+      }
+
+      if (el.copyrightYear) el.copyrightYear.textContent = String(new Date().getFullYear());
+
+      const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      let reduceMotion = motionQuery.matches;
+      motionQuery.addEventListener?.('change', (event) => {
+        reduceMotion = event.matches;
+      });
+
+      function currentBet() {
+        return BETS[game.betIndex];
+      }
+
+      function announce(message) {
+        if (!el.srStatus) return;
+        el.srStatus.textContent = '';
+        window.setTimeout(() => { el.srStatus.textContent = message; }, 20);
+      }
+
+      /* ============================================================
+       * 2. 程序化音效（Web Audio API，无外部音频文件）
+       * ============================================================ */
+      const Sound = (() => {
+        let audioContext = null;
+        let master = null;
+        let lastPegAt = 0;
+
+        function ensureContext() {
+          if (audioContext) return audioContext;
+          const AudioCtor = window.AudioContext || window.webkitAudioContext;
+          if (!AudioCtor) return null;
+          try {
+            audioContext = new AudioCtor();
+            master = audioContext.createGain();
+            master.gain.value = 0.16;
+            master.connect(audioContext.destination);
+          } catch (error) {
+            audioContext = null;
+          }
+          return audioContext;
+        }
+
+        function tone(freq, duration = 0.08, type = 'sine', volume = 0.25, delay = 0, endFreq = null) {
+          if (!audioEnabled) return;
+          const ac = ensureContext();
+          if (!ac || !master) return;
+          if (ac.state === 'suspended') ac.resume().catch(() => {});
+          const start = ac.currentTime + delay;
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(Math.max(30, freq), start);
+          if (endFreq) {
+            osc.frequency.exponentialRampToValueAtTime(Math.max(30, endFreq), start + duration);
+          }
+          gain.gain.setValueAtTime(0.0001, start);
+          gain.gain.exponentialRampToValueAtTime(Math.max(0.0002, volume), start + 0.008);
+          gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+          osc.connect(gain);
+          gain.connect(master);
+          osc.start(start);
+          osc.stop(start + duration + 0.03);
+        }
+
+        function init() {
+          if (audioEnabled) ensureContext();
+        }
+
+        function ui() {
+          tone(880, 0.035, 'square', 0.045);
+        }
+
+        function drop() {
+          tone(280, 0.16, 'sawtooth', 0.12, 0, 640);
+          tone(860, 0.05, 'triangle', 0.06, 0.015);
+        }
+
+        function peg(y) {
+          const now = performance.now();
+          if (now - lastPegAt < 34) return;
+          lastPegAt = now;
+          const pitch = 500 + (GEOM.binTop - y) * 0.32 + rand(-28, 28);
+          tone(pitch, 0.035, 'triangle', 0.055);
+        }
+
+        function land(mult) {
+          if (mult >= 4) {
+            [523.25, 659.25, 783.99, 1046.5].forEach((freq, index) => {
+              tone(freq, 0.16, 'triangle', 0.16, index * 0.07);
+            });
+            tone(130.81, 0.3, 'sine', 0.16, 0.02);
+          } else if (mult >= 1) {
+            [392, 523.25, 659.25].forEach((freq, index) => {
+              tone(freq, 0.13, 'triangle', 0.13, index * 0.055);
+            });
+          } else {
+            tone(320, 0.12, 'triangle', 0.1);
+            tone(213, 0.2, 'sine', 0.1, 0.09);
+          }
+        }
+
+        function start() {
+          [196, 293.66, 440, 659.25].forEach((freq, index) => {
+            tone(freq, 0.14, 'triangle', 0.11, index * 0.06);
+          });
+        }
+
+        function over(victory) {
+          if (victory) {
+            [523.25, 659.25, 783.99, 1046.5, 1318.5].forEach((freq, index) => {
+              tone(freq, 0.22, 'triangle', 0.15, index * 0.09);
+            });
+          } else {
+            [392, 311.13, 233.08, 155.56].forEach((freq, index) => {
+              tone(freq, 0.22, 'sine', 0.12, index * 0.09);
+            });
+          }
+        }
+
+        return { init, ui, drop, peg, land, start, over };
+      })();
+
+      /* ============================================================
+       * 3. UI 更新：HUD、下注、按钮与历史记录
+       * ============================================================ */
+      function pulseValue(node, direction) {
+        if (!node) return;
+        node.classList.remove('pulse-up', 'pulse-down');
+        void node.offsetWidth;
+        node.classList.add(direction === 'down' ? 'pulse-down' : 'pulse-up');
+      }
+
+      function updateHUD(pulseDirection = null) {
+        if (!el.balance) return;
+        el.balance.textContent = formatCredits(game.balance);
+        el.peak.textContent = formatCredits(game.peak);
+        el.record.textContent = bestRecord > 0 ? formatCredits(bestRecord) : '—';
+
+        const progress = clamp((game.balance / VAULT_TARGET) * 100, 0, 100);
+        el.targetFill.style.width = `${progress}%`;
+        el.targetTrack.setAttribute('aria-valuenow', String(Math.round(progress)));
+        el.targetTrack.setAttribute('aria-valuetext', `当前进度 ${Math.round(progress)}%`);
+        el.targetValue.textContent = `${formatCredits(Math.min(game.balance, VAULT_TARGET))} / ${formatCredits(VAULT_TARGET)}`;
+
+        if (pulseDirection) pulseValue(el.balance, pulseDirection);
+      }
+
+      function updateControls() {
+        if (!el.dropBtn) return;
+        const canPlay = game.phase === 'playing';
+        const busy = Boolean(game.ball) || game.roundLock;
+        const canDrop = canPlay && !busy && currentBet() <= game.balance;
+
+        el.dropBtn.disabled = !canDrop;
+        el.dropBtn.classList.toggle('is-running', canPlay && busy);
+        el.betMinus.disabled = !canPlay || busy || game.betIndex <= 0;
+        el.betPlus.disabled = !canPlay || busy || game.betIndex >= BETS.length - 1
+          || BETS[game.betIndex + 1] > game.balance;
+        el.betValue.textContent = formatCredits(currentBet());
+
+        if (!canPlay) {
+          el.dropLabel.textContent = game.phase === 'start' ? '等待接入' : '本局结束';
+          if (el.modeLabel && game.phase === 'start') el.modeLabel.textContent = 'STANDBY';
+        } else if (busy) {
+          el.dropLabel.textContent = '弹珠运行中';
+          if (el.modeLabel) el.modeLabel.textContent = 'IN PLAY';
+        } else {
+          el.dropLabel.textContent = '投放筹码';
+          if (el.modeLabel) el.modeLabel.textContent = 'LIVE';
+        }
+      }
+
+      function historyTier(mult) {
+        if (mult >= 4) return 'high';
+        if (mult >= 1.5) return 'mid';
+        if (mult >= 0.5) return 'low';
+        return 'loss';
+      }
+
+      function renderHistory() {
+        if (!el.historyList) return;
+        el.historyList.replaceChildren();
+        if (game.history.length === 0) {
+          for (let i = 0; i < 5; i += 1) {
+            const item = document.createElement('li');
+            item.className = 'history-chip';
+            item.textContent = '—';
+            el.historyList.appendChild(item);
+          }
+          return;
+        }
+        game.history.slice(0, 5).forEach((result) => {
+          const item = document.createElement('li');
+          item.className = 'history-chip';
+          item.dataset.tier = result.tier;
+          item.textContent = formatMult(result.mult);
+          item.title = `${formatMult(result.mult)} · 派彩 ${formatCredits(result.payout)} CR`;
+          el.historyList.appendChild(item);
+        });
+      }
+
+      function syncSoundButton() {
+        if (!el.soundToggle) return;
+        el.soundToggle.classList.toggle('is-muted', !audioEnabled);
+        el.soundToggle.setAttribute('aria-pressed', String(audioEnabled));
+        el.soundToggle.setAttribute('aria-label', audioEnabled ? '声音 ON，关闭游戏音效' : '声音 OFF，开启游戏音效');
+        const label = el.soundToggle.querySelector('span');
+        if (label) label.textContent = audioEnabled ? '声音 ON' : '声音 OFF';
+      }
+
+      function flashScreen(gold = false) {
+        if (!el.screenFlash || reduceMotion) return;
+        el.screenFlash.className = 'screen-flash';
+        void el.screenFlash.offsetWidth;
+        el.screenFlash.classList.add(gold ? 'is-gold' : 'is-hot');
+        window.setTimeout(() => {
+          if (el.screenFlash) el.screenFlash.className = 'screen-flash';
+        }, 620);
+      }
+
+      function setCabinetMode(mode) {
+        if (!el.cabinet) return;
+        el.cabinet.dataset.mode = mode;
+        const labels = { start: 'STANDBY', playing: 'LIVE', over: 'CLOSED', victory: 'BREACHED' };
+        if (el.modeLabel) el.modeLabel.textContent = labels[mode] || 'STANDBY';
+      }
+
+      function toggleSound() {
+        audioEnabled = !audioEnabled;
+        writeStorage(STORAGE_SOUND, audioEnabled ? 'on' : 'off');
+        syncSoundButton();
+        if (audioEnabled) {
+          Sound.init();
+          Sound.ui();
+        }
+        announce(audioEnabled ? '游戏音效已开启。' : '游戏音效已关闭。');
+      }
+
+      // 初始化页面数据视图
+      syncSoundButton();
+      updateHUD();
+      renderHistory();
+      updateControls();
+
+      /* ============================================================
+       * 4. Canvas 基础设施与静态场景绘制
+       * ============================================================ */
+      const visual = {
+        staticLayer: null,
+        pegCyan: null,
+        pegPink: null,
+        ballGlow: null,
+        dust: [],
+        shake: 0,
+        flash: { binIndex: -1, life: 0, duration: 0, color: '#48e8ff' },
+        particles: [],
+        floaters: [],
+        rings: [],
+        bufferW: 0,
+        bufferH: 0,
+        scaleX: 1,
+        scaleY: 1,
+        initialized: false
+      };
+
+      function rgba(hex, alpha) {
+        const value = hex.replace('#', '');
+        const r = Number.parseInt(value.slice(0, 2), 16);
+        const g = Number.parseInt(value.slice(2, 4), 16);
+        const b = Number.parseInt(value.slice(4, 6), 16);
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+      }
+
+      function roundedRectPath(g, x, y, width, height, radius) {
+        const r = Math.min(radius, width / 2, height / 2);
+        g.beginPath();
+        g.moveTo(x + r, y);
+        g.lineTo(x + width - r, y);
+        g.quadraticCurveTo(x + width, y, x + width, y + r);
+        g.lineTo(x + width, y + height - r);
+        g.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+        g.lineTo(x + r, y + height);
+        g.quadraticCurveTo(x, y + height, x, y + height - r);
+        g.lineTo(x, y + r);
+        g.quadraticCurveTo(x, y, x + r, y);
+        g.closePath();
+      }
+
+      function makePegSprite(color) {
+        const sprite = document.createElement('canvas');
+        sprite.width = 128;
+        sprite.height = 128;
+        const g = sprite.getContext('2d');
+        const gradient = g.createRadialGradient(64, 64, 2, 64, 64, 64);
+        gradient.addColorStop(0, 'rgba(255, 255, 255, .95)');
+        gradient.addColorStop(0.12, rgba(color, 0.95));
+        gradient.addColorStop(0.28, rgba(color, 0.36));
+        gradient.addColorStop(0.58, rgba(color, 0.07));
+        gradient.addColorStop(1, rgba(color, 0));
+        g.fillStyle = gradient;
+        g.beginPath();
+        g.arc(64, 64, 64, 0, TAU);
+        g.fill();
+
+        g.beginPath();
+        g.arc(64, 64, 15, 0, TAU);
+        g.fillStyle = rgba(color, 0.9);
+        g.fill();
+        g.beginPath();
+        g.arc(64, 64, 5.5, 0, TAU);
+        g.fillStyle = '#f7feff';
+        g.fill();
+        g.beginPath();
+        g.arc(64, 64, 16.5, 0, TAU);
+        g.strokeStyle = rgba(color, 0.75);
+        g.lineWidth = 1.5;
+        g.stroke();
+        return sprite;
+      }
+
+      function makeBallGlow() {
+        const sprite = document.createElement('canvas');
+        sprite.width = 160;
+        sprite.height = 160;
+        const g = sprite.getContext('2d');
+        const gradient = g.createRadialGradient(80, 80, 2, 80, 80, 80);
+        gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+        gradient.addColorStop(0.1, 'rgba(206, 252, 255, .98)');
+        gradient.addColorStop(0.25, 'rgba(72, 232, 255, .58)');
+        gradient.addColorStop(0.58, 'rgba(72, 232, 255, .12)');
+        gradient.addColorStop(1, 'rgba(72, 232, 255, 0)');
+        g.fillStyle = gradient;
+        g.beginPath();
+        g.arc(80, 80, 80, 0, TAU);
+        g.fill();
+        return sprite;
+      }
+
+      function buildSprites() {
+        visual.pegCyan = makePegSprite('#48e8ff');
+        visual.pegPink = makePegSprite('#ff3bd4');
+        visual.ballGlow = makeBallGlow();
+        visual.dust = Array.from({ length: 28 }, () => ({
+          x: rand(24, VW - 24),
+          y: rand(60, VH - 40),
+          size: rand(0.8, 2.1),
+          speed: rand(5, 18),
+          alpha: rand(0.12, 0.46),
+          phase: rand(0, TAU)
+        }));
+        visual.initialized = true;
+      }
+
+      // 绘制棋盘静态元素：背景、网格、钉子、倍率槽与边框
+      function drawStaticScene(g) {
+        const background = g.createLinearGradient(0, 0, 0, VH);
+        background.addColorStop(0, '#070312');
+        background.addColorStop(0.45, '#060312');
+        background.addColorStop(1, '#03010a');
+        g.fillStyle = background;
+        g.fillRect(0, 0, VW, VH);
+
+        const topGlow = g.createRadialGradient(VW / 2, 330, 30, VW / 2, 330, 650);
+        topGlow.addColorStop(0, 'rgba(72, 232, 255, .10)');
+        topGlow.addColorStop(0.45, 'rgba(113, 70, 255, .055)');
+        topGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        g.fillStyle = topGlow;
+        g.fillRect(0, 0, VW, VH);
+
+        const bottomGlow = g.createRadialGradient(VW / 2, 930, 20, VW / 2, 930, 520);
+        bottomGlow.addColorStop(0, 'rgba(255, 59, 212, .075)');
+        bottomGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        g.fillStyle = bottomGlow;
+        g.fillRect(0, 480, VW, 600);
+
+        // 精密网格
+        g.save();
+        g.strokeStyle = 'rgba(111, 125, 220, .058)';
+        g.lineWidth = 1;
+        for (let x = 30; x <= VW - 30; x += 45) {
+          g.beginPath();
+          g.moveTo(x, 40);
+          g.lineTo(x, VH - 40);
+          g.stroke();
+        }
+        for (let y = 40; y <= VH - 40; y += 45) {
+          g.beginPath();
+          g.moveTo(30, y);
+          g.lineTo(VW - 30, y);
+          g.stroke();
+        }
+        g.restore();
+
+        // 侧边竖向标识
+        g.save();
+        g.translate(31, 590);
+        g.rotate(-Math.PI / 2);
+        g.textAlign = 'center';
+        g.fillStyle = 'rgba(134, 144, 194, .32)';
+        g.font = '600 10px "Cascadia Code", Consolas, monospace';
+        g.fillText('NEON PLINKO // PROBABILITY FIELD', 0, 0);
+        g.restore();
+
+        g.save();
+        g.translate(VW - 31, 590);
+        g.rotate(Math.PI / 2);
+        g.textAlign = 'center';
+        g.fillStyle = 'rgba(134, 144, 194, .25)';
+        g.font = '600 10px "Cascadia Code", Consolas, monospace';
+        g.fillText('LUCK IS A PROTOCOL // 07', 0, 0);
+        g.restore();
+
+        // 顶部状态标签
+        g.textAlign = 'left';
+        g.fillStyle = 'rgba(204, 209, 238, .72)';
+        g.font = '700 10px "Cascadia Code", Consolas, monospace';
+        g.fillText('CYBER CASINO / DROP ZONE', 48, 72);
+        g.fillStyle = 'rgba(112, 120, 166, .62)';
+        g.font = '500 9px "Cascadia Code", Consolas, monospace';
+        g.fillText('SECTOR 07 — NIGHT CITY GRID', 48, 90);
+
+        g.textAlign = 'right';
+        g.fillStyle = 'rgba(101, 255, 207, .75)';
+        g.font = '700 9px "Cascadia Code", Consolas, monospace';
+        g.fillText('● PHYSICS ONLINE', VW - 48, 72);
+        g.fillStyle = 'rgba(112, 120, 166, .62)';
+        g.font = '500 8px "Cascadia Code", Consolas, monospace';
+        g.fillText('MAX PAYOUT x12 / 9 SLOTS', VW - 48, 90);
+
+        // 中央投放区标识
+        g.textAlign = 'center';
+        g.fillStyle = 'rgba(156, 165, 211, .55)';
+        g.font = '700 9px "Cascadia Code", Consolas, monospace';
+        g.fillText('A I M   &   D R O P', VW / 2, 118);
+        g.strokeStyle = 'rgba(72, 232, 255, .18)';
+        g.lineWidth = 1;
+        g.beginPath();
+        g.moveTo(VW / 2 - 104, 126);
+        g.lineTo(VW / 2 - 24, 126);
+        g.moveTo(VW / 2 + 24, 126);
+        g.lineTo(VW / 2 + 104, 126);
+        g.stroke();
+
+        // 投放轨道
+        const railLeft = GEOM.wallLeft + 8;
+        const railRight = GEOM.wallRight - 8;
+        const railGradient = g.createLinearGradient(railLeft, 0, railRight, 0);
+        railGradient.addColorStop(0, 'rgba(72, 232, 255, .1)');
+        railGradient.addColorStop(0.5, 'rgba(193, 225, 255, .45)');
+        railGradient.addColorStop(1, 'rgba(255, 59, 212, .2)');
+        g.strokeStyle = railGradient;
+        g.lineWidth = 1.5;
+        g.beginPath();
+        g.moveTo(railLeft, GEOM.railY);
+        g.lineTo(railRight, GEOM.railY);
+        g.stroke();
+
+        for (let x = railLeft; x <= railRight; x += 21) {
+          const major = Math.round((x - railLeft) / 21) % 4 === 0;
+          g.strokeStyle = major ? 'rgba(143, 164, 221, .34)' : 'rgba(111, 125, 185, .17)';
+          g.lineWidth = 1;
+          g.beginPath();
+          g.moveTo(x, GEOM.railY - (major ? 7 : 4));
+          g.lineTo(x, GEOM.railY + (major ? 7 : 4));
+          g.stroke();
+        }
+
+        // 侧壁霓虹轨
+        [GEOM.wallLeft, GEOM.wallRight].forEach((x, index) => {
+          const color = index === 0 ? '#48e8ff' : '#ff3bd4';
+          const wallGradient = g.createLinearGradient(0, 220, 0, GEOM.binTop);
+          wallGradient.addColorStop(0, rgba(color, 0.05));
+          wallGradient.addColorStop(0.5, rgba(color, 0.34));
+          wallGradient.addColorStop(1, rgba(color, 0.08));
+          g.strokeStyle = wallGradient;
+          g.lineWidth = 1.5;
+          g.beginPath();
+          g.moveTo(x, 220);
+          g.lineTo(x, GEOM.binTop + 48);
+          g.stroke();
+        });
+
+        // 钉阵：使用预渲染发光贴图，兼顾清晰度与性能
+        for (const peg of GEOM.pegs) {
+          const sprite = peg.color === '#ff3bd4' ? visual.pegPink : visual.pegCyan;
+          if (sprite) {
+            g.drawImage(sprite, peg.x - 32, peg.y - 32, 64, 64);
+          } else {
+            g.beginPath();
+            g.arc(peg.x, peg.y, PEG_RADIUS, 0, TAU);
+            g.fillStyle = peg.color;
+            g.fill();
+          }
+        }
+
+        // 倍率槽背景
+        MULTIPLIERS.forEach((mult, index) => {
+          const style = BIN_STYLES[index];
+          const x = GEOM.left + GEOM.binW * index;
+          const y = GEOM.binTop;
+          const width = GEOM.binW;
+          const binGradient = g.createLinearGradient(0, y, 0, y + GEOM.binHeight);
+          binGradient.addColorStop(0, rgba(style.color, 0.14));
+          binGradient.addColorStop(0.48, rgba(style.color, 0.055));
+          binGradient.addColorStop(1, 'rgba(4, 2, 12, .42)');
+
+          roundedRectPath(g, x + 2.5, y, width - 5, GEOM.binHeight, 4);
+          g.fillStyle = binGradient;
+          g.fill();
+          g.strokeStyle = rgba(style.color, 0.32);
+          g.lineWidth = 1;
+          g.stroke();
+
+          g.fillStyle = rgba(style.color, 0.75);
+          g.fillRect(x + 8, y, width - 16, 2);
+
+          g.textAlign = 'center';
+          g.fillStyle = mult >= 4 ? '#ffe1a2' : (mult >= 1.5 ? '#d8fbff' : '#b8b9d3');
+          const fontSize = mult >= 10 ? 28 : (mult === 0.25 ? 20 : 23);
+          g.font = `800 ${fontSize}px "Cascadia Code", Consolas, monospace`;
+          g.fillText(formatMult(mult), x + width / 2, y + 51);
+
+          g.fillStyle = rgba(style.color, 0.65);
+          g.font = '600 7px "Cascadia Code", Consolas, monospace';
+          g.fillText(style.name, x + width / 2, y + 72);
+
+          g.fillStyle = 'rgba(140, 146, 191, .36)';
+          g.font = '500 6.5px "Cascadia Code", Consolas, monospace';
+          g.fillText(`SLOT ${String(index + 1).padStart(2, '0')}`, x + width / 2, y + GEOM.binHeight - 11);
+        });
+
+        // 倍率槽分隔线
+        for (let i = 0; i <= MULTIPLIERS.length; i += 1) {
+          const x = GEOM.left + GEOM.binW * i;
+          const divider = g.createLinearGradient(0, GEOM.binTop, 0, GEOM.binBottom);
+          divider.addColorStop(0, 'rgba(187, 196, 255, .34)');
+          divider.addColorStop(1, 'rgba(80, 73, 126, .06)');
+          g.strokeStyle = divider;
+          g.lineWidth = 1;
+          g.beginPath();
+          g.moveTo(x, GEOM.binTop);
+          g.lineTo(x, GEOM.binBottom);
+          g.stroke();
+        }
+
+        // 底部铭牌
+        g.textAlign = 'center';
+        g.fillStyle = 'rgba(187, 196, 235, .55)';
+        g.font = '700 10px "Cascadia Code", Consolas, monospace';
+        g.fillText('TARGET VAULT // 10,000 CR', VW / 2, 1016);
+        g.fillStyle = 'rgba(120, 128, 172, .38)';
+        g.font = '500 8px "Cascadia Code", Consolas, monospace';
+        g.fillText('NO REAL MONEY · FOR ENTERTAINMENT ONLY', VW / 2, 1037);
+
+        // 四角边框
+        g.strokeStyle = 'rgba(117, 144, 225, .23)';
+        g.lineWidth = 1;
+        const corners = [
+          [30, 40, 1, 1], [VW - 30, 40, -1, 1],
+          [30, VH - 40, 1, -1], [VW - 30, VH - 40, -1, -1]
+        ];
+        corners.forEach(([x, y, sx, sy]) => {
+          g.beginPath();
+          g.moveTo(x, y + sy * 18);
+          g.lineTo(x, y);
+          g.lineTo(x + sx * 18, y);
+          g.stroke();
+        });
+      }
+
+      function buildStaticLayer() {
+        if (!ctx || !el.canvas) return;
+        const width = el.canvas.width;
+        const height = el.canvas.height;
+        if (!width || !height) return;
+
+        if (!visual.staticLayer) visual.staticLayer = document.createElement('canvas');
+        visual.staticLayer.width = width;
+        visual.staticLayer.height = height;
+        const g = visual.staticLayer.getContext('2d');
+        g.setTransform(width / VW, 0, 0, height / VH, 0, 0);
+        drawStaticScene(g);
+        visual.bufferW = width;
+        visual.bufferH = height;
+        visual.scaleX = width / VW;
+        visual.scaleY = height / VH;
+      }
+
+      function resizeCanvas() {
+        if (!ctx || !el.canvas) return;
+        const rect = el.canvas.getBoundingClientRect();
+        if (rect.width < 10 || rect.height < 10) return;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const width = Math.max(1, Math.round(rect.width * dpr));
+        const height = Math.max(1, Math.round(rect.height * dpr));
+        if (el.canvas.width !== width || el.canvas.height !== height) {
+          el.canvas.width = width;
+          el.canvas.height = height;
+        }
+        buildStaticLayer();
+      }
+
+      /* ============================================================
+       * 5. 动效：粒子、冲击波、漂浮分数与动态绘制
+       * ============================================================ */
+      function burstParticles(x, y, color, count = 14, power = 230, spread = TAU) {
+        const amount = reduceMotion ? Math.min(5, Math.ceil(count / 3)) : count;
+        for (let i = 0; i < amount; i += 1) {
+          const angle = spread === TAU ? rand(0, TAU) : rand(-Math.PI + 0.35, -0.35);
+          const speed = rand(power * 0.22, power);
+          visual.particles.push({
+            x,
+            y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            gravity: rand(260, 620),
+            size: rand(1.1, 3.6),
+            life: rand(0.3, 0.72),
+            maxLife: 0.72,
+            color
+          });
+        }
+        // 防止粒子无限累积
+        if (visual.particles.length > 260) {
+          visual.particles.splice(0, visual.particles.length - 260);
+        }
+      }
+
+      function spawnRing(x, y, color, maxRadius = 80, duration = 0.55) {
+        visual.rings.push({ x, y, color, maxRadius, duration, life: duration });
+        if (visual.rings.length > 16) visual.rings.shift();
+      }
+
+      function spawnFloater(x, y, text, sub, color) {
+        visual.floaters.push({
+          x,
+          y,
+          text,
+          sub: sub || '',
+          color,
+          life: 1.35,
+          duration: 1.35
+        });
+        if (visual.floaters.length > 5) visual.floaters.shift();
+      }
+
+      function binCenter(index) {
+        return GEOM.left + GEOM.binW * (index + 0.5);
+      }
+
+      function flashBin(index, color, duration = 1.15) {
+        visual.flash = { binIndex: index, color, life: duration, duration };
+      }
+
+      function addShake(amount) {
+        if (reduceMotion) return;
+        visual.shake = Math.max(visual.shake, amount);
+      }
+
+      function updateVisualEffects(dt) {
+        for (let i = visual.particles.length - 1; i >= 0; i -= 1) {
+          const p = visual.particles[i];
+          p.life -= dt;
+          if (p.life <= 0) {
+            visual.particles.splice(i, 1);
+            continue;
+          }
+          p.vy += p.gravity * dt;
+          p.vx *= Math.exp(-0.8 * dt);
+          p.x += p.vx * dt;
+          p.y += p.vy * dt;
+        }
+        for (let i = visual.rings.length - 1; i >= 0; i -= 1) {
+          visual.rings[i].life -= dt;
+          if (visual.rings[i].life <= 0) visual.rings.splice(i, 1);
+        }
+        for (let i = visual.floaters.length - 1; i >= 0; i -= 1) {
+          visual.floaters[i].life -= dt;
+          if (visual.floaters[i].life <= 0) visual.floaters.splice(i, 1);
+        }
+        if (visual.flash.life > 0) visual.flash.life -= dt;
+        visual.shake *= Math.exp(-7.5 * dt);
+        if (visual.shake < 0.08) visual.shake = 0;
+      }
+
+      function drawDust(time) {
+        if (!ctx) return;
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        for (const dot of visual.dust) {
+          const y = ((dot.y - time * dot.speed) % (VH + 80) + VH + 80) % (VH + 80) - 40;
+          const alpha = dot.alpha * (0.55 + 0.45 * Math.sin(time * 0.9 + dot.phase));
+          ctx.fillStyle = `rgba(142, 237, 255, ${alpha})`;
+          ctx.beginPath();
+          ctx.arc(dot.x, y, dot.size, 0, TAU);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      function drawScanline(time) {
+        if (!ctx || reduceMotion) return;
+        const y = ((time * 72) % (VH + 240)) - 120;
+        const gradient = ctx.createLinearGradient(0, y - 45, 0, y + 45);
+        gradient.addColorStop(0, 'rgba(72, 232, 255, 0)');
+        gradient.addColorStop(0.48, 'rgba(72, 232, 255, .035)');
+        gradient.addColorStop(0.52, 'rgba(255, 59, 212, .03)');
+        gradient.addColorStop(1, 'rgba(72, 232, 255, 0)');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(34, y - 45, VW - 68, 90);
+      }
+
+      function drawLauncher(time) {
+        if (!ctx) return;
+        const active = game.phase === 'playing' && !game.ball && !game.roundLock;
+        const x = game.aimX;
+        const railY = GEOM.railY;
+
+        ctx.save();
+        ctx.globalAlpha = active ? 1 : 0.32;
+
+        // 瞄准虚线
+        const guide = ctx.createLinearGradient(0, railY, 0, GEOM.top);
+        guide.addColorStop(0, 'rgba(72, 232, 255, .38)');
+        guide.addColorStop(1, 'rgba(72, 232, 255, 0)');
+        ctx.strokeStyle = guide;
+        ctx.lineWidth = 1;
+        ctx.setLineDash([3, 9]);
+        ctx.beginPath();
+        ctx.moveTo(x, railY + 13);
+        ctx.lineTo(x, GEOM.top - 15);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // 发射器光晕
+        const glow = ctx.createRadialGradient(x, railY + 17, 2, x, railY + 17, 42);
+        glow.addColorStop(0, 'rgba(72, 232, 255, .28)');
+        glow.addColorStop(0.5, 'rgba(72, 232, 255, .08)');
+        glow.addColorStop(1, 'rgba(72, 232, 255, 0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(x, railY + 17, 42, 0, TAU);
+        ctx.fill();
+
+        // 发射器主体
+        ctx.translate(x, railY);
+        ctx.fillStyle = 'rgba(7, 5, 19, .92)';
+        ctx.strokeStyle = 'rgba(72, 232, 255, .82)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(-18, -9);
+        ctx.lineTo(18, -9);
+        ctx.lineTo(23, 2);
+        ctx.lineTo(23, 9);
+        ctx.lineTo(-23, 9);
+        ctx.lineTo(-23, 2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.strokeStyle = 'rgba(255, 59, 212, .7)';
+        ctx.beginPath();
+        ctx.moveTo(-12, 5);
+        ctx.lineTo(12, 5);
+        ctx.stroke();
+
+        // 向下箭头
+        ctx.fillStyle = '#bff9ff';
+        ctx.beginPath();
+        ctx.moveTo(0, 22);
+        ctx.lineTo(-5, 14);
+        ctx.lineTo(5, 14);
+        ctx.closePath();
+        ctx.fill();
+
+        // 轨道上的呼吸光点
+        ctx.restore();
+        const sweep = (Math.sin(time * 0.9) + 1) / 2;
+        const sweepX = lerp(GEOM.wallLeft + 20, GEOM.wallRight - 20, sweep);
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        ctx.globalAlpha = 0.7;
+        const sweepGradient = ctx.createRadialGradient(sweepX, railY, 0, sweepX, railY, 24);
+        sweepGradient.addColorStop(0, 'rgba(255, 255, 255, .45)');
+        sweepGradient.addColorStop(1, 'rgba(72, 232, 255, 0)');
+        ctx.fillStyle = sweepGradient;
+        ctx.beginPath();
+        ctx.arc(sweepX, railY, 24, 0, TAU);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawBinFlash() {
+        if (!ctx || visual.flash.life <= 0 || visual.flash.binIndex < 0) return;
+        const index = visual.flash.binIndex;
+        const style = BIN_STYLES[index];
+        const progress = clamp(visual.flash.life / visual.flash.duration, 0, 1);
+        const x = GEOM.left + GEOM.binW * index + 2.5;
+        const y = GEOM.binTop;
+        const width = GEOM.binW - 5;
+        const alpha = Math.min(1, progress * 1.8);
+
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        const fill = ctx.createLinearGradient(0, y, 0, GEOM.binBottom);
+        fill.addColorStop(0, rgba(style.color, 0.28 * alpha));
+        fill.addColorStop(0.45, rgba(style.color, 0.11 * alpha));
+        fill.addColorStop(1, rgba(style.color, 0.01 * alpha));
+        roundedRectPath(ctx, x, y, width, GEOM.binHeight, 4);
+        ctx.fillStyle = fill;
+        ctx.fill();
+        ctx.strokeStyle = rgba(style.color, 0.92 * alpha);
+        ctx.lineWidth = 1.6;
+        ctx.stroke();
+        ctx.setLineDash([6, 5]);
+        ctx.strokeStyle = rgba('#ffffff', 0.38 * alpha);
+        ctx.beginPath();
+        ctx.moveTo(x + 5, y + 5);
+        ctx.lineTo(x + width - 5, y + 5);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawBall() {
+        if (!ctx || !game.ball) return;
+        const ball = game.ball;
+
+        // 更新拖尾点
+        const last = ball.trail[ball.trail.length - 1];
+        if (!last || Math.hypot(ball.x - last.x, ball.y - last.y) > 5) {
+          ball.trail.push({ x: ball.x, y: ball.y });
+          if (ball.trail.length > 15) ball.trail.shift();
+        }
+
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+
+        // 拖尾
+        for (let i = 0; i < ball.trail.length; i += 1) {
+          const point = ball.trail[i];
+          const t = (i + 1) / ball.trail.length;
+          const size = 8 + t * 26;
+          ctx.globalAlpha = t * 0.17;
+          if (visual.ballGlow) {
+            ctx.drawImage(visual.ballGlow, point.x - size, point.y - size, size * 2, size * 2);
+          }
+        }
+
+        // 发光核心
+        ctx.globalAlpha = 0.95;
+        if (visual.ballGlow) {
+          const glowSize = 42;
+          ctx.drawImage(visual.ballGlow, ball.x - glowSize, ball.y - glowSize, glowSize * 2, glowSize * 2);
+        }
+        ctx.restore();
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, BALL_RADIUS, 0, TAU);
+        ctx.fillStyle = '#f4feff';
+        ctx.shadowColor = '#48e8ff';
+        ctx.shadowBlur = 20;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, BALL_RADIUS - 4.5, 0, TAU);
+        ctx.strokeStyle = 'rgba(72, 232, 255, .85)';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(ball.x - 3.5, ball.y - 4, 2.4, 0, TAU);
+        ctx.fillStyle = 'rgba(255, 255, 255, .9)';
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawParticles() {
+        if (!ctx) return;
+        ctx.save();
+        ctx.globalCompositeOperation = 'lighter';
+        for (const p of visual.particles) {
+          const alpha = clamp(p.life / p.maxLife, 0, 1);
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size * (0.5 + alpha * 0.5), 0, TAU);
+          ctx.fill();
+        }
+        for (const ring of visual.rings) {
+          const progress = 1 - ring.life / ring.duration;
+          const radius = 12 + (ring.maxRadius - 12) * progress;
+          ctx.globalAlpha = (1 - progress) * 0.55;
+          ctx.strokeStyle = ring.color;
+          ctx.lineWidth = 2 * (1 - progress) + 0.5;
+          ctx.beginPath();
+          ctx.arc(ring.x, ring.y, radius, 0, TAU);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      function drawFloaters() {
+        if (!ctx) return;
+        for (const floater of visual.floaters) {
+          const progress = 1 - floater.life / floater.duration;
+          const alpha = Math.min(1, (1 - progress) * 5) * Math.min(1, progress * 9 + 0.1);
+          const y = floater.y - progress * 52;
+          ctx.save();
+          ctx.globalAlpha = clamp(alpha, 0, 1);
+          ctx.textAlign = 'center';
+          ctx.fillStyle = floater.color;
+          ctx.shadowColor = floater.color;
+          ctx.shadowBlur = 16;
+          ctx.font = '800 26px "Cascadia Code", Consolas, monospace';
+          ctx.fillText(floater.text, floater.x, y);
+          if (floater.sub) {
+            ctx.shadowBlur = 9;
+            ctx.fillStyle = 'rgba(255, 255, 255, .82)';
+            ctx.font = '600 13px "Cascadia Code", Consolas, monospace';
+            ctx.fillText(floater.sub, floater.x, y + 20);
+          }
+          ctx.restore();
+        }
+      }
+
+      function drawSideMarkers(time) {
+        if (!ctx) return;
+        const pulse = 0.55 + Math.sin(time * 2.2) * 0.25;
+        const slots = [GEOM.left, GEOM.right];
+        ctx.save();
+        slots.forEach((x, index) => {
+          ctx.fillStyle = index === 0 ? `rgba(72, 232, 255, ${pulse})` : `rgba(255, 59, 212, ${pulse})`;
+          ctx.beginPath();
+          ctx.arc(x, GEOM.binTop - 10, 2.2, 0, TAU);
+          ctx.fill();
+        });
+        ctx.restore();
+      }
+
+      function renderFrame(now) {
+        if (!ctx || !el.canvas) return;
+        const width = el.canvas.width;
+        const height = el.canvas.height;
+        if (!visual.staticLayer) buildStaticLayer();
+
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        if (visual.staticLayer) {
+          ctx.drawImage(visual.staticLayer, 0, 0);
+        } else {
+          ctx.fillStyle = '#04020b';
+          ctx.fillRect(0, 0, width, height);
+        }
+        if (!visual.staticLayer) return;
+
+        ctx.setTransform(visual.scaleX, 0, 0, visual.scaleY, 0, 0);
+        if (visual.shake > 0.08) {
+          ctx.translate(rand(-visual.shake, visual.shake), rand(-visual.shake, visual.shake));
+        }
+
+        const time = now / 1000;
+        drawDust(time);
+        drawScanline(time);
+        drawSideMarkers(time);
+        drawBinFlash();
+        drawLauncher(time);
+        drawBall();
+        drawParticles();
+        drawFloaters();
+      }
+
+      /* ============================================================
+       * 6. 游戏流程：投放、物理结算、结束与重开
+       * ============================================================ */
+      function clampBetToBalance() {
+        if (game.balance < MIN_BET) return;
+        if (currentBet() <= game.balance) return;
+        const affordable = BETS.filter((bet) => bet <= game.balance);
+        const next = affordable.length > 0 ? affordable[affordable.length - 1] : MIN_BET;
+        game.betIndex = Math.max(0, BETS.indexOf(next));
+      }
+
+      function changeBet(direction) {
+        if (game.phase !== 'playing' || game.roundLock || game.ball) return;
+        const nextIndex = game.betIndex + direction;
+        if (nextIndex < 0 || nextIndex >= BETS.length) return;
+        if (BETS[nextIndex] > game.balance) {
+          announce('余额不足，无法选择更高的单注。');
+          return;
+        }
+        game.betIndex = nextIndex;
+        updateControls();
+        Sound.ui();
+      }
+
+      function createBall(wager) {
+        return {
+          x: game.aimX,
+          y: GEOM.ballStartY,
+          vx: rand(-16, 16),
+          vy: rand(55, 95),
+          wager,
+          age: 0,
+          stall: 0,
+          trail: [],
+          landed: false,
+          binIndex: -1,
+          targetX: game.aimX,
+          resolved: false
+        };
+      }
+
+      function dropBall() {
+        if (game.phase !== 'playing' || game.ball || game.roundLock) return;
+        if (currentBet() > game.balance) {
+          clampBetToBalance();
+          updateControls();
+          return;
+        }
+
+        Sound.init();
+        const wager = currentBet();
+        game.balance -= wager;
+        game.drops += 1;
+        game.lastResult = null;
+        game.ball = createBall(wager);
+        game.aimX = clamp(game.aimX, GEOM.aimMin, GEOM.aimMax);
+
+        burstParticles(game.ball.x, GEOM.ballStartY, '#48e8ff', 8, 110);
+        spawnRing(game.aimX, GEOM.ballStartY, '#48e8ff', 38, 0.35);
+        addShake(1.4);
+        Sound.drop();
+        updateHUD('down');
+        updateControls();
+        if (el.stage) el.stage.setAttribute('aria-busy', 'true');
+        haltRoundTimer();
+        announce(`已投放 ${formatCredits(wager)} 筹码，剩余余额 ${formatCredits(game.balance)} CR。`);
+      }
+
+      function resolveLanding(binIndex) {
+        const ball = game.ball;
+        if (!ball || ball.resolved) return;
+        ball.resolved = true;
+        ball.binIndex = binIndex;
+
+        const style = BIN_STYLES[binIndex];
+        const mult = MULTIPLIERS[binIndex];
+        const payout = Math.round(ball.wager * mult);
+        const highTier = mult >= 4;
+
+        game.balance += payout;
+        game.peak = Math.max(game.peak, game.balance);
+        game.maxWin = Math.max(game.maxWin, payout);
+        game.bestMultiplier = Math.max(game.bestMultiplier, mult);
+        game.lastResult = { mult, payout, binIndex };
+
+        game.history.unshift({ mult, payout, tier: style.tier });
+        game.history = game.history.slice(0, 5);
+
+        flashBin(binIndex, style.color, mult >= 4 ? 1.5 : 1.1);
+        const centerX = binCenter(binIndex);
+        burstParticles(centerX, GEOM.binTop + 24, style.color, highTier ? 34 : 16, highTier ? 330 : 190);
+        spawnRing(centerX, GEOM.binTop + 36, style.color, highTier ? 118 : 72, highTier ? 0.8 : 0.55);
+        spawnFloater(
+          centerX,
+          GEOM.binTop + 18,
+          highTier ? `${formatMult(mult)} HIT` : formatMult(mult),
+          `+${formatCredits(payout)} CR`,
+          style.color
+        );
+        addShake(highTier ? 8.5 : 3.2);
+        flashScreen(highTier);
+        Sound.land(mult);
+
+        updateHUD('up');
+        renderHistory();
+        updateControls();
+        announce(`落点倍率 ${formatMult(mult)}，派彩 ${formatCredits(payout)} CR，当前余额 ${formatCredits(game.balance)} CR。`);
+
+        haltRoundTimer();
+        game.roundLock = true;
+        updateControls();
+
+        // 给派彩动画留出时间，再结束回合或本局
+        game.roundTimer = window.setTimeout(() => {
+          game.ball = null;
+          game.roundLock = false;
+          if (el.stage) el.stage.setAttribute('aria-busy', 'false');
+          if (game.phase !== 'playing') return;
+
+          if (game.balance >= VAULT_TARGET) {
+            endGame(true);
+            return;
+          }
+          if (game.balance < MIN_BET) {
+            endGame(false);
+            return;
+          }
+
+          clampBetToBalance();
+          updateControls();
+          updateHUD();
+        }, highTier ? 1500 : 1150);
+      }
+
+      function updateBallPhysics(dt) {
+        const ball = game.ball;
+        if (!ball) return;
+        ball.age += dt;
+
+        // 已进入结算槽：平滑吸附到槽中心并下落到派彩线
+        if (ball.landed) {
+          ball.x += (ball.targetX - ball.x) * Math.min(1, dt * 8.5);
+          if (!ball.resolved) {
+            ball.vy = Math.min(ball.vy + GRAVITY * 0.22 * dt, 260);
+            ball.y += ball.vy * dt;
+            if (ball.y >= GEOM.payoutY) {
+              ball.y = GEOM.payoutY;
+              ball.vy = 0;
+              resolveLanding(ball.binIndex);
+            }
+          } else {
+            ball.y = lerp(ball.y, GEOM.payoutY + 4, Math.min(1, dt * 4));
+          }
+          return;
+        }
+
+        // 标准重力运动
+        ball.vy += GRAVITY * dt;
+        ball.vx *= Math.exp(-0.025 * dt);
+        ball.x += ball.vx * dt;
+        ball.y += ball.vy * dt;
+
+        // 侧壁反弹
+        if (ball.x - BALL_RADIUS < GEOM.wallLeft) {
+          ball.x = GEOM.wallLeft + BALL_RADIUS;
+          ball.vx = Math.abs(ball.vx) * 0.52 + rand(8, 28);
+          burstParticles(ball.x, ball.y, '#48e8ff', 2, 70);
+          Sound.peg(ball.y);
+          addShake(0.5);
+        } else if (ball.x + BALL_RADIUS > GEOM.wallRight) {
+          ball.x = GEOM.wallRight - BALL_RADIUS;
+          ball.vx = -Math.abs(ball.vx) * 0.52 - rand(8, 28);
+          burstParticles(ball.x, ball.y, '#ff3bd4', 2, 70);
+          Sound.peg(ball.y);
+          addShake(0.5);
+        }
+
+        // 与每一颗钉子做圆形碰撞检测
+        for (const peg of GEOM.pegs) {
+          const dx = ball.x - peg.x;
+          const dy = ball.y - peg.y;
+          const minDistance = BALL_RADIUS + PEG_RADIUS;
+          const distanceSq = dx * dx + dy * dy;
+
+          if (distanceSq > minDistance * minDistance || distanceSq < 0.0001) continue;
+          const distance = Math.sqrt(distanceSq);
+          const nx = dx / distance;
+          const ny = dy / distance;
+          const overlap = minDistance - distance;
+
+          ball.x += nx * overlap;
+          ball.y += ny * overlap;
+
+          const velocityAlongNormal = ball.vx * nx + ball.vy * ny;
+          if (velocityAlongNormal < 0) {
+            const restitution = 0.54;
+            ball.vx -= (1 + restitution) * velocityAlongNormal * nx;
+            ball.vy -= (1 + restitution) * velocityAlongNormal * ny;
+            // 加入少量随机切向速度，避免完全对称的固定路径
+            ball.vx += rand(-48, 48);
+            ball.vy = Math.max(ball.vy, 8);
+            ball.vx *= 0.985;
+          }
+
+          burstParticles(peg.x, peg.y, peg.color, 2, 92);
+          Sound.peg(peg.y);
+          addShake(0.65);
+        }
+
+        // 限制最大速度，避免高速穿透
+        const speed = Math.hypot(ball.vx, ball.vy);
+        const maxSpeed = 1450;
+        if (speed > maxSpeed) {
+          ball.vx = (ball.vx / speed) * maxSpeed;
+          ball.vy = (ball.vy / speed) * maxSpeed;
+        }
+
+        // 低速卡住时给一个向下推力
+        if (speed < 42 && ball.y > GEOM.top - 30) {
+          ball.stall += dt;
+          if (ball.stall > 0.55) {
+            ball.vy += rand(320, 520);
+            ball.vx += rand(-130, 130);
+            ball.stall = 0;
+          }
+        } else {
+          ball.stall = 0;
+        }
+
+        // 进入结算槽：根据当前横坐标确定槽位
+        if (ball.y >= GEOM.binTop - BALL_RADIUS) {
+          const rawIndex = Math.floor((ball.x - GEOM.left) / GEOM.binW);
+          ball.binIndex = clamp(rawIndex, 0, MULTIPLIERS.length - 1);
+          ball.targetX = binCenter(ball.binIndex);
+          ball.landed = true;
+          ball.vx = 0;
+          ball.vy = Math.max(ball.vy, 130);
+        }
+
+        // 极端情况下超时，强制进入最近槽位
+        if (ball.age > 9 && !ball.landed) {
+          const rawIndex = Math.floor((ball.x - GEOM.left) / GEOM.binW);
+          ball.binIndex = clamp(rawIndex, 0, MULTIPLIERS.length - 1);
+          ball.targetX = binCenter(ball.binIndex);
+          ball.y = GEOM.binTop - BALL_RADIUS;
+          ball.landed = true;
+          ball.vx = 0;
+          ball.vy = 160;
+        }
+      }
+
+      function haltRoundTimer() {
+        if (game.roundTimer) {
+          window.clearTimeout(game.roundTimer);
+          game.roundTimer = 0;
+        }
+      }
+
+      function startGame() {
+        haltRoundTimer();
+        game.phase = 'playing';
+        game.balance = START_BALANCE;
+        game.peak = START_BALANCE;
+        game.betIndex = 1;
+        game.drops = 0;
+        game.maxWin = 0;
+        game.bestMultiplier = 0;
+        game.history = [];
+        game.ball = null;
+        game.roundLock = false;
+        game.aimX = VW / 2;
+        game.recordBeforeRun = bestRecord;
+        game.lastResult = null;
+        visual.flash = { binIndex: -1, life: 0, duration: 0, color: '#48e8ff' };
+        visual.particles = [];
+        visual.floaters = [];
+        visual.rings = [];
+        visual.shake = 0;
+
+        if (el.startOverlay) el.startOverlay.hidden = true;
+        if (el.overOverlay) {
+          el.overOverlay.hidden = true;
+          el.overOverlay.classList.remove('is-victory');
+        }
+        if (el.stage) el.stage.setAttribute('aria-busy', 'false');
+        if (el.canvas) el.canvas.tabIndex = 0;
+        setCabinetMode('playing');
+        updateHUD();
+        renderHistory();
+        updateControls();
+        syncSoundButton();
+
+        Sound.init();
+        Sound.start();
+        announce('游戏开始。你有 1,000 筹码，最低下注 10，目标 10,000。使用方向键移动发射器，空格投放筹码。');
+        window.setTimeout(() => {
+          if (game.phase === 'playing' && el.dropBtn && !el.dropBtn.disabled) {
+            el.dropBtn.focus({ preventScroll: true });
+          }
+        }, 120);
+      }
+
+      function endGame(victory) {
+        if (game.phase !== 'playing') return;
+        haltRoundTimer();
+        game.phase = victory ? 'victory' : 'over';
+        game.ball = null;
+        game.roundLock = false;
+        if (el.stage) el.stage.setAttribute('aria-busy', 'false');
+        if (el.canvas) el.canvas.tabIndex = -1;
+
+        const isNewRecord = game.peak > bestRecord;
+        if (isNewRecord) {
+          bestRecord = game.peak;
+          writeStorage(STORAGE_RECORD, String(bestRecord));
+        }
+
+        setCabinetMode(game.phase);
+        updateHUD();
+        updateControls();
+
+        if (el.finalScore) el.finalScore.textContent = formatCredits(game.peak);
+        if (el.statFinal) el.statFinal.textContent = `${formatCredits(game.balance)} CR`;
+        if (el.statDrops) el.statDrops.textContent = String(game.drops);
+        if (el.statMaxWin) el.statMaxWin.textContent = `${formatCredits(game.maxWin)} CR`;
+        if (el.statRecord) el.statRecord.textContent = `${formatCredits(bestRecord)} CR${isNewRecord ? ' ★' : ''}`;
+
+        if (victory) {
+          if (el.overEyebrow) el.overEyebrow.textContent = 'VAULT BREACHED // TARGET REACHED';
+          if (el.overTitle) el.overTitle.innerHTML = '金库<br><span>已被击穿</span>';
+          if (el.overDesc) el.overDesc.textContent = `你达成了 10,000 CR 破局目标。霓虹赌场记录下了这次入侵，峰值余额同时成为本局得分。`;
+          if (el.overOverlay) el.overOverlay.classList.add('is-victory');
+          flashScreen(true);
+        } else {
+          if (el.overEyebrow) el.overEyebrow.textContent = 'CONNECTION CLOSED // BALANCE TOO LOW';
+          if (el.overTitle) el.overTitle.innerHTML = '金库<br><span>已清空</span>';
+          if (el.overDesc) el.overDesc.textContent = '余额低于最低下注 10 CR，霓虹赌场暂时切断了你的接入权限。换一个节奏，再次尝试。';
+          if (el.overOverlay) el.overOverlay.classList.remove('is-victory');
+        }
+
+        if (el.overOverlay) el.overOverlay.hidden = false;
+        Sound.over(victory);
+        announce(victory
+          ? `恭喜击穿金库。本局峰值 ${formatCredits(game.peak)} CR，投放 ${game.drops} 次。`
+          : `本局结束。最终余额 ${formatCredits(game.balance)} CR，本局峰值 ${formatCredits(game.peak)} CR。`);
+
+        window.setTimeout(() => {
+          if (el.restartBtn) el.restartBtn.focus({ preventScroll: true });
+        }, 120);
+      }
+
+      /* ============================================================
+       * 7. 输入：键盘、指针拖动与按钮事件
+       * ============================================================ */
+      const held = { left: false, right: false };
+      let activePointer = null;
+
+      function isTypingTarget(target) {
+        return target instanceof Element && Boolean(target.closest('input, textarea, select, [contenteditable="true"]'));
+      }
+
+      function isInteractiveTarget(target) {
+        return target instanceof Element && Boolean(target.closest('button, a, summary, input, select, textarea, [contenteditable="true"]'));
+      }
+
+      function insideGame(target) {
+        return target === document.body || target === document.documentElement || target === el.canvas
+          || (target instanceof Element && Boolean(target.closest('#cabinet')));
+      }
+
+      function moveAimToPointer(event) {
+        if (!el.canvas) return;
+        const rect = el.canvas.getBoundingClientRect();
+        if (!rect.width) return;
+        const x = ((event.clientX - rect.left) / rect.width) * VW;
+        game.aimX = clamp(x, GEOM.aimMin, GEOM.aimMax);
+      }
+
+      function updateAim(dt) {
+        if (game.phase !== 'playing') return;
+        const speed = 780;
+        if (held.left) game.aimX -= speed * dt;
+        if (held.right) game.aimX += speed * dt;
+        game.aimX = clamp(game.aimX, GEOM.aimMin, GEOM.aimMax);
+      }
+
+      if (el.canvas) {
+        el.canvas.addEventListener('pointerdown', (event) => {
+          if (game.phase !== 'playing') return;
+          event.preventDefault();
+          activePointer = event.pointerId;
+          moveAimToPointer(event);
+          el.canvas.focus({ preventScroll: true });
+          try { el.canvas.setPointerCapture(event.pointerId); } catch (error) { /* 忽略指针捕获失败 */ }
+          Sound.ui();
+        });
+
+        el.canvas.addEventListener('pointermove', (event) => {
+          if (activePointer !== event.pointerId || game.phase !== 'playing') return;
+          event.preventDefault();
+          moveAimToPointer(event);
+        });
+
+        const releasePointer = (event) => {
+          if (activePointer !== event.pointerId) return;
+          activePointer = null;
+          try { el.canvas.releasePointerCapture(event.pointerId); } catch (error) { /* 忽略 */ }
+        };
+        el.canvas.addEventListener('pointerup', releasePointer);
+        el.canvas.addEventListener('pointercancel', releasePointer);
+        el.canvas.addEventListener('lostpointercapture', () => { activePointer = null; });
+      }
+
+      // 某些输入层/旧浏览器只提供 event.key，这里统一成 code 以复用同一套按键逻辑
+      function resolveKeyCode(event) {
+        if (event.code) return event.code;
+        const key = event.key;
+        if (key === ' ' || key === 'Spacebar') return 'Space';
+        if (key === 'ArrowLeft' || key === 'ArrowRight' || key === 'ArrowUp' || key === 'ArrowDown') return key;
+        if (typeof key === 'string' && /^[a-zA-Z]$/.test(key)) return 'Key' + key.toUpperCase();
+        return '';
+      }
+
+      document.addEventListener('keydown', (event) => {
+        if (isTypingTarget(event.target)) return;
+        const inGame = insideGame(event.target);
+        const code = resolveKeyCode(event);
+
+        if (code === 'ArrowLeft' || code === 'ArrowRight') {
+          if (game.phase === 'playing' && inGame) {
+            event.preventDefault();
+            if (code === 'ArrowLeft') held.left = true;
+            else held.right = true;
+          }
+          return;
+        }
+
+        if (code === 'ArrowUp' || code === 'ArrowDown') {
+          if (game.phase === 'playing' && inGame) {
+            event.preventDefault();
+            if (!event.repeat) changeBet(code === 'ArrowUp' ? 1 : -1);
+          }
+          return;
+        }
+
+        if (code === 'Space') {
+          // 当焦点在按钮/链接上时，保留浏览器原生的空格激活行为
+          if (isInteractiveTarget(event.target)) return;
+          if (game.phase === 'playing') {
+            event.preventDefault();
+            dropBall();
+          } else if (game.phase === 'start' || game.phase === 'over' || game.phase === 'victory') {
+            event.preventDefault();
+            startGame();
+          }
+          return;
+        }
+
+        if (code === 'KeyM' && !isInteractiveTarget(event.target)) {
+          event.preventDefault();
+          toggleSound();
+        }
+      });
+
+      document.addEventListener('keyup', (event) => {
+        const code = resolveKeyCode(event);
+        if (code === 'ArrowLeft') held.left = false;
+        if (code === 'ArrowRight') held.right = false;
+      });
+
+      window.addEventListener('blur', () => {
+        held.left = false;
+        held.right = false;
+        activePointer = null;
+      });
+
+      if (el.startBtn) el.startBtn.addEventListener('click', startGame);
+      if (el.restartBtn) el.restartBtn.addEventListener('click', startGame);
+      if (el.dropBtn) el.dropBtn.addEventListener('click', dropBall);
+      if (el.betMinus) el.betMinus.addEventListener('click', () => changeBet(-1));
+      if (el.betPlus) el.betPlus.addEventListener('click', () => changeBet(1));
+      if (el.soundToggle) el.soundToggle.addEventListener('click', toggleSound);
+
+      /* ============================================================
+       * 8. 主循环、初始化与响应式
+       * ============================================================ */
+      let previousFrame = 0;
+      let accumulator = 0;
+
+      function frame(now) {
+        if (!previousFrame) previousFrame = now;
+        const dt = clamp((now - previousFrame) / 1000, 0, 0.05);
+        previousFrame = now;
+
+        if (game.phase === 'playing') {
+          updateAim(dt);
+          accumulator += dt;
+          let steps = 0;
+          while (accumulator >= FIXED_STEP && steps < MAX_STEPS) {
+            updateBallPhysics(FIXED_STEP);
+            accumulator -= FIXED_STEP;
+            steps += 1;
+          }
+          if (steps >= MAX_STEPS) accumulator = 0;
+        } else {
+          accumulator = 0;
+        }
+
+        updateVisualEffects(dt);
+        renderFrame(now);
+        window.requestAnimationFrame(frame);
+      }
+
+      function init() {
+        if (!ctx) return;
+        buildSprites();
+        resizeCanvas();
+        if (el.canvas) el.canvas.tabIndex = -1;
+        setCabinetMode('start');
+        updateHUD();
+        renderHistory();
+        updateControls();
+        syncSoundButton();
+        previousFrame = 0;
+        accumulator = 0;
+        window.requestAnimationFrame(frame);
+
+        if ('ResizeObserver' in window && el.stage) {
+          const observer = new ResizeObserver(() => resizeCanvas());
+          observer.observe(el.stage);
+        } else {
+          window.addEventListener('resize', resizeCanvas);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('orientationchange', () => {
+          window.setTimeout(resizeCanvas, 120);
+        });
+
+        document.addEventListener('visibilitychange', () => {
+          previousFrame = 0;
+          accumulator = 0;
+        });
+
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(() => buildStaticLayer()).catch(() => {});
+        }
+      }
+
+      // 仅在 ?debug=1 时暴露极简测试接口，方便自动化验收，不影响普通玩家
+      if (new URLSearchParams(window.location.search).has('debug')) {
+        window.__NEON_PLINKO_DEBUG__ = {
+          snapshot: () => ({
+            phase: game.phase,
+            balance: game.balance,
+            peak: game.peak,
+            bet: currentBet(),
+            drops: game.drops,
+            ball: game.ball ? {
+              x: Math.round(game.ball.x),
+              y: Math.round(game.ball.y),
+              landed: game.ball.landed,
+              resolved: game.ball.resolved,
+              binIndex: game.ball.binIndex
+            } : null,
+            bestRecord
+          }),
+          setBalance: (value) => {
+            if (game.phase !== 'playing') return false;
+            game.balance = clamp(Number(value) || 0, 0, VAULT_TARGET * 2);
+            game.peak = Math.max(game.peak, game.balance);
+            updateHUD();
+            updateControls();
+            return true;
+          },
+          start: startGame,
+          drop: dropBall,
+          finish: (victory) => endGame(Boolean(victory))
+        };
+      }
+
+      init();
+    })();
+  </script>
+
+</body>
+</html>
