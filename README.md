@@ -4,6 +4,7 @@
 
 - **生产地址（Canonical）**：https://neon-plinko.pages.dev/
 - **GitHub Pages 镜像**：https://vip-81.github.io/neon-plinko/
+- **Firebase Hosting 镜像**：https://neon-plinko-20261110.web.app/
 - **GitHub 仓库**：https://github.com/vip-81/neon-plinko
 - **Gitee 仓库**：https://gitee.com/vip882/neon-plinko
 - **AtomGit 仓库**：https://atomgit.com/zzw1208/neon-plinko
@@ -21,6 +22,8 @@
 ├── sitemap.xml     # 单页 sitemap
 ├── llms.txt        # 面向 AI 摘要与引用的结构化站点摘要
 ├── _headers        # Cloudflare Pages 缓存与安全响应头
+├── firebase.json   # Firebase Hosting 配置（headers / cache / cleanUrls）
+├── .firebaserc     # Firebase 项目与多站点 target 映射
 ├── 404.html        # 品牌化 404 页面（含 noindex）
 ├── .nojekyll       # GitHub Pages：跳过 Jekyll，原样发布静态文件
 └── README.md       # 部署与维护说明
@@ -65,6 +68,28 @@ git push -u origin main
 - GitHub Pages 不支持自定义响应头，`_headers` 中的 CSP 与缓存策略仅在 Cloudflare Pages 生效。
 - 两个地址返回相同页面；canonical、`og:url`、JSON-LD、`sitemap.xml` 与 `robots.txt` 统一指向 Cloudflare 生产域名，避免重复索引。
 - 需要把 GitHub Pages 设为主站时，将上述文件中的 `https://neon-plinko.pages.dev/` 替换为 `https://vip-81.github.io/neon-plinko/`，同步更新 `llms.txt`，然后重新部署两个平台。
+
+### Firebase Hosting 部署
+
+复用已有 Firebase 项目 `boto3-firebase-1101012838`，并新建独立 Hosting 站点 `neon-plinko-20261110`，未覆盖该项目中已有站点：
+
+- 站点地址：https://neon-plinko-20261110.web.app/
+- 项目 ID：`boto3-firebase-1101012838`
+- Site ID：`neon-plinko-20261110`
+- 部署 target：`neon-plinko`（见 `.firebaserc`）
+- Firebase 项目控制台：https://console.firebase.google.com/project/boto3-firebase-1101012838/overview
+
+在 `firebase.json` 所在目录执行：
+
+```bash
+firebase target:apply hosting neon-plinko neon-plinko-20261110 --project boto3-firebase-1101012838
+firebase deploy --only hosting:neon-plinko --project boto3-firebase-1101012838
+```
+
+- `firebase.json` 配置了 CSP、安全响应头、缓存策略、`cleanUrls` 与自定义 404；效果与 Cloudflare `_headers` 对齐。
+- 仅上传 `index.html`、`og-cover.png`、`robots.txt`、`sitemap.xml`、`llms.txt`、`404.html` 六个文件；`_headers`、README、`.nojekyll` 与 Firebase 配置本身设为 `ignore`。
+- Firebase 镜像与 Cloudflare / GitHub Pages 一样，canonical 保持 `https://neon-plinko.pages.dev/`。
+- 登录使用 `gcloud auth application-default login` 生成的 ADC；Firebase CLI 会直接复用该凭据，无需单独 `firebase login`。
 
 ### 代码托管镜像
 
@@ -117,6 +142,7 @@ window.__NEON_PLINKO_DEBUG__.finish(true)
 - 页面内包含一句话摘要、游戏规格、玩法步骤、倍率表、技术特性与 FAQ，便于搜索引擎和生成式引擎提取。
 - `llms.txt` 提供可直接引用的游戏事实、规则、倍率与 FAQ，并注明引用来源。
 - `sitemap.xml` 与 `robots.txt` 已指向正式域名。
+- Google Search Console：已通过 API 创建 URL-prefix 资源 `https://neon-plinko.pages.dev/`；因所有权尚未验证，sitemap 提交返回 403。需在 GSC 完成验证（HTML 文件 / DNS / meta 标签）后重新提交 `sitemap.xml`。
 
 ### 绑定自定义域名后
 
@@ -132,6 +158,7 @@ window.__NEON_PLINKO_DEBUG__.finish(true)
 ## 性能与可访问性
 
 - Lighthouse 本地桌面测试：Accessibility / Best Practices / SEO 均为 100，0 项失败。
+- Firebase Hosting 生产 URL 复测：Accessibility / Best Practices / SEO 均为 100，0 项失败。
 - 页面无外部字体、图片、统计或第三方脚本请求。
 - `index.html` 约 132 KB；`og-cover.png` 约 0.8 MB。
 - 支持键盘（方向键、空格、M）与触屏/指针操作，带 `aria-live` 状态播报。
@@ -141,10 +168,10 @@ window.__NEON_PLINKO_DEBUG__.finish(true)
 
 ## 安全提示（重要）
 
-- 项目文件不包含任何 Cloudflare、itch.io 或其他第三方密钥。
-- 本次部署使用的凭据仅通过命令环境传递，没有写入 `index.html`、README、Git 或静态资源。
-- 你在对话中提供的 **Cloudflare API Token、R2 Access Key / Secret Key 和 itch.io API Key 已经出现在聊天记录中，请立即撤销并重新生成**。尤其是 R2 Secret Access Key 与 Cloudflare API Token，应视为已泄露。
-- 后续更新时，使用环境变量或 Cloudflare Dashboard 的 Secrets 管理，不要把密钥粘贴到对话或提交到仓库。
+- 项目文件不包含任何 Cloudflare、GitHub、Gitee、AtomGit、Google 或 itch.io 密钥。
+- 本次部署使用的凭据仅通过命令环境传递，没有写入 `index.html`、README、Git 或静态资源；Google ADC 凭据保存在用户目录 `%APPDATA%\gcloud\application_default_credentials.json`，属于本机登录态，不在项目目录内。
+- 你在对话中提供的 **Cloudflare API Token、R2 Access Key / Secret Key、itch.io API Key、两个 GitHub Token、Gitee Token、AtomGit Token 均已出现在聊天记录中，请立即撤销并重新生成**。尤其是 R2 Secret Access Key、Cloudflare API Token 与 classic GitHub Token，应视为已泄露。
+- 后续更新时，使用环境变量或平台 Secrets 管理，不要把密钥粘贴到对话或提交到仓库。
 
 ## 说明
 
