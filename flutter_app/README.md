@@ -6,7 +6,7 @@
 - 深链示例：`https://neon-plinko-flutter.web.app/?q=最高倍率是多少`
 - Firebase 项目：`boto3-firebase-1101012838`
 - Hosting 站点：`neon-plinko-flutter`
-- 依赖：`firebase_core ^5.1.0`、`firebase_ai ^5.1.0`、`firebase_analytics ^13.0.1`、`firebase_auth ^7.0.1`、`cloud_firestore ^7.1.0`、`cloud_functions ^7.0.1`、Flutter 3.47.9 / Dart 3.13.7
+- 依赖：`firebase_core ^5.1.0`、`firebase_ai ^5.1.0`、`firebase_analytics ^13.0.1`、`firebase_auth ^7.0.1`、`cloud_firestore ^7.1.0`、`cloud_functions ^7.0.1`、`firebase_database ^13.0.1`、Flutter 3.47.9 / Dart 3.13.7
 
 > 主游戏仍是 `../index.html` 的零依赖单文件静态站；本目录只是额外的 Flutter 客户端示例，不参与主站 SEO/GEO/Lighthouse 评分。
 
@@ -158,6 +158,22 @@ const bool kFunctionsEnabled =
   两种构建（关/开）均已通过 `flutter analyze` 与生产编译校验；后端 `index.js` 通过 `node --check`。
 
 > 主游戏 `../index.html` **不接入 Cloud Functions**（保持零第三方请求与 Lighthouse 100）。
+
+## Realtime Database（参考 Trovami）
+
+[Trovami](https://github.com/Samaritan1011001/Trovami) 是用 Flutter + Firebase 做的实时位置分享 App，核心是 **Firebase Realtime Database（RTDB）** 的实时多人状态同步。该仓库**无 LICENSE（默认保留所有权利）**，因此**不复制其代码**；此处用官方 `firebase_database` SDK 自行实现一个许可证中立的实时共享计数器（全局「投注次数」），演示同样的 `onValue` 实时同步概念。
+
+- `lib/main.dart` 的 `RealtimeService`：
+  - `betCounter()`：`FirebaseDatabase.instanceFor(...).ref(path).onValue` 实时监听计数器
+  - `incrementBets()`：用 `ServerValue.increment(1)` 原子自增（RTDB 计数器标准写法）
+- 新增 `database.rules.json`：仅 `neon_plinko/counters/bets` 公开可读，且写入被限制为非负数字（防越权/乱写）；`firebase.json` 增加 `database` 配置与 CSP 放行 `*.firebaseio.com`
+- `lib/main.dart` 增加 `kRtdbEnabled` 构建期开关：默认关闭（**0 次 RTDB 请求**），UI 显示「未启用」；在 Firebase 控制台创建 Realtime Database 实例后，用 `--dart-define=RTDB_ENABLED=true` 重新构建即可开启
+
+### 前置条件（重要）
+
+RTDB 与 Firestore 是**独立的服务实例**，当前项目尚未创建 Realtime Database。开启前需：在 Firebase 控制台创建 Realtime Database（选区域）→ `firebase deploy --only database --project boto3-firebase-1101012838` 部署 `database.rules.json` → 重新构建。两种构建（关/开）均已通过 `flutter analyze` 与生产编译校验。
+
+> 主游戏 `../index.html` **不接入 Realtime Database**（保持零第三方请求与 Lighthouse 100）。
 
 ## 部署
 
