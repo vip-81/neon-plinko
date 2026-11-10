@@ -6,7 +6,7 @@
 - 深链示例：`https://neon-plinko-flutter.web.app/?q=最高倍率是多少`
 - Firebase 项目：`boto3-firebase-1101012838`
 - Hosting 站点：`neon-plinko-flutter`
-- 依赖：`firebase_core ^5.1.0`、`firebase_ai ^5.1.0`、`firebase_analytics ^13.0.1`、`firebase_auth ^7.0.1`、`cloud_firestore ^7.1.0`、`cloud_functions ^7.0.1`、`firebase_database ^13.0.1`、Flutter 3.47.9 / Dart 3.13.7
+- 依赖：`firebase_core ^5.1.0`、`firebase_ai ^5.1.0`、`firebase_analytics ^13.0.1`、`firebase_auth ^7.0.1`、`cloud_firestore ^7.1.0`、`cloud_functions ^7.0.1`、`firebase_database ^13.0.1`、`firebase_messaging ^17.0.1`、Flutter 3.47.9 / Dart 3.13.7
 
 > 主游戏仍是 `../index.html` 的零依赖单文件静态站；本目录只是额外的 Flutter 客户端示例，不参与主站 SEO/GEO/Lighthouse 评分。
 
@@ -174,6 +174,21 @@ const bool kFunctionsEnabled =
 RTDB 与 Firestore 是**独立的服务实例**，当前项目尚未创建 Realtime Database。开启前需：在 Firebase 控制台创建 Realtime Database（选区域）→ `firebase deploy --only database --project boto3-firebase-1101012838` 部署 `database.rules.json` → 重新构建。两种构建（关/开）均已通过 `flutter analyze` 与生产编译校验。
 
 > 主游戏 `../index.html` **不接入 Realtime Database**（保持零第三方请求与 Lighthouse 100）。
+
+## Cloud Messaging（参考 CryptoShadow）
+
+[CryptoShadow](https://github.com/huextrat/CryptoShadow) 是 Flutter 加密货币行情 App，**MIT 许可证（可自由集成）**，但其**已停止维护**。它用到 `firebase_analytics` + **`firebase_messaging`（FCM）** + `onesignal`；行情数据走 REST 而非 Firebase，与 NEON PLINKO 无关。因此只把 **Cloud Messaging** 这一 Firebase 服务接入。
+
+- `lib/main.dart` 的 `MessagingService`：调用 `FirebaseMessaging.instance.requestPermission()` + `register(vapidKey:)` 注册，`onRegistered` 流拿 token，`onMessage` 展示前台推送
+- 新增 `firebase-messaging-sw.js`：FCM Web 服务工作者骨架（仅启用 FCM 并配置 VAPID 后生效），含 `onBackgroundMessage` 系统通知
+- `firebase.json` 的 CSP 放行 `fcm.googleapis.com` / `firebaseinstallations.googleapis.com`
+- 构建期开关 `kFcmEnabled` + 常量 `kVapidKey`：默认关闭（**0 次 FCM 请求、不弹权限**）；Web 端真实收推送需① 在 Firebase 控制台生成 Web 推送证书(VAPID) 并填入 `kVapidKey`；② 正确配置 `firebase-messaging-sw.js` 中的 Web 配置；③ `flutter build web --dart-define=FCM_ENABLED=true` 重新构建
+
+### 前置条件（重要）
+
+Web 端 FCM 需要 **VAPID 密钥 + 通知权限 + firebase-messaging-sw.js**，且项目需开启 Cloud Messaging。默认构建为零请求、零打扰；两种构建（关/开）均已通过 `flutter analyze` 与生产编译校验。
+
+> 主游戏 `../index.html` **不接入 Cloud Messaging**（保持零第三方请求与 Lighthouse 100）。
 
 ## 部署
 
