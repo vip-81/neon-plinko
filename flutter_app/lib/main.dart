@@ -7,6 +7,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import 'firebase_options.dart';
@@ -28,6 +29,16 @@ const bool kFunctionsEnabled =
 // 创建 Realtime Database 后用 `flutter build web --dart-define=RTDB_ENABLED=true` 开启。
 const bool kRtdbEnabled =
     bool.fromEnvironment('RTDB_ENABLED', defaultValue: false);
+
+// 构建期开关：Cloud Messaging (FCM) 是 CryptoShadow 用到的推送服务（其仓库为 MIT，可自由集成）。
+// Web 端真正接收推送需要 VAPID 密钥 + firebase-messaging-sw.js 服务工作者 + 用户授权通知权限。
+// 默认关闭以保证 0 额外请求、不弹权限；在 Firebase 控制台配置 Web 推送证书(VAPID)并填入 kVapidKey 后，
+// 用 `flutter build web --dart-define=FCM_ENABLED=true` 开启。
+const bool kFcmEnabled =
+    bool.fromEnvironment('FCM_ENABLED', defaultValue: false);
+
+// 填入 Firebase 控制台 → Cloud Messaging → Web 推送证书(VAPID) 的 key 后，Web 端才能 getToken/收推送。
+const String kVapidKey = '';
 
 const String _systemInstruction = '你是「NEON PLINKO 霓虹弹珠」的官方规则助手。只回答与这个游戏相关的问题，包括：玩法步骤、9 个倍率槽（x12 / x4 / x1.5 / x0.5 / x0.25 / x0.5 / x1.5 / x4 / x12）、下注档位（10 / 25 / 50 / 100 / 250 CR）、初始 1,000 CR、目标 10,000 CR、键盘与触屏操作、最高纪录保存在浏览器 localStorage、纯娱乐且无真实货币投注。请用简体中文、简短、纯文本回答，不要使用 Markdown，不要编造未提供的信息。如果问题与游戏无关，请礼貌拒答并引导用户回到游戏。';
 
@@ -302,6 +313,42 @@ class RealtimeService {
   }
 }
 
+/// 对齐 CryptoShadow 用到的 **Firebase Cloud Messaging (FCM)** 推送服务
+/// （CryptoShadow 为 MIT 许可证，可自由集成；其行情数据走 REST 与 Firebase 无关）。
+///
+/// Web 端真正收推送需要：VAPID 密钥(kVapidKey) + 根目录 firebase-messaging-sw.js
+/// + 用户授予通知权限。因此由 kFcmEnabled 构建期开关默认关闭：不请求权限、不发起请求。
+/// 开启后调用 register(vapidKey:) 注册，token 通过 onRegistered 流返回。
+class MessagingService {
+  MessagingService._();
+  static final MessagingService instance = MessagingService._();
+
+  bool get enabled => kFcmEnabled;
+
+  bool get hasVapidKey => kVapidKey.isNotEmpty;
+
+  /// 请求通知权限并注册 FCM（Web 端需要 vapidKey）。
+  /// 返回状态字符串：'registered' / 'denied' / 'no_vapid_key' / 'error:...'。
+  Future<String> registerForToken() async {
+    if (!enabled) return 'disabled';
+    try {
+      final NotificationSettings settings =
+          await FirebaseMessaging.instance.requestPermission();
+      final AuthorizationStatus status = settings.authorizationStatus;
+      if (status != AuthorizationStatus.authorized &&
+          status != AuthorizationStatus.provisional) {
+        return 'denied';
+      }
+      if (!hasVapidKey) return 'no_vapid_key';
+      await FirebaseMessaging.instance.register(vapidKey: kVapidKey);
+      return 'registered';
+    } catch (e) {
+      debugPrint('[fcm] 注册失败：$e');
+      return 'error:$e';
+    }
+  }
+}
+
 class NeonAiApp extends StatelessWidget {
   const NeonAiApp({super.key});
 
@@ -347,6 +394,10 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
   final TextEditingController _chatController = TextEditingController();
   String _chatError = '';
   bool _rtdbBusy = false;
+  String _fcmStatus = '未启用';
+  String _fcmToken = '';
+  String _fcmLastMessage = '';
+  bool _fcmBusy = false;
 
   @override
   void initState() {
@@ -355,6 +406,26 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
     if (kFirestoreEnabled) {
       // 启用时初始化 Firestore 离线缓存（必须在首次读写前）。
       FirestoreService.instance.init();
+    }
+    if (kFcmEnabled) {
+      // 启用时监听前台消息与注册后的 token（仅展示，不弹窗打断）。
+      FirebaseMessaging.onMessage.listen(
+        (RemoteMessage message) {
+          if (!mounted) return;
+          final String? body = message.notification?.body;
+          if (body != null) {
+            setState(() => _fcmLastMessage = body);
+          }
+        },
+        onError: (Object e) => debugPrint('[fcm] onMessage 异常：$e'),
+      );
+      FirebaseMessaging.instance.onRegistered.listen(
+        (String token) {
+          if (!mounted) return;
+          setState(() => _fcmToken = token);
+        },
+        onError: (Object e) => debugPrint('[fcm] onRegistered 异常：$e'),
+      );
     }
     _authSub = AuthService.instance.authStateChanges().listen(
       (User? user) {
@@ -475,6 +546,26 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
     await RealtimeService.instance.incrementBets();
     if (!mounted) return;
     setState(() => _rtdbBusy = false);
+  }
+
+  Future<void> _enableFcm() async {
+    if (_fcmBusy || !kFcmEnabled) return;
+    setState(() {
+      _fcmBusy = true;
+      _fcmStatus = '正在请求通知权限并注册 FCM…';
+    });
+    final String result = await MessagingService.instance.registerForToken();
+    if (!mounted) return;
+    setState(() {
+      _fcmBusy = false;
+      _fcmStatus = switch (result) {
+        'registered' => '已注册；token 见下方（由 onRegistered 返回）',
+        'denied' => '用户拒绝了通知权限',
+        'no_vapid_key' => '未配置 VAPID 密钥（在 main.dart 填入 kVapidKey 后可真实收推送）',
+        'disabled' => '未启用',
+        _ => '注册失败：$result',
+      };
+    });
   }
 
   Future<void> _ask(String question, {String source = 'input'}) async {
@@ -950,6 +1041,57 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
                             child: Text(_rtdbBusy ? '同步中…' : '我投注了一次（+1）'),
                           ),
                         ),
+                      ],
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                _buildCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      const Text(
+                        'Cloud Messaging（FCM）',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        '对齐 CryptoShadow 用到的 Firebase Cloud Messaging 推送（CryptoShadow 为 MIT，可自由集成）。Web 端收推送需 VAPID 密钥 + firebase-messaging-sw.js + 通知权限；默认关闭时不请求权限、0 推送请求。',
+                        style: TextStyle(color: Color(0xFFA8A2C8), fontSize: 13, height: 1.6),
+                      ),
+                      const SizedBox(height: 12),
+                      if (!kFcmEnabled)
+                        const Text(
+                          '未启用：当前为构建期关闭状态（Web 端还需配置 VAPID 密钥与服务工作者）。AI 助手与控制台不受影响，且不会产生任何 FCM 请求。',
+                          style: TextStyle(color: Color(0xFF00E5FF), fontSize: 13, height: 1.6),
+                        )
+                      else ...<Widget>[
+                        OutlinedButton(
+                          onPressed: _fcmBusy ? null : _enableFcm,
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: const Color(0xFF00E5FF),
+                            side: const BorderSide(color: Color(0x5500E5FF)),
+                          ),
+                          child: Text(_fcmBusy ? '注册中…' : '启用推送通知'),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(_fcmStatus, style: const TextStyle(color: Color(0xFF00E5FF), fontSize: 13)),
+                        if (_fcmToken.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: SelectableText(
+                              'Token: ${_fcmToken.length > 48 ? '${_fcmToken.substring(0, 48)}…' : _fcmToken}',
+                              style: const TextStyle(color: Colors.white, fontSize: 12),
+                            ),
+                          ),
+                        if (_fcmLastMessage.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Text(
+                              '最近收到：$_fcmLastMessage',
+                              style: const TextStyle(color: Color(0xFFFF3CAC), fontSize: 13),
+                            ),
+                          ),
                       ],
                     ],
                   ),
