@@ -1,0 +1,16 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "neon_plinko": {
+      "counters": {
+        // 公开演示用的实时计数器：任何人可读；写入仅允许对 bets 节点做数值自增，
+        // 避免被随意改写为非数字或越权写入其它路径。
+        "bets": {
+          ".read": true,
+          ".write": "data.exists() && newData.exists() && newData.isNumber() && newData.val() >= 0 && newData.val() <= 100000000"
+        }
+      }
+    }
+  }
+}
