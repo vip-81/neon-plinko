@@ -6,6 +6,7 @@ import 'package:firebase_ai/firebase_ai.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import 'firebase_options.dart';
@@ -20,6 +21,13 @@ const bool kFirestoreEnabled =
 // `flutter build web --dart-define=FUNCTIONS_ENABLED=true` 开启。
 const bool kFunctionsEnabled =
     bool.fromEnvironment('FUNCTIONS_ENABLED', defaultValue: false);
+
+// 构建期开关：Firebase Realtime Database 是 Trovami 用到的实时同步服务
+// （Trovami 仓库无 LICENSE，这里用官方 firebase_database SDK 自行实现，不复制其代码）。
+// 当前项目尚未创建 RTDB 实例，默认关闭以保证 0 额外请求；在 Firebase 控制台
+// 创建 Realtime Database 后用 `flutter build web --dart-define=RTDB_ENABLED=true` 开启。
+const bool kRtdbEnabled =
+    bool.fromEnvironment('RTDB_ENABLED', defaultValue: false);
 
 const String _systemInstruction = '你是「NEON PLINKO 霓虹弹珠」的官方规则助手。只回答与这个游戏相关的问题，包括：玩法步骤、9 个倍率槽（x12 / x4 / x1.5 / x0.5 / x0.25 / x0.5 / x1.5 / x4 / x12）、下注档位（10 / 25 / 50 / 100 / 250 CR）、初始 1,000 CR、目标 10,000 CR、键盘与触屏操作、最高纪录保存在浏览器 localStorage、纯娱乐且无真实货币投注。请用简体中文、简短、纯文本回答，不要使用 Markdown，不要编造未提供的信息。如果问题与游戏无关，请礼貌拒答并引导用户回到游戏。';
 
@@ -255,6 +263,45 @@ class FunctionsService {
   }
 }
 
+/// 对齐 Trovami 用到的 **Firebase Realtime Database** 实时同步模式
+/// （Trovami 仓库无 LICENSE，此实现用官方 firebase_database SDK 自行编写，不复制其代码）。
+///
+/// 提供实时共享计数器：任何人可 +1，所有客户端通过 `onValue` 实时看到同一数值，
+/// 与 Trovami 的「多人实时状态同步」概念同构（此处用于 NEON PLINKO 的全局投注次数）。
+/// 项目当前尚未创建 RTDB 实例，由 kRtdbEnabled 构建期开关默认关闭：不实例化 RTDB、不发起请求。
+class RealtimeService {
+  RealtimeService._();
+  static final RealtimeService instance = RealtimeService._();
+
+  // Trovami 默认 RTDB 主机；实际使用前须在 Firebase 控制台创建 Realtime Database 实例。
+  static const String databaseUrl =
+      'https://boto3-firebase-1101012838-default-rtdb.firebaseio.com';
+  static const String counterPath = 'neon_plinko/counters/bets';
+
+  bool get enabled => kRtdbEnabled;
+
+  FirebaseDatabase get _db =>
+      FirebaseDatabase.instanceFor(app: Firebase.app(), databaseURL: databaseUrl);
+
+  /// 实时监听计数器（onValue 单向流，低延迟、断网可本地缓存）。
+  Stream<int> betCounter() {
+    return _db.ref(counterPath).onValue.map(
+          (DatabaseEvent event) =>
+              (event.snapshot.value as num?)?.toInt() ?? 0,
+        );
+  }
+
+  /// 用 ServerValue.increment 原子自增，避免并发覆盖（RTDB 计数器的标准写法）。
+  Future<void> incrementBets() async {
+    if (!enabled) return;
+    try {
+      await _db.ref(counterPath).set(ServerValue.increment(1));
+    } catch (e) {
+      debugPrint('[rtdb] 自增失败：$e');
+    }
+  }
+}
+
 class NeonAiApp extends StatelessWidget {
   const NeonAiApp({super.key});
 
@@ -299,6 +346,7 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
   bool _functionBusy = false;
   final TextEditingController _chatController = TextEditingController();
   String _chatError = '';
+  bool _rtdbBusy = false;
 
   @override
   void initState() {
@@ -419,6 +467,14 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
     );
     if (!mounted) return;
     _chatController.clear();
+  }
+
+  Future<void> _incrementBets() async {
+    if (_rtdbBusy || !kRtdbEnabled) return;
+    setState(() => _rtdbBusy = true);
+    await RealtimeService.instance.incrementBets();
+    if (!mounted) return;
+    setState(() => _rtdbBusy = false);
   }
 
   Future<void> _ask(String question, {String source = 'input'}) async {
@@ -842,6 +898,58 @@ class _AiAssistantPageState extends State<AiAssistantPage> {
                             padding: const EdgeInsets.only(top: 6),
                             child: Text(_chatError, style: const TextStyle(color: Color(0xFFFF3CAC), fontSize: 12)),
                           ),
+                      ],
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                _buildCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      const Text(
+                        '实时计数器（Realtime Database）',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        '对齐 Trovami 用到的 Firebase Realtime Database 实时同步（Trovami 无 LICENSE，此处用官方 SDK 自行实现）。全局「投注次数」通过 onValue 实时同步，任何人点击 +1 都用 transaction 原子自增。',
+                        style: TextStyle(color: Color(0xFFA8A2C8), fontSize: 13, height: 1.6),
+                      ),
+                      const SizedBox(height: 12),
+                      if (!kRtdbEnabled)
+                        const Text(
+                          '未启用：当前为构建期关闭状态（尚未创建 Realtime Database 实例）。AI 助手与控制台不受影响，且不会产生任何 RTDB 请求。',
+                          style: TextStyle(color: Color(0xFF00E5FF), fontSize: 13, height: 1.6),
+                        )
+                      else ...<Widget>[
+                        StreamBuilder<int>(
+                          stream: RealtimeService.instance.betCounter(),
+                          builder: (BuildContext context, AsyncSnapshot<int> snapshot) {
+                            final int count = snapshot.data ?? 0;
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                const Text('全球投注次数：', style: TextStyle(color: Color(0xFFA8A2C8), fontSize: 15)),
+                                Text(
+                                  '$count',
+                                  style: const TextStyle(color: Color(0xFFFF3CAC), fontSize: 28, fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 12),
+                        Center(
+                          child: OutlinedButton(
+                            onPressed: _rtdbBusy ? null : _incrementBets,
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: const Color(0xFF00E5FF),
+                              side: const BorderSide(color: Color(0x5500E5FF)),
+                            ),
+                            child: Text(_rtdbBusy ? '同步中…' : '我投注了一次（+1）'),
+                          ),
+                        ),
                       ],
                     ],
                   ),
